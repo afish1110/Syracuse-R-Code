@@ -1,0 +1,132 @@
+---
+title: "SAL 602 Assignment 1"
+author: "Andrew Fish"
+date: "2024-10-25"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r }
+library(tidyverse)
+```
+
+
+##1.
+
+#a.
+```{r}
+SB <- c(1406, 938, 897, 741, 738, 689, 506, 504, 474)
+CS <- c(335, 307, 212, 195, 109, 162, 136, 131, 114)
+G <- c(3081, 2616, 3034, 2826, 2476, 2649, 2599, 2683, 2379)
+Players <- c("Rickey Henderson", "Lou Brock", "Ty Cobb", "Eddie Collings",
+             "Max Carey", "Joe Morgan", "Luis Aparicio", "Paul Molitor", "Roberto Alomar")
+#will use players later in plot
+```
+
+#b.
+```{r}
+SB.Attempt <- SB + CS
+```
+
+#c.
+```{r}
+Success.Rate <- SB / SB.Attempt
+```
+
+#d.
+```{r}
+SB.Game <- SB / G
+```
+
+#e.
+```{r}
+ggplot(data.frame(x = SB.Game, y = Success.Rate),
+       aes(SB.Game, Success.Rate)) +
+  geom_point(color = "red") + #creates a scatter plot using ggplo
+  geom_text(vjust = 1, label = Players, size = 3) #labels the points using the players vjust moves the label down below point
+```
+
+From the scatter plot we can see that Max Carey had a high success rate while Lou Brock had a low success rate. As well Rickey Henderson had the most stolen bases per game.
+
+##2.
+
+#a.
+```{r}
+outcomes <- c("Single", "Out", "Out", "Single", "Double", "Out", "Walk", "Out", "Single")
+```
+
+#b.
+```{r}
+table(outcomes)
+```
+
+#c.
+```{r}
+f.outcomes <- factor(outcomes, levels = c("Out", "Walk", "Single", "Double"))
+table(f.outcomes)
+```
+The table of f.outcomes sorts the table based on the levels variable within factors.
+
+#d.
+Within the first statement R is searching through the outcomes vector for the value "Walk" and counting the occurances. The second statement sums the occurances of "Walk" within outcomes. Overall both statements are totaling the number of walks in outcomes.
+
+##3.
+
+#a.
+```{r}
+W <- c(373, 354, 364, 417, 355, 373, 361, 363, 511)
+L <- c(208, 184, 310, 279, 227, 188, 208, 245, 316)
+Name <- c("Pete Alexander", "Roger Clemens", "Pud Galvin", "Walter Johnson",
+          "Greg Maddux", "Christy Mathewson", "Kid Nichols", "Warren Spahn", "Cy Young")
+```
+
+#b.
+```{r}
+Win.PCT <- ((100 * W) / (W +L))
+```
+
+#c.
+```{r}
+Wins.350 <- data.frame(Name, W, L, Win.PCT)
+```
+
+#d.
+```{r}
+Wins.350 <- arrange(Wins.350, desc(Win.PCT))
+head(Wins.350, n = 1)
+tail(Wins.350, n = 1)
+```
+After arranging Wins.350 by Win.PCT we use the head and tail functions to give us the best and worst win percentages. Those are Christy Mathewson and Pud Galvin respectivley.
+
+##4.
+
+#a.
+```{r}
+SO <- c(2198, 4672, 1806, 3509, 3371, 2502, 1868, 2583, 2803)
+BB <- c(951, 1580, 745, 1363, 999, 844, 1268, 1434, 1217)
+#Name is taken from 3a. since we are using the same list of pitchers
+```
+
+#b.
+```{r}
+SO.BB.Ratio <- SO / BB
+```
+
+#c.
+```{r}
+SO.BB <- data.frame(Name, SO, BB, SO.BB.Ratio)
+```
+
+#d.
+```{r}
+filter(SO.BB, SO.BB.Ratio > 2.8)
+```
+
+#e.
+```{r}
+arrange(SO.BB, desc(BB))
+```
+The pitcher with the largest number of walks had a high strikeout to walk ratio.

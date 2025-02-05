@@ -1,0 +1,99 @@
+---
+title: "SAL 602 Module 5 Lab 1"
+author: "Andrew Fish"
+date: "2024-11-19"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(Lahman)
+library(rvest)
+library(readr)
+```
+
+```{r}
+##function for postion and high school from baseball ref
+scrapePlayerBIO <- function(bbrefID){
+  
+  ##helper variable for url no matter what player entered
+  firstInitial <- substring(bbrefID, 1, 1)
+  ##generic baseball reference url setup filled in with player info
+  url <- paste("https://www.baseball-reference.com/players/",firstInitial,"/",bbrefID,".shtml",sep = "")
+  webpage <- read_html(url)
+  
+  
+  ##call to bio on BR
+  webpage %>% html_nodes("div#meta p") %>% html_text() -> pagedata
+  
+  ##position code
+  pagedata[1] %>% strsplit('\n') -> positionline
+  positionline[[1]][3] %>% trimws() -> position
+  
+  ##high school
+ 
+  for (i in 1:length(pagedata)) {
+    if (grepl("High School:", pagedata[i], fixed = TRUE)) {
+      pagedata[i] %>% strsplit(':', fixed = TRUE) -> highschoolline
+      highschoolline[[1]][2] %>% trimws() -> highschool
+      break
+    }
+  }
+  return(tibble(bbrefID = bbrefID, position = position, highschool = highschool))
+}
+
+```
+
+Start of using Lahman for player data
+
+```{r}
+##list of players for checking function works
+check_players <- c("alonspe01", "willite01", "ruthba01")
+```
+
+```{r}
+Pitching %>%
+  filter(yearID == 1955) %>%
+  arrange(desc(W)) %>%
+  slice(1:10) %>%
+  pull(playerID) -> topW
+```
+
+```{r}
+People %>%
+  filter(playerID %in% topW) %>%
+  pull(bbrefID) ->WrefID
+```
+
+
+```{r}
+##function that plugs player list into scraping function
+playerBio <- function(refID) {
+  for (i in 1:length(refID)) {
+    if (i == 1) {
+      scrapePlayerBIO(refID[i]) -> playerdata
+    } else {
+      scrapePlayerBIO(refID[i]) ->player210data
+      bind_rows(playerdata, player210data) -> playerdata
+    }
+  }
+  return(playerdata)
+}
+```
+
+```{r}
+playerBio(check_players)
+```
+
+```{r}
+TopWBio <- playerBio(SOrefID)
+```
+
+```{r}
+write_csv(TopWBio, file = "C:/Users/Andrew Fish/Documents/Syracuse/SAL 602/Module 5/mod5lab1.csv")
+```
+

@@ -1,0 +1,73 @@
+---
+title: "SAL 602 Assignment 5"
+author: "Andrew Fish"
+date: "2024-11-19"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(Lahman)
+library(rvest)
+library(readr)
+```
+
+
+```{r}
+##hardcoded team info and empty data frames
+team_abr <- c("red-sox", "yankees")
+team_name <- c("Red Sox", "Yankees")
+allBattingStats <- tibble()
+allSPStats <- tibble()
+allRPStats <- tibble()
+allFieldingStats <- tibble()
+```
+
+```{r}
+##function to scrape tables off fangraphs
+##9 = batting, 10 = SP, 11 = RP, 12 = fielding
+scrapeStatTables <- function(teamPostFix) {
+  url <- paste("https://www.fangraphs.com/teams/",teamPostFix,"/stats", sep = "")
+  print(url)
+  webpage <- read_html(url)
+  webpage %>% html_table(fill = TRUE) -> tables
+  return(tables)
+}
+```
+
+```{r}
+for (i in 1:length(team_abr)) {
+  ##loop to scrape fangraphs and put stats into correct data frame
+  Sys.sleep(5)
+  tables <- scrapeStatTables(team_abr[i])
+  batStats <- tables[[9]] %>% head(-1)
+  batStats$Team <- team_name[i]
+  allBattingStats %>% bind_rows(batStats) -> allBattingStats
+  
+  spStats <- tables[[10]] %>% head(-1)
+  spStats$Team <- team_name[i]
+  allSPStats %>% bind_rows(spStats) -> allSPStats
+  
+  rpStats <- tables[[11]] %>% head(-1)
+  rpStats$Team <- team_name[i]
+  allRPStats %>% bind_rows(rpStats) -> allRPStats
+  
+  fieldStats <- tables[[12]] %>% head(-1)
+  fieldStats$Team <- team_name[i]
+  allFieldingStats %>% bind_rows(fieldStats) -> allFieldingStats
+}
+```
+
+```{r}
+write_csv(allBattingStats, "C:/Users/Andrew Fish/Documents/Syracuse/SAL 602/Module 5/allBattingStats.csv")
+write_csv(allSPStats, "C:/Users/Andrew Fish/Documents/Syracuse/SAL 602/Module 5/allSPStats.csv")
+write_csv(allRPStats, "C:/Users/Andrew Fish/Documents/Syracuse/SAL 602/Module 5/allRPStats.csv")
+write_csv(allFieldingStats, "C:/Users/Andrew Fish/Documents/Syracuse/SAL 602/Module 5/allFieldingStats.csv")
+```
+
+
+

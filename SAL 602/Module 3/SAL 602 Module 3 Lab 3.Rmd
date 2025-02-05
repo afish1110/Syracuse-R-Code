@@ -1,0 +1,53 @@
+---
+title: "SAL 602 Module 3 Lab 3"
+author: "Andrew Fish"
+date: "2024-11-05"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(Lahman)
+library(plotly)
+```
+
+Using the Lahman Batting data from 2010 to present. Sum stats and create OBP, SLG, RC
+
+```{r}
+Batting %>% filter(yearID >= 2010) %>%
+  group_by(playerID, yearID) %>%
+  summarize(RBI = sum(RBI),
+            R = sum(R),
+            H = sum(H),
+            BB = sum(BB),
+            HBP = sum(HBP),
+            SF = sum(SF),
+            G = sum(G),
+            AB = sum(AB),
+            X1B = sum((H - X2B -X3B - HR)),
+            X2B = sum(X2B),
+            X3B = sum(X3B),
+            HR = sum(HR)) %>%
+  inner_join(People, by = "playerID") %>%
+  mutate(fullname = paste(nameFirst, nameLast),
+         TB = (X1B + (2 * X2B) + (3 * X3B) + (4 * HR)),
+         OBP = ((H + BB + HBP) / (AB + BB + HBP + SF)),
+         SLG = TB / AB,
+         RC = (TB * (H + BB)) / (AB + BB)) -> Batting2010
+```
+
+Creating 3D Scatter Plot
+
+```{r}
+Batting2010 %>% filter(SLG > 0, OBP > 0) %>%
+  plot_ly(x = ~OBP, y = ~SLG, z = ~RC, color = ~AB) %>%
+  add_markers() %>% 
+  layout(scene = list(xaxis = list(title = "On-Base Percentage"),
+                      yaxis = list(title = "Slugging Percentage"),
+                      zaxis = list(title = "Runs Created"))) -> Batting2010plot
+```
+

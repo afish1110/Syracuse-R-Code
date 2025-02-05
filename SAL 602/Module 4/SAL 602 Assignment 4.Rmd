@@ -1,0 +1,76 @@
+---
+title: "SAL 602 Assignment 4"
+author: "Andrew Fish"
+date: "2024-11-13"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(broom)
+library(ggrepel)
+options(scipen = 1)
+```
+
+```{r}
+nhl2023 <- read_csv("C:/Users/Andrew Fish/Documents/Syracuse/SAL 602/Module 4/NHLdata2023.csv")
+nhl2022 <- read_csv("C:/Users/Andrew Fish/Documents/Syracuse/SAL 602/Module 4/NHLdata2022.csv")
+nhl2021 <- read_csv("C:/Users/Andrew Fish/Documents/Syracuse/SAL 602/Module 4/NHLdata2021.csv")
+```
+
+```{r}
+nhl2123 <- bind_rows(nhl2023, nhl2022, nhl2021)
+```
+
+##1.
+
+```{r}
+nhl2123 <- nhldata %>%
+  select(Team, Year, GP, W, L, OL, GF, GA) %>%
+  mutate(Wpct = W / GP,
+         GD = GF - GA,
+         logWratio = log(W / (L + OL)),
+         logRratio = log(GF / GA))
+```
+
+```{r}
+pytfit <- lm(logWratio ~ 0 + logRratio, nhl2123)
+pytfit
+```
+From out pytfit model we found that the Coefficient is k = 2.071 for NHL using the 2021-22 to 2023-24 seasons.
+
+##2.
+
+```{r}
+exponent <- pytfit$coefficients["logRratio"]
+nhl2123 <- nhl2123 %>%
+  mutate(Wpct_pyt = (GF ^ exponent) / ((GF ^ exponent) + (GA ^ exponent)),
+         resid_pyt = Wpct - Wpct_pyt)
+```
+
+```{r}
+highlight_teams <- nhl2123 %>%
+  arrange(desc(abs(resid_pyt))) %>%
+  head(4)
+```
+
+
+```{r}
+ggplot(nhl2123, aes(x = GD, y = resid_pyt)) +
+  geom_point(alpha = 0.4, color = "darkgreen") +
+  geom_hline(yintercept = 0, linetype = 2, color = "orange") +
+  xlab("Goal Differential") + ylab("Residual") + 
+  ggtitle("Goal Differential Residuals - NHL Seasons 2021-22 to 2023-24") +
+  geom_point(data = highlight_teams, color = "darkblue") +
+  geom_text_repel(data = highlight_teams, color = "darkblue",
+                  aes(label = paste(Team, Year)))
+```
+
+```{r}
+ggsave("C:/Users/Andrew Fish/Documents/Syracuse/SAL 602/Module 4/assignment4residgraph.pdf")
+```
+

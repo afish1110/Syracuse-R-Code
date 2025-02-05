@@ -1,0 +1,164 @@
+---
+title: "SAL 602 Module 7 Lab 1"
+author: "Andrew Fish"
+date: "2024-12-02"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(baseballr)
+library(shiny)
+library(readr)
+```
+
+```{r}
+june2023_1 <- scrape_statcast_savant_batter_all("2023-06-01", "2023-06-07")
+june2023_2 <- scrape_statcast_savant_batter_all("2023-06-08", "2023-06-14")
+june2023_3 <- scrape_statcast_savant_batter_all("2023-06-15", "2023-06-21")
+june2023_4 <- scrape_statcast_savant_batter_all("2023-06-22", "2023-06-28")
+june2023_5 <- scrape_statcast_savant_batter_all("2023-06-29", "2023-06-30")
+june2023 <- rbind(june2023_1, june2023_2, june2023_3, june2023_4, june2023_5)
+```
+
+```{r}
+masterID <- read_csv("C:/Users/Andrew Fish/Documents/Syracuse/SAL 602/Module 7/SwingsOutsideZoneBatters/masterid.csv")
+```
+
+
+```{r}
+##only want options where batters think it is a ball
+june2023 %>%
+  filter(description != "blocked_ball",
+         zone %in% c(11, 12, 13, 14)) -> lab1data
+```
+
+```{r}
+##used to help decide chase rate
+lab1data %>%
+  mutate(Swing = case_when(
+    type == "S" & description == "called_strike" ~ FALSE,
+    type == "X" | type == "S" ~ TRUE,
+    type == "B" ~ FALSE),
+    zFromCenter = abs(plate_z - 2.55),
+    xFromCenter = abs(plate_x),
+    distanceFromCenter = sqrt((xFromCenter ^ 2) + (zFromCenter ^ 2))) -> lab1data
+```
+
+```{r}
+lab1data %>%
+  group_by(batter) %>%
+  summarise() %>%
+  inner_join(masterID, by = c("batter" = "mlb_id")) %>%
+  select(batter, mlb_name) %>%
+  arrange(mlb_name) -> possibleBatters
+
+possibleBattersList <- possibleBatters$batter
+names(possibleBattersList) <- possibleBatters$mlb_name
+```
+
+
+```{r}
+##writing statcast data to csv for shiny apps purposes
+write_csv(lab1data, file = "C:/Users/Andrew Fish/Documents/Syracuse/SAL 602/Module 7/SwingsOutsideZone/lab1data.csv")
+```
+
+The Following used to check the filter and mutation of june2023 to check zones still creates a cool visualization on chase rate
+```{r}
+##creating strike zone
+plate_width <- 17 + (9 / pi)
+k_zone_plot <- ggplot(NULL, aes(x = plate_x, plate_z)) +
+  geom_rect(xmin = -(plate_width / 2) / 12,
+            xmax = (plate_width / 2) / 12,
+            ymin = 1.5,
+            ymax = 3.6, color = "black", alpha = 0) +
+  coord_equal() +
+  scale_x_continuous("Horizontal Location (ft.)",
+                     limits = c(-2, 2)) +
+  scale_y_continuous("Vertical Location (ft.)",
+                     limits = c(0, 5))
+```
+
+```{r}
+##used to check lab1data zones and swing rate
+k_zone_plot %+% lab1data +
+  aes(color = Swing, shape = type) +
+  geom_point() -> zoneplot
+```
+
+Creating Shiny app
+```{r}
+ui <- fluidPage(
+  titlePanel("Swings on Pitches Outside the Zone"),
+  sidebarLayout(
+    sliderInput(inputId = "bins",
+                label = "Number of bins:",
+                min = 1,
+                max = 200,
+                value = 50),
+    mainPanel(
+      plotOutput(outputId = "swingPlot")
+    )
+  ),
+  sidebarLayout(
+    sidebarPanel(
+      checkboxGroupInput(inputId = "zones",
+                       label = h3("Zones of Pitches"),
+                       choices = list("11" = 11,
+                                      "12" = 12,
+                                      "13" = 13,
+                                      "14" = 14),
+                       selected = c(11, 12, 13, 14)),
+      sidebarPanel(
+        checkboxGroupInput(inputId = "swing",
+                           label = h3("Batter Swing"),
+                           choices = list("Yes" = TRUE,
+                                          "No" = FALSE),
+                           selected = TRUE)
+      ),
+      selectInput(inputId = "selectBatter",
+                  label = h3("Select box"),
+                  choices = possibleBattersList,
+                  selected = 605141) ##Mookie Betts
+    ),
+    mainPanel(
+      plotOutput(outputId = "batterChart")
+    )
+  )
+)
+
+server <- function(input, output) {
+  SelectedBatterReactive <- reactive({
+    lab1data %>% filter(batter == input$selectBatter)
+  })
+  
+  output$batterChart <- renderPlot({
+    SelectedBatterReactive() %>%
+      filter(zone %in% input$zones,
+             Swing %in% input$swing) -> SelectedPitchResults
+    
+    k_zone_plot %+% SelectedPitchResults +
+      aes(color = pitch_name, shape = type) +
+      geom_point(size = 3) + ggtitle("Pitch Chart")})
+  
+  output$swingPlot <- renderPlot({
+    lab2data <- SelectedBatterReactive() %>%
+      filter(zone %in% input$zones,
+             Swing %in% input$swing)
+    
+    ggplot(lab2data, aes(x = distanceFromCenter, colour = Swing)) +
+      geom_histogram(bins = input$bins) +
+      ggtitle("Histogram of Swings Outside the Zone") +
+      xlab("Feet From Center of Zone") + ylab("n")
+  })
+}
+```
+
+```{r}
+#runs shinyapp here instead of with ui and server code
+shinyApp(ui = ui, server = server)
+```
