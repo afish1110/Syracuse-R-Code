@@ -91,12 +91,11 @@ scrapeStatcastLastmonth <- function(year, month, end_date, playerID) {
                                              paste(as.character(year), "-0", as.character(month), "-28", sep = ""),
                                              batterid = playerID)
     scrape5 <- scrape_statcast_savant_batter(paste(as.character(year), "-0", as.character(month), "-29", sep = ""),
-                                             end_date)
+                                             end_date, batterid = playerID)
     statcastScrape <- rbind(scrape1, scrape2, scrape3, scrape4, scrape5)
   }
   if (month == 10) {
-    statcastScrape <- scrape_statcast_savant_batter(paste(as.character(year), "-", as.character(month), "-01", sep = ""),
-                                             end_date)
+    statcastScrape <- scrape_statcast_savant_batter(paste(as.character(year), "-", as.character(month), "-01", sep = ""), end_date, batterid =  playerID)
     
   }
   return(statcastScrape)
