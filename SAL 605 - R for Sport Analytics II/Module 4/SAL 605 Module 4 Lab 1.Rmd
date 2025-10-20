@@ -1,0 +1,98 @@
+---
+title: "SAL 605 Module 4 Lab 1"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+##packages
+library(tidyverse)
+library(Lahman)
+library(baseballr)
+library(ggplot2)
+library(ggthemes)
+```
+
+
+#1.
+```{r}
+##getting mlbam ids for players
+bettsID <- playerid_lookup(last_name = 'Betts', first_name = 'Mookie') %>% 
+  pull(mlbam_id)
+
+martinezID <- playerid_lookup(last_name = 'Martinez', first_name = 'J. D.') %>%
+  pull(mlbam_id)
+```
+
+
+```{r}
+##will look at the months of august for each player in 2018
+##scraping data from statcast
+##Mookie Betts
+betts <- scrape_statcast_savant(start_date = '2018-08-01',
+                                    end_date = '2018-08-31',
+                                    playerid = bettsID,
+                                    player_type = 'batter')
+
+
+##JD Martinez
+martinez <- scrape_statcast_savant(start_date = '2018-08-01',
+                                    end_date = '2018-08-31',
+                                    playerid = martinezID,
+                                    player_type = 'batter')
+
+##combining all data into one df
+lab_data <- bind_rows(betts, martinez) %>%
+  ##only balls in play
+  filter(type == 'X')
+```
+
+
+#2.
+```{r}
+spray_chart <-  function(...) {
+  ggplot(...) +
+    geom_curve(x = 33, xend = 223, y = -100, yend = -100,
+               curvature = -0.65, color = 'darkgray') +
+    geom_segment(x = 128, xend = 33, y = -208, yend = -100, color = 'darkgray') +
+    geom_segment(x = 128, xend = 223, y = -208, yend = - 100, color = 'darkgray') +
+    geom_curve(x = 83, xend = 173, y = -155, yend = -156,
+               curvature = -0.65, linetype = 'dotted', color = 'darkgray') +
+    coord_fixed() +
+    scale_x_continuous(NULL, limits = c(25, 225)) +
+    scale_y_continuous(NULL, limits = c(-225, -25))
+}
+```
+
+
+```{r}
+spray_chart(lab_data %>%
+              filter(batter == bettsID),
+            aes(x = hc_x, y = -hc_y, color = events)) +
+  geom_point(size = 2) +
+  labs(title = 'Mookie Betts Spray Chart - August 2018',
+       caption = 'Data from Statcast Savant',
+       color = 'Result') +
+  labs(caption = 'Data from Statcast Savant') +
+  theme_classic()
+ggsave('graphics/BettsSprayChart2018.png')
+```
+
+
+```{r}
+spray_chart(lab_data %>%
+              filter(batter == martinezID),
+            aes(x = hc_x, y = -hc_y, color = events)) +
+  geom_point(size = 2) +
+  labs(title = 'J.D. Martinez Spray Chart - August 2018',
+       caption = 'Data from Statcast Savant',
+       color = 'Result') +
+  labs(caption = 'Data from Statcast Savant') +
+  theme_classic()
+ggsave('graphics/MartinezSprayChart2018.png')
+```

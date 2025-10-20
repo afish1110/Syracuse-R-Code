@@ -1,0 +1,153 @@
+---
+title: "SAL 621 Exam Analytics Q2"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(readr)
+library(car)
+library(ggplot2)
+```
+
+```{r}
+q2data <- read_csv('data/NCAAB_reduced_3_19_25.csv')
+```
+
+```{r}
+##adding columns for spread related columns with abs and covering
+q2data %>%
+  mutate(scorediff = HomeScore - AwayScore,
+         ABSactualSpread = abs(HomeScore - AwayScore),
+         ABSSpread = abs(Spread),
+         HomeCover = case_when(
+           ##favorite
+           ((HomeSpread < 0) & (((ABSSpread < ABSactualSpread)) & (HomeScore > AwayScore))) ~ TRUE,
+           ((HomeSpread < 0) & ((ABSSpread > ABSactualSpread) | (HomeScore < AwayScore))) ~ FALSE,
+           ##dog
+           ((HomeSpread > 0) & ((ABSSpread > ABSactualSpread) | (HomeScore > AwayScore))) ~ TRUE,
+           ((HomeSpread > 0) & ((ABSSpread < ABSactualSpread) & (AwayScore > HomeScore))) ~ FALSE),
+         ##for away if home doesn't cover then away does
+         AwayCover = case_when(
+           HomeCover == TRUE ~ FALSE,
+           HomeCover == FALSE ~ TRUE),
+         Underdog = ifelse(HomeSpread > 0, 'Home', 'Away'),
+         UnderdogCover = case_when(
+           Underdog == 'Home' & HomeCover == TRUE ~ TRUE,
+           Underdog == 'AWAY' & AwayCover == TRUE ~ TRUE,
+           HomeCover == FALSE | AwayCover == FALSE ~ FALSE)) -> q2data
+```
+
+
+```{r}
+##shows normal distribution of total
+ggplot(q2data, aes(x = Total, fill = OU)) +
+  geom_histogram(color = 'black') +
+  xlab('Total') + ylab('Count') +
+  ggtitle('Total w/OU Color')
+ggsave('TotalHist.jpg')
+```
+
+```{r}
+##shows normal distribution of spread
+ggplot(q2data, aes(x = Spread, fill = UnderdogCover)) +
+  geom_histogram(color = 'black') +
+  xlab('Absolut Value of Spread') + ylab('Count') +
+  ggtitle('Absolute Value of Spread w/Underdog Covering as Color')
+ggsave('SpreadHist.jpg')
+```
+
+```{r}
+##model for total, ran linearHypothesis() to test linearity and will show using chart
+total_mod <- lm(sumscore ~ Total, data = q2data)
+summary(total_mod)
+linearHypothesis(total_mod, c('(Intercept) = 0', 'Total = 1'))
+```
+
+```{r}
+##scatter plot to show linearity of model for totals
+ggplot(q2data, aes(x = Total, y = sumscore)) +
+  geom_point(alpha = 0.5) + 
+  geom_abline(slope = total_mod$coefficients[2], intercept = total_mod$coefficients[1], color = 'green', size = 1.5)
+ggsave('TotalLinearity.jpg')
+```
+
+
+```{r}
+##model for spread couldn't figure out linearHypothesis() so used chart to show linear relationship
+spread_mod <- lm(ABSactualSpread ~ ABSSpread, data = q2data)
+summary(spread_mod)
+```
+
+```{r}
+##scatter plot to show linearity of model for spread
+ggplot(q2data, aes(x = ABSSpread, y = ABSactualSpread)) +
+  geom_point(alpha = 0.5) + 
+  geom_abline(slope = spread_mod$coefficients[2], intercept = spread_mod$coefficients[1], color = 'red', size = 1.5)
+ggsave('SpreadLinearity.jpg')
+```
+
+
+```{r}
+##looking at the summary for total and spread to examine where should start the tails
+summary(q2data$ABSSpread)
+summary(q2data$Total)
+```
+From this table above will start by filtering data in the outer quartiles (Min-Q1 and Q3-Max)
+
+Going to exam the totals and spreads results as stated in the papers specifically the underdog covering and the under
+
+```{r}
+##calculating percentage for underdog covering and filtering the data over the tails and entire set
+q2data %>% count(UnderdogCover) -> breakdwn_dog_spread
+breakdwn_dog_spread
+breakdwn_dog_spread$n[2] / sum(breakdwn_dog_spread$n)
+```
+
+It is possible there might be a tail where the underdog spread covers more with such a low hit rate overall. Will check both ends (Q1 & Q3).
+
+```{r}
+q2data %>% filter((ABSSpread >= 10.5)) -> spreadq3
+spreadq3 %>% count(UnderdogCover) -> breakdwn_dog_spreadq3
+breakdwn_dog_spreadq3
+breakdwn_dog_spreadq3$n[2] / sum(breakdwn_dog_spreadq3$n)
+```
+
+```{r}
+q2data %>% filter((ABSSpread <= 3.5)) -> spreadq1
+spreadq1 %>% count(UnderdogCover) -> breakdwn_dog_spreadq1
+breakdwn_dog_spreadq1
+breakdwn_dog_spreadq1$n[2] / sum(breakdwn_dog_spreadq1$n)
+```
+
+Now examine the totals market
+```{r}
+##calculating percentages for under hitting over the entire data set and the tails
+q2data %>% count(OU) -> breakdwn_OU
+breakdwn_OU
+breakdwn_OU$n[3] / sum(breakdwn_OU$n)
+```
+
+Not very efficient to just bet under. Will check both ends (Q1 & Q3) like with the Spreads
+
+```{r}
+q2data %>% filter(Total <= 135) -> totalq1
+totalq1 %>% count(OU) -> breakdwn_OUq1
+breakdwn_OUq1
+breakdwn_OUq1$n[3] / sum(breakdwn_OUq1$n)
+```
+
+```{r}
+q2data %>% filter(Total >= 147) -> totalq3
+totalq3 %>% count(OU) -> breakdwn_OUq3
+breakdwn_OUq3
+breakdwn_OUq3$n[3] / sum(breakdwn_OUq3$n)
+```
+From this data betting the under is better when the Total is higher (50% success rate).
+Betting the underdog to cover isn't a very good strategy as can be seen by percentages but the best time to do it is with lower spreads (20% success rate).

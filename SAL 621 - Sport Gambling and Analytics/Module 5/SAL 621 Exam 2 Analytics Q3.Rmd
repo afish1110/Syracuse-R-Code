@@ -1,0 +1,136 @@
+---
+title: "SAL 621 Exam 2 Analytics Q3"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(readr)
+library(lmtest)
+library(car)
+library(sandwich)
+library(ggplot2)
+library(ggpubr)
+```
+
+```{r}
+nfl_bet_vol <- read_csv('data/NFL_volume_pct_2024 season_2_27_25.csv')
+```
+
+```{r}
+##data came in with extra na columns so removing them
+nfl_bet_vol[-c(14:24)] -> nfl_bet_vol
+```
+
+```{r}
+##adding variables to df for modeling mostly dummies
+nfl_bet_vol %>%
+  mutate(absSpread = abs(HomeSpread),
+         HomeFav = case_when(
+           HomeSpread < 0 ~ 1,
+           .default = 0),
+         RoadFav = case_when(
+           AwaySpread < 0 ~ 1,
+           .default = 0),
+         HomeDog = case_when(
+           HomeSpread > 0 ~ 1,
+           .default = 0),
+         RoadDog = case_when(
+           AwaySpread > 0 ~ 1,
+           .default = 0)) -> nfl_bet_vol
+```
+
+```{r}
+##starting out trying to replicate model from paper using betting data
+volume1 <- lm(volume ~ absSpread + I(absSpread^2) + Total + RoadFav, data = nfl_bet_vol)
+summary(volume1)
+```
+
+```{r}
+##multicollinearity test
+vif(volume1)
+```
+
+```{r}
+##issue with abs spread and squared so removing squared
+volume1 <- lm(volume ~ absSpread + Total + RoadFav, data = nfl_bet_vol)
+summary(volume1)
+vif(volume1)
+```
+
+```{r}
+##BP and White test for heteroskedasticity
+bptest(volume1)
+bptest(volume1, ~ fitted(volume1) + I(fitted(volume1)^2))
+```
+BP test rejects at 10% but White fail to reject will not adjust for heteroskedasticity looking for 1% or 5%
+
+```{r}
+##adding week in season
+volume2 <- lm(volume ~ absSpread + Total + RoadFav + Week_of_season, data = nfl_bet_vol)
+summary(volume2)
+vif(volume2)
+```
+
+```{r}
+##hetero tests
+bptest(volume2)
+bptest(volume2, ~ fitted(volume2) + I(fitted(volume2)^2))
+```
+
+Both BP and White test reject at 5% will adjust
+
+```{r}
+hccm(volume2)
+coeftest(volume2, vcov. = hccm)
+
+```
+
+Adjusting for heteroskedasticity makes spread significant at 10% level no changes to coefficients
+
+```{r}
+##comparing the two models using ANOVA
+anova(volume1, volume2)
+```
+
+```{r}
+bar1 <- ggplot(nfl_bet_vol, aes(Week_of_season, volume)) +
+  geom_col(fill = 'maroon') +
+  xlab('Week of Season') + ylab('Betting Volume') +
+  ggtitle('Betting Volume by Week of Season')
+```
+
+```{r}
+scatter1 <- ggplot(nfl_bet_vol, aes(Total, volume)) +
+  geom_point(color = 'darkblue', size = 2, alpha = .75) +
+  xlab('Total (Line)') + ylab('Betting Volume') +
+  ggtitle('Betting Volume by Total Line')
+```
+
+```{r}
+bar2 <- ggplot(nfl_bet_vol, aes(absSpread, volume)) + 
+  geom_col(fill = 'darkgreen') +
+  xlab('Absolute Value Spread') +
+  ylab('Betting Volume') +
+  ggtitle('Betting Volume by Absolute Value of Spread')
+```
+
+```{r}
+bar3 <- ggplot(nfl_bet_vol, aes(RoadFav, volume)) +
+  geom_col(fill = 'purple') +
+  xlab('Road Favorite') +
+  ylab('Betting Volume') +
+  ggtitle('Betting Volume by Favorites (Road)')
+```
+
+```{r}
+dash1 <- ggarrange(scatter1, bar2, bar1, bar3, ncol = 2, nrow = 2)
+ggsave('SAL 621 Analytics Q3 Dashboard.jpg', plot = dash1, width = 9)
+```
+

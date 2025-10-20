@@ -1,0 +1,109 @@
+---
+title: "SAL 605 Assignment 2"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+##packages
+library(tidyverse)
+library(readr)
+```
+
+#1.
+```{r}
+##reading in data
+data1968c <- read_csv('data/data1968C.csv')
+```
+
+#2.
+```{r}
+##all data cleaning was done on this file already so don't need to prepare it in anyway can just go into making T-Matrix and P-Matrix
+##T-Matrix
+T_matrix <- data1968c %>%
+  select(STATE, NEW.STATE) %>%
+  table()
+```
+
+```{r}
+##P-Matrix
+##pobabilities of each state from t matrix
+P_matrix <- prop.table(T_matrix, 1)
+
+##getting probabilities from each state to every other state
+P_matrix <- rbind(P_matrix, c(rep(0,24), 1))
+
+P_matrix
+```
+
+```{r}
+##Run Matrix (R-Matrix)
+count_runners_out <- function(s) {
+  s %>% 
+    str_split('') %>% 
+    pluck(1) %>% 
+    as.numeric() %>% 
+    sum(na.rm = TRUE)
+}
+
+runners_out <- sapply(row.names(T_matrix),
+                      count_runners_out)[-25]
+
+R <- outer(runners_out + 1, runners_out, FUN = '-')
+names(R) <- names(T_matrix)[-25]
+R <- cbind(R, rep(0,24))
+```
+
+#4.
+```{r}
+simulate_half_inning <- function(P, R, start = 1) {
+  s <- start
+  path <- NULL
+  runs <- 0
+  while (s < 25) {
+    s.new <- sample(1:25, size = 1, prob = P[s, ])
+    path <- c(path, s.new)
+    runs <- runs + R[s, s.new]
+    s <- s.new
+  }
+  return(runs)
+}
+```
+
+#5.
+```{r}
+##function to get mean number of runs
+set.seed(19) ##Roman Anthony
+RUNS.j <-  function(j) {
+  mean(replicate(10000, simulate_half_inning(T_matrix, R, j)))
+}
+
+RE_bat <- sapply(1:24, RUNS.j) %>% 
+  matrix(nrow = 8, ncol = 3, byrow = TRUE,
+         dimnames = list(c('000', '001', '010', '011', '100', '101', '110', '111'), c('0 outs', '1 out', '2 outs')))
+
+round(RE_bat, 2)
+```
+
+#6.
+```{r}
+RE_bat_2021 <- t(matrix(c(0.49, 0.26, 0.10,
+                          1.38, 0.94, 0.37,
+                          1.12, 0.68, 0.32,
+                          1.99, 1.37, 0.58,
+                          0.88, 0.52, 0.23,
+                          1.75, 1.10, 0.46,
+                          1.54, 0.90, 0.43,
+                          2.37, 1.64, 0.81), 3, 8))
+
+##comparing using both subtraction and RMSE
+RE_bat - RE_bat_2021
+
+sqrt(mean(RE_bat - RE_bat_2021) ^ 2)
+```
+

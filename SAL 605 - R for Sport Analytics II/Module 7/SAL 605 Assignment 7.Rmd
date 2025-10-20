@@ -1,0 +1,50 @@
+---
+title: "SAL 605 Assignment 7"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(BasketballAnalyzeR)
+library(ggplot2)
+```
+
+
+```{r}
+data <- Pbox %>% 
+  filter(MIN >= 1500) %>% 
+  ##looking at 2P shots 3P shots Blocks and Assists
+  transmute(P3A, P3M, P2A, P2M, BLK, AST)
+
+##player identification for labels
+ID <- Pbox %>% 
+  filter(MIN >= 1500) %>% 
+  pull(Player)
+```
+
+
+```{r}
+##first steps in hierarchial clustering
+hclu1 <- hclustering(data)
+plot(hclu1)
+```
+
+
+```{r}
+##from first step will use 8 clusters as elbow
+hclu2 <- hclustering(data, labels = ID, k = 8)
+plot(hclu2, profiles = TRUE)
+##Clusters 2, 6, 8 have high CHI, high variance undermining cluster
+```
+
+```{r}
+##tree cluster plot using player names
+plot(hclu2, profiles = FALSE, rect = FALSE, colored.branches = TRUE, cex.labels = 0.25)
+```
+

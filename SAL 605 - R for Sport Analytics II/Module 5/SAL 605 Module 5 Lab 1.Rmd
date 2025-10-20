@@ -1,0 +1,29 @@
+---
+title: "SAL 605 Module 5 Lab 1"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(BasketballAnalyzeR)
+library(tidyverse)
+```
+
+
+```{r}
+##teams abreviations that we are examining
+selTeams <- which(Tadd$team %in% c('MIN', 'BOS', 'DEN', 'MIL'))
+##four factors data of just the teams
+sel.FF <- fourfactors(Obox[selTeams, ], Tbox[selTeams, ])
+##radial chart of each team's four factors
+X <- sel.FF %>% 
+  select(-c(Team, POSS.Off, POSS.Def, PACE.Off, PACE.Def, ORtg, DRtg))
+radialprofile(data = X, title = sel.FF$Team)
+```
+

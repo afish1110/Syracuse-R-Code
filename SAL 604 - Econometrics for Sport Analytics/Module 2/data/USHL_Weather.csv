@@ -1,0 +1,486 @@
+date,Visiting,GF,Home,GF,Venue,Crowd,temp,hum,wind,precip
+10/14/2017,Omaha,5,Cedar Rapids,1,Cedar Rapids Ice Arena,1902,63,94,12,0.8
+10/20/2017,Lincoln,2,Cedar Rapids,4,Cedar Rapids Ice Arena,1872,62,69,10,0
+10/21/2017,Central Illinois,3,Cedar Rapids,5,Cedar Rapids Ice Arena,1507,68,74,14,0.23
+11/11/2017,Madison,3,Cedar Rapids,1,Cedar Rapids Ice Arena,2128,39,54,10,0.001
+11/25/2017,Waterloo,2,Cedar Rapids,3,Cedar Rapids Ice Arena,2666,39,65,11,0
+12/2/2017,Sioux Falls,4,Cedar Rapids,2,Cedar Rapids Ice Arena,1749,42,57,3,0
+12/8/2017,Chicago,0,Cedar Rapids,2,Cedar Rapids Ice Arena,1699,25,61,11,0.001
+12/9/2017,Dubuque,1,Cedar Rapids,7,Cedar Rapids Ice Arena,2082,23,62,14,0
+12/27/2017,Chicago,4,Cedar Rapids,3,Cedar Rapids Ice Arena,1938,-3,64,5,0
+12/30/2017,Central Illinois,5,Cedar Rapids,6,Cedar Rapids Ice Arena,2083,0,73,15,0.001
+1/5/2018,Youngstown,3,Cedar Rapids,5,Cedar Rapids Ice Arena,1514,0,73,7,0.001
+1/6/2018,Youngstown,4,Cedar Rapids,2,Cedar Rapids Ice Arena,2305,-3,75,9,0
+1/13/2018,Waterloo,3,Cedar Rapids,2,Cedar Rapids Ice Arena,3581,6,61,8,0
+1/19/2018,Team USA,7,Cedar Rapids,6,Cedar Rapids Ice Arena,2124,35,67,12,0
+1/20/2018,Dubuque,3,Cedar Rapids,0,Cedar Rapids Ice Arena,3573,38,76,6,0
+2/2/2018,Dubuque,4,Cedar Rapids,3,Cedar Rapids Ice Arena,2091,9,56,7,0.001
+2/16/2018,Muskegon,5,Cedar Rapids,2,Cedar Rapids Ice Arena,2076,24,67,13,0
+2/17/2018,Dubuque,2,Cedar Rapids,1,Cedar Rapids Ice Arena,2721,25,80,9,0.1
+2/23/2018,Tri-City,1,Cedar Rapids,0,Cedar Rapids Ice Arena,1788,31,85,11,0.1
+2/24/2018,Fargo,3,Cedar Rapids,0,Cedar Rapids Ice Arena,2542,31,84,15,0.16
+3/9/2018,Waterloo,4,Cedar Rapids,5,Cedar Rapids Ice Arena,2640,29,63,6,0
+3/10/2018,Green Bay,2,Cedar Rapids,3,Cedar Rapids Ice Arena,2017,33,60,10,0
+3/14/2018,Green Bay,4,Cedar Rapids,3,Cedar Rapids Ice Arena,1390,39,59,13,0
+3/23/2018,Green Bay,4,Cedar Rapids,3,Cedar Rapids Ice Arena,2050,39,55,17,0.22
+3/24/2018,Green Bay,1,Cedar Rapids,4,Cedar Rapids Ice Arena,1873,32,81,20,0.2
+3/31/2018,Chicago,5,Cedar Rapids,4,Cedar Rapids Ice Arena,2388,38,71,20,0.3
+4/4/2018,Madison,1,Cedar Rapids,4,Cedar Rapids Ice Arena,1230,25,76,14,0.001
+4/7/2018,Sioux City,0,Cedar Rapids,4,Cedar Rapids Ice Arena,2321,27,57,11,0
+10/28/2017,Dubuque,6,Central Illinois,3,Peoria Civic Center,712,35,82,13,0.02
+10/29/2017,Waterloo,1,Central Illinois,5,Peoria Civic Center,424,38,62,8,0
+11/4/2017,Des Moines,5,Central Illinois,6,Peoria Civic Center,569,48,95,11,0
+11/5/2017,Chicago,1,Central Illinois,2,Peoria Civic Center,471,56,97,7,0.03
+11/10/2017,Youngstown,3,Central Illinois,2,Grossinger Motors Arena,1924,26,62,12,0
+11/11/2017,Dubuque,5,Central Illinois,6,Grossinger Motors Arena,1488,34,62,12,0
+11/24/2017,Youngstown,4,Central Illinois,3,Grossinger Motors Arena,712,46,65,13,0
+11/25/2017,Youngstown,5,Central Illinois,1,Grossinger Motors Arena,1041,46,59,15,0
+12/1/2017,Sioux City,2,Central Illinois,3,Grossinger Motors Arena,830,40,66,5,0
+12/29/2017,Des Moines,3,Central Illinois,6,Grossinger Motors Arena,1037,13,86,6,0.14
+12/31/2017,Madison,2,Central Illinois,3,Grossinger Motors Arena,789,0,75,13,0
+1/2/2018,Green Bay,2,Central Illinois,1,Grossinger Motors Arena,512,-3,72,11,0
+1/12/2018,Team USA,6,Central Illinois,5,Grossinger Motors Arena,729,16,74,21,0
+1/13/2018,Team USA,4,Central Illinois,2,Grossinger Motors Arena,1724,12,65,15,0
+1/19/2018,Sioux Falls,5,Central Illinois,2,Grossinger Motors Arena,1032,32,70,18,0
+1/21/2018,Lincoln,4,Central Illinois,3,Grossinger Motors Arena,1041,44,98,10,0
+1/22/2018,Lincoln,1,Central Illinois,4,Grossinger Motors Arena,632,46,90,17,0.31
+2/7/2018,Cedar Rapids,4,Central Illinois,3,Grossinger Motors Arena,517,16,76,11,0
+2/17/2018,Green Bay,4,Central Illinois,1,Grossinger Motors Arena,1083,26,89,11,0.03
+2/18/2018,Green Bay,5,Central Illinois,2,Grossinger Motors Arena,888,30,85,10,0
+3/2/2018,Fargo,6,Central Illinois,2,Grossinger Motors Arena,962,37,67,9,0
+3/3/2018,Fargo,8,Central Illinois,0,Grossinger Motors Arena,1182,38,69,9,0
+3/9/2018,Muskegon,5,Central Illinois,4,Grossinger Motors Arena,1064,32,65,5,0
+3/10/2018,Muskegon,4,Central Illinois,5,Grossinger Motors Arena,945,34,66,10,0
+3/18/2018,Madison,6,Central Illinois,3,Grossinger Motors Arena,759,38,73,3,0
+3/23/2018,Team USA,9,Central Illinois,3,Grossinger Motors Arena,745,28,68,18,0
+3/24/2018,Team USA,4,Central Illinois,2,Grossinger Motors Arena,756,35,89,15,0.42
+3/30/2018,Chicago,3,Central Illinois,4,Grossinger Motors Arena,636,26,82,11,0.08
+4/6/2018,Muskegon,6,Central Illinois,5,Grossinger Motors Arena,1012,30,68,7,0.08
+10/7/2017,Team USA,10,Chicago,5,Fox Valley Ice Arena,1204,70,70,18,0.43
+10/20/2017,Dubuque,2,Chicago,3,Fox Valley Ice Arena,693,65,59,9,0
+10/21/2017,Madison,2,Chicago,7,Fox Valley Ice Arena,881,69,59,15,0
+11/3/2017,Green Bay,4,Chicago,5,Fox Valley Ice Arena,852,43,76,10,0
+11/4/2017,Green Bay,6,Chicago,5,Fox Valley Ice Arena,1477,46,86,8,0.48
+11/24/2017,Lincoln,5,Chicago,4,Fox Valley Ice Arena,932,48,57,13,0
+12/2/2017,Waterloo,2,Chicago,3,Fox Valley Ice Arena,775,44,59,4,0
+12/9/2017,Madison,3,Chicago,7,Fox Valley Ice Arena,1229,26,71,14,0.03
+12/30/2017,Dubuque,2,Chicago,4,Fox Valley Ice Arena,1326,7,67,13,0.001
+12/31/2017,Muskegon,6,Chicago,3,Fox Valley Ice Arena,758,6,61,11,0
+1/12/2018,Cedar Rapids,5,Chicago,6,Fox Valley Ice Arena,744,19,62,20,0.001
+1/14/2018,Sioux City,2,Chicago,7,Fox Valley Ice Arena,1067,13,63,9,0.08
+1/19/2018,Muskegon,2,Chicago,6,Fox Valley Ice Arena,663,34,61,17,0
+1/20/2018,Team USA,4,Chicago,3,Fox Valley Ice Arena,1181,39,72,8,0
+1/26/2018,Cedar Rapids,2,Chicago,8,Fox Valley Ice Arena,940,42,68,19,0
+1/28/2018,Muskegon,5,Chicago,4,Fox Valley Ice Arena,909,34,75,9,0.01
+2/2/2018,Youngstown,4,Chicago,3,Fox Valley Ice Arena,659,14,50,10,0
+2/3/2018,Youngstown,4,Chicago,3,Fox Valley Ice Arena,1677,32,63,13,0.03
+2/9/2018,Central Illinois,4,Chicago,5,Fox Valley Ice Arena,512,23,80,11,0.57
+2/16/2018,Des Moines,3,Chicago,2,Fox Valley Ice Arena,968,29,61,10,0
+2/17/2018,Madison,8,Chicago,4,Fox Valley Ice Arena,1036,26,75,9,0.11
+2/23/2018,Green Bay,3,Chicago,2,Fox Valley Ice Arena,1010,39,82,9,0.06
+2/25/2018,Central Illinois,0,Chicago,3,Fox Valley Ice Arena,1055,42,62,18,0.01
+3/2/2018,Omaha,6,Chicago,4,Fox Valley Ice Arena,1344,39,57,6,0
+3/3/2018,Sioux Falls,2,Chicago,4,Fox Valley Ice Arena,1093,38,53,8,0
+3/4/2018,Youngstown,4,Chicago,2,Fox Valley Ice Arena,1118,39,53,12,0
+3/17/2018,Tri-City,2,Chicago,5,Fox Valley Ice Arena,1027,38,53,10,0.001
+3/18/2018,Tri-City,5,Chicago,2,Fox Valley Ice Arena,1271,42,47,5,0
+3/25/2018,Team USA,6,Chicago,9,Fox Valley Ice Arena,1159,34,45,14,0
+10/7/2017,Muskegon,3,Des Moines,2,Buccaneer Arena,2271,63,83,13,0.32
+10/14/2017,Lincoln,6,Des Moines,2,Buccaneer Arena,2113,61,93,13,1.23
+10/28/2017,Fargo,6,Des Moines,5,Buccaneer Arena,1949,38,55,9,0
+11/3/2017,Madison,3,Des Moines,4,Buccaneer Arena,1995,42,64,10,0.001
+11/18/2017,Tri-City,1,Des Moines,4,Buccaneer Arena,2410,38,77,16,0.2
+11/24/2017,Fargo,4,Des Moines,3,Buccaneer Arena,2229,57,49,16,0
+11/25/2017,Fargo,5,Des Moines,1,Buccaneer Arena,2339,47,61,7,0
+12/1/2017,Chicago,0,Des Moines,3,Buccaneer Arena,1757,43,48,9,0
+12/2/2017,Omaha,5,Des Moines,3,Buccaneer Arena,2131,45,49,4,0
+12/8/2017,Sioux City,3,Des Moines,9,Buccaneer Arena,1823,28,61,10,0
+12/9/2017,Lincoln,4,Des Moines,2,Buccaneer Arena,1990,26,63,12,0.001
+1/5/2018,Team USA,3,Des Moines,5,Buccaneer Arena,2244,7,63,6,0.001
+1/6/2018,Team USA,3,Des Moines,2,Buccaneer Arena,2368,6,63,10,0
+1/20/2018,Omaha,5,Des Moines,1,Buccaneer Arena,2712,39,73,5,0
+1/21/2018,Cedar Rapids,2,Des Moines,1,Buccaneer Arena,1550,41,93,9,0.44
+1/26/2018,Sioux Falls,2,Des Moines,1,Buccaneer Arena,1811,47,60,16,0
+1/27/2018,Green Bay,0,Des Moines,3,Buccaneer Arena,2428,40,60,9,0
+2/9/2018,Cedar Rapids,1,Des Moines,2,Buccaneer Arena,2076,13,73,15,0.14
+2/10/2018,Lincoln,2,Des Moines,1,Buccaneer Arena,2243,10,68,7,0.11
+2/17/2018,Muskegon,3,Des Moines,5,Buccaneer Arena,2360,32,71,10,0.02
+2/23/2018,Waterloo,2,Des Moines,1,Buccaneer Arena,2098,45,76,8,0.001
+2/24/2018,Tri-City,4,Des Moines,2,Buccaneer Arena,2421,39,62,12,0
+3/2/2018,Sioux Falls,2,Des Moines,1,Buccaneer Arena,1829,27,72,15,0.02
+3/3/2018,Tri-City,5,Des Moines,2,Buccaneer Arena,3028,27,66,8,0
+3/16/2018,Sioux Falls,3,Des Moines,2,Buccaneer Arena,1888,43,66,15,0.06
+3/17/2018,Lincoln,2,Des Moines,1,Buccaneer Arena,1914,35,87,14,0.65
+3/23/2018,Sioux City,2,Des Moines,3,Buccaneer Arena,2008,43,60,10,0
+4/1/2018,Dubuque,2,Des Moines,3,Buccaneer Arena,1693,32,66,12,0.03
+4/6/2018,Omaha,3,Des Moines,1,Buccaneer Arena,2329,30,53,15,0
+4/7/2018,Omaha,2,Des Moines,0,Buccaneer Arena,2542,28,54,8,0
+10/6/2017,Chicago,6,Dubuque,2,Mystique Ice Center,1749,62,88,10,1.33
+10/13/2017,Waterloo,2,Dubuque,0,Mystique Ice Center,1536,57,86,9,1.12
+11/3/2017,Omaha,3,Dubuque,5,Mystique Ice Center,1477,41,70,10,0
+11/10/2017,Chicago,3,Dubuque,2,Mystique Ice Center,1781,21,51,10,0
+11/18/2017,Madison,2,Dubuque,3,Mystique Ice Center,2009,33,82,16,0.15
+11/22/2017,Waterloo,3,Dubuque,2,Mystique Ice Center,1556,23,67,7,0
+11/25/2017,Sioux City,4,Dubuque,5,Mystique Ice Center,1712,39,64,12,0
+12/1/2017,Cedar Rapids,3,Dubuque,4,Mystique Ice Center,1665,37,58,8,0
+12/2/2017,Sioux City,2,Dubuque,0,Mystique Ice Center,2462,39,64,4,0
+12/8/2017,Madison,1,Dubuque,7,Mystique Ice Center,1627,24,67,12,0.001
+12/28/2017,Cedar Rapids,3,Dubuque,4,Mystique Ice Center,2317,6,80,11,0.09
+1/5/2018,Muskegon,3,Dubuque,2,Mystique Ice Center,1687,0,72,7,0
+1/6/2018,Muskegon,3,Dubuque,4,Mystique Ice Center,1978,-1,73,9,0
+1/12/2018,Youngstown,1,Dubuque,3,Mystique Ice Center,2011,9,69,17,0
+1/13/2018,Youngstown,3,Dubuque,1,Mystique Ice Center,2873,4,63,7,0
+2/10/2018,Central Illinois,1,Dubuque,4,Mystique Ice Center,2912,11,70,8,0.09
+2/16/2018,Madison,5,Dubuque,4,Mystique Ice Center,2221,21,63,12,0
+2/23/2018,Sioux Falls,7,Dubuque,6,Mystique Ice Center,2262,30,86,12,0.12
+2/24/2018,Sioux Falls,2,Dubuque,3,Mystique Ice Center,3084,30,89,15,0.35
+3/7/2018,Green Bay,6,Dubuque,3,Mystique Ice Center,1209,23,74,13,0.001
+3/9/2018,Lincoln,4,Dubuque,2,Mystique Ice Center,2147,22,67,3,0
+3/23/2018,Waterloo,2,Dubuque,3,Mystique Ice Center,2241,35,56,13,0.001
+3/24/2018,Des Moines,2,Dubuque,5,Mystique Ice Center,2052,32,65,16,0.27
+3/30/2018,Cedar Rapids,2,Dubuque,4,Mystique Ice Center,2005,39,55,8,0
+4/6/2018,Team USA,5,Dubuque,4,Mystique Ice Center,1452,25,65,18,0
+4/7/2018,Team USA,5,Dubuque,4,Mystique Ice Center,1953,24,50,11,0
+10/6/2017,Sioux Falls,5,Fargo,2,Scheels Arena,2739,49,73,5,0
+10/7/2017,Sioux City,3,Fargo,2,Scheels Arena,2283,60,59,12,0
+10/13/2017,Youngstown,2,Fargo,3,Scheels Arena,2096,45,61,5,0
+10/14/2017,Youngstown,4,Fargo,3,Scheels Arena,2745,43,72,7,0.27
+10/19/2017,Sioux Falls,2,Fargo,1,Scheels Arena,2380,56,53,12,0
+11/3/2017,Cedar Rapids,0,Fargo,5,Scheels Arena,2612,29,82,8,0.04
+11/4/2017,Waterloo,3,Fargo,6,Scheels Arena,3120,33,89,11,0.1
+11/9/2017,Des Moines,4,Fargo,2,Scheels Arena,2028,11,68,9,0.02
+11/10/2017,Des Moines,0,Fargo,4,Scheels Arena,2749,15,66,20,0
+11/22/2017,Sioux Falls,4,Fargo,3,Scheels Arena,2923,20,67,10,0.001
+12/15/2017,Waterloo,0,Fargo,4,Scheels Arena,2484,25,87,8,0.06
+12/16/2017,Waterloo,4,Fargo,1,Scheels Arena,2926,26,89,4,0
+12/29/2017,Sioux Falls,3,Fargo,2,Scheels Arena,3302,-9,71,9,0.001
+12/30/2017,Omaha,4,Fargo,3,Scheels Arena,3113,-18,66,9,0
+1/5/2018,Chicago,3,Fargo,5,Scheels Arena,2552,-10,72,3,0
+1/6/2018,Chicago,1,Fargo,2,Scheels Arena,2664,6,73,22,0.001
+1/19/2018,Sioux City,2,Fargo,1,Scheels Arena,4361,34,81,9,0
+1/20/2018,Sioux City,3,Fargo,1,Scheels Arena,3823,30,88,7,0
+1/25/2018,Sioux City,4,Fargo,3,Scheels Arena,2335,25,92,17,0
+2/2/2018,Muskegon,1,Fargo,0,Scheels Arena,2646,5,72,8,0.001
+2/3/2018,Muskegon,1,Fargo,6,Scheels Arena,3047,2,83,18,0.15
+2/16/2018,Tri-City,0,Fargo,3,Scheels Arena,4487,12,65,16,0
+2/17/2018,Tri-City,2,Fargo,1,Scheels Arena,3713,17,69,11,0
+3/16/2018,Dubuque,1,Fargo,3,Scheels Arena,3695,26,59,7,0
+3/17/2018,Dubuque,1,Fargo,5,Scheels Arena,3635,22,74,3,0
+3/22/2018,Omaha,1,Fargo,7,Scheels Arena,2789,37,88,6,0
+3/23/2018,Omaha,2,Fargo,8,Scheels Arena,3578,34,71,14,0.001
+3/30/2018,Lincoln,7,Fargo,2,Scheels Arena,3989,18,77,12,0.28
+3/31/2018,Lincoln,2,Fargo,3,Scheels Arena,3119,12,80,17,0.14
+10/6/2017,Cedar Rapids,1,Green Bay,2,Resch Center,1792,60,84,5,0.76
+10/7/2017,Dubuque,1,Green Bay,2,Resch Center,2555,64,92,12,0.26
+10/14/2017,Central Illinois,3,Green Bay,2,Resch Center,1796,52,88,11,1.04
+10/28/2017,Sioux Falls,4,Green Bay,5,Resch Center,4367,40,77,10,0.001
+10/29/2017,Sioux Falls,0,Green Bay,2,Resch Center,1217,36,79,6,0.001
+11/22/2017,Cedar Rapids,1,Green Bay,6,Resch Center,2655,27,64,8,0.001
+11/25/2017,Chicago,0,Green Bay,4,Resch Center,3057,35,66,10,0
+12/5/2017,Cedar Rapids,1,Green Bay,3,Resch Center,872,38,68,24,0.001
+12/8/2017,Muskegon,1,Green Bay,4,Resch Center,2021,24,72,9,0.02
+12/9/2017,Muskegon,4,Green Bay,2,Resch Center,2721,20,78,11,0.04
+12/15/2017,Madison,2,Green Bay,3,Resch Center,2787,14,68,9,0.01
+12/27/2017,Dubuque,3,Green Bay,2,Resch Center,2702,-6,63,6,0
+12/30/2017,Tri-City,4,Green Bay,5,Resch Center,3272,-1,66,13,0
+12/31/2017,Tri-City,1,Green Bay,2,Resch Center,4552,-1,60,10,0
+1/5/2018,Central Illinois,4,Green Bay,7,Resch Center,2302,1,61,10,0
+1/19/2018,Dubuque,3,Green Bay,0,Resch Center,3657,30,73,10,0
+1/20/2018,Madison,3,Green Bay,2,Resch Center,6722,35,81,3,0
+2/9/2018,Waterloo,2,Green Bay,1,Resch Center,3703,6,62,7,0.02
+2/10/2018,Chicago,0,Green Bay,4,Resch Center,7226,10,57,5,0
+2/24/2018,Madison,2,Green Bay,4,Resch Center,7757,33,76,9,0.33
+3/2/2018,Team USA,5,Green Bay,2,Resch Center,2223,36,61,4,0
+3/3/2018,Team USA,4,Green Bay,1,Resch Center,5180,34,61,7,0
+3/4/2018,Madison,2,Green Bay,6,Resch Center,2210,33,63,9,0
+3/16/2018,Youngstown,3,Green Bay,2,Resch Center,3270,30,58,5,0
+3/17/2018,Youngstown,1,Green Bay,0,Resch Center,5051,35,55,4,0
+3/25/2018,Des Moines,2,Green Bay,4,Resch Center,2821,30,58,8,0
+3/30/2018,Madison,4,Green Bay,2,Resch Center,2537,35,65,7,0
+3/31/2018,Central Illinois,1,Green Bay,6,Resch Center,3002,31,72,11,0.38
+4/7/2018,Fargo,4,Green Bay,1,Resch Center,4257,21,54,13,0
+4/8/2018,Fargo,3,Green Bay,2,Resch Center,4272,23,51,3,0
+10/6/2017,Muskegon,0,Lincoln,1,Ice Box,1781,65,94,8,1.18
+10/13/2017,Des Moines,2,Lincoln,4,Ice Box,2229,57,79,11,0
+10/28/2017,Chicago,5,Lincoln,3,Ice Box,1799,38,44,6,0
+11/11/2017,Sioux Falls,4,Lincoln,5,Ice Box,2199,41,74,100,0.01
+11/17/2017,Fargo,0,Lincoln,3,Ice Box,2150,56,72,12,0.001
+11/22/2017,Tri-City,3,Lincoln,2,Ice Box,2958,28,61,9,0
+12/1/2017,Green Bay,3,Lincoln,4,Ice Box,1830,43,55,7,0
+12/2/2017,Green Bay,1,Lincoln,5,Ice Box,2165,40,54,1,0
+12/7/2017,Tri-City,1,Lincoln,0,Ice Box,1698,21,55,9,0
+12/15/2017,Sioux Falls,0,Lincoln,2,Ice Box,1873,38,61,12,0
+12/16/2017,Des Moines,7,Lincoln,5,Ice Box,1946,41,53,7,0
+12/28/2017,Tri-City,3,Lincoln,2,Ice Box,2564,17,70,8,0
+1/5/2018,Madison,5,Lincoln,3,Ice Box,2119,13,72,7,0
+1/6/2018,Sioux City,2,Lincoln,3,Ice Box,2433,13,74,7,0
+1/12/2018,Omaha,6,Lincoln,2,Ice Box,3062,7,63,12,0
+1/16/2018,Des Moines,3,Lincoln,5,Ice Box,1680,8,71,9,0
+1/19/2018,Waterloo,6,Lincoln,2,Ice Box,2651,39,57,8,0
+1/27/2018,Omaha,2,Lincoln,1,Ice Box,4310,35,61,5,0
+1/30/2018,Sioux City,1,Lincoln,7,Ice Box,1759,34,55,16,0
+2/16/2018,Omaha,4,Lincoln,3,Ice Box,3684,23,56,12,0
+2/18/2018,Dubuque,4,Lincoln,3,Ice Box,2798,42,59,18,0.001
+2/23/2018,Fargo,2,Lincoln,4,Ice Box,2421,25,81,8,0
+3/2/2018,Waterloo,2,Lincoln,3,Ice Box,2198,41,52,14,0
+3/3/2018,Cedar Rapids,1,Lincoln,5,Ice Box,2378,58,53,19,0
+3/10/2018,Omaha,2,Lincoln,4,Ice Box,4371,41,57,11,0
+3/15/2018,Des Moines,4,Lincoln,6,Ice Box,1815,48,51,12,0
+3/24/2018,Youngstown,1,Lincoln,2,Ice Box,3745,42,61,14,0
+4/4/2018,Des Moines,2,Lincoln,6,Ice Box,1880,32,68,10,0
+4/7/2018,Tri-City,0,Lincoln,2,Ice Box,3724,26,53,6,0
+10/6/2017,Des Moines,6,Madison,2,Bob Suter Capitol Ice,578,61,89,10,0.39
+10/7/2017,Cedar Rapids,4,Madison,3,Bob Suter Capitol Ice,552,64,85,14,0.32
+10/13/2017,Green Bay,2,Madison,3,Bob Suter Capitol Ice,625,58,89,5,0.21
+10/20/2017,Central Illinois,2,Madison,5,Bob Suter Capitol Ice,803,64,59,9,0
+10/27/2017,Sioux Falls,3,Madison,2,Bob Suter Capitol Ice,617,39,73,9,0.001
+11/4/2017,Omaha,2,Madison,3,Bob Suter Capitol Ice,1031,42,88,8,0.26
+11/10/2017,Cedar Rapids,3,Madison,6,Bob Suter Capitol Ice,762,19,60,9,0
+11/24/2017,Dubuque,3,Madison,1,Bob Suter Capitol Ice,697,49,56,10,0.001
+12/10/2017,Lincoln,2,Madison,3,Bob Suter Capitol Ice,651,24,74,7,0
+12/16/2017,Green Bay,4,Madison,1,Bob Suter Capitol Ice,871,34,78,7,0
+1/12/2018,Waterloo,1,Madison,4,Bob Suter Capitol Ice,747,11,64,14,0
+1/13/2018,Chicago,1,Madison,4,Bob Suter Capitol Ice,1011,3,62,5,0
+1/18/2018,Dubuque,3,Madison,5,Bob Suter Capitol Ice,489,25,67,7,0
+1/26/2018,Green Bay,3,Madison,2,Bob Suter Capitol Ice,927,36,75,10,0.02
+1/27/2018,Chicago,6,Madison,2,Bob Suter Capitol Ice,1052,36,66,7,0.001
+2/2/2018,Team USA,3,Madison,1,Bob Suter Capitol Ice,1033,9,54,6,0.001
+2/3/2018,Team USA,5,Madison,3,Bob Suter Capitol Ice,817,25,78,8,0.24
+2/7/2018,Dubuque,2,Madison,3,Bob Suter Capitol Ice,339,5,76,4,0.04
+2/18/2018,Cedar Rapids,4,Madison,2,Bob Suter Capitol Ice,774,25,82,11,0
+2/21/2018,Sioux City,5,Madison,4,Bob Suter Capitol Ice,459,23,66,8,0
+3/2/2018,Youngstown,5,Madison,3,Bob Suter Capitol Ice,679,33,62,3,0
+3/3/2018,Youngstown,2,Madison,1,Bob Suter Capitol Ice,1014,37,53,9,0
+3/9/2018,Fargo,2,Madison,4,Bob Suter Capitol Ice,1154,25,59,2,0
+3/10/2018,Fargo,5,Madison,1,Bob Suter Capitol Ice,1031,28,63,2,0
+3/23/2018,Muskegon,5,Madison,4,Bob Suter Capitol Ice,813,32,60,8,0
+3/24/2018,Muskegon,5,Madison,2,Bob Suter Capitol Ice,1043,30,60,15,0
+4/6/2018,Green Bay,6,Madison,4,Bob Suter Capitol Ice,1127,26,64,13,0.001
+4/7/2018,Muskegon,5,Madison,3,Bob Suter Capitol Ice,1011,25,45,9,0
+10/13/2017,Chicago,3,Muskegon,2,L.C. Walker Arena,2006,61,80,8,0.24
+10/14/2017,Team USA,7,Muskegon,0,L.C. Walker Arena,1721,62,95,10,0.93
+10/28/2017,Youngstown,2,Muskegon,5,L.C. Walker Arena,1577,42,78,10,0.45
+11/3/2017,Tri-City,3,Muskegon,2,L.C. Walker Arena,1658,46,66,8,0
+11/4/2017,Tri-City,4,Muskegon,2,L.C. Walker Arena,1762,43,83,10,0.12
+11/8/2017,Central Illinois,0,Muskegon,3,L.C. Walker Arena,3098,35,73,7,0
+11/11/2017,Youngstown,4,Muskegon,3,L.C. Walker Arena,4035,28,57,9,0
+11/12/2017,Youngstown,5,Muskegon,4,L.C. Walker Arena,1134,39,71,2,0
+11/25/2017,Lincoln,2,Muskegon,3,L.C. Walker Arena,2917,41,65,12,0.001
+12/1/2017,Waterloo,5,Muskegon,4,L.C. Walker Arena,1422,38,70,5,0
+12/2/2017,Central Illinois,2,Muskegon,4,L.C. Walker Arena,1708,42,77,6,0
+12/15/2017,Chicago,2,Muskegon,4,L.C. Walker Arena,1479,27,69,13,0.08
+12/16/2017,Chicago,2,Muskegon,4,L.C. Walker Arena,2040,28,77,10,0.23
+12/29/2017,Team USA,0,Muskegon,3,L.C. Walker Arena,2206,15,73,8,0.42
+1/12/2018,Green Bay,3,Muskegon,5,L.C. Walker Arena,1789,26,70,18,0.001
+1/13/2018,Green Bay,2,Muskegon,5,L.C. Walker Arena,3343,17,58,10,0.001
+1/26/2018,Youngstown,3,Muskegon,5,L.C. Walker Arena,1816,41,62,17,0.001
+1/27/2018,Team USA,10,Muskegon,1,L.C. Walker Arena,2756,40,65,13,0
+2/9/2018,Madison,5,Muskegon,3,L.C. Walker Arena,1686,22,73,7,0.25
+2/10/2018,Madison,1,Muskegon,2,L.C. Walker Arena,3160,18,74,3,0.001
+2/14/2018,Central Illinois,1,Muskegon,2,L.C. Walker Arena,1219,36,77,15,0
+2/23/2018,Sioux City,4,Muskegon,1,L.C. Walker Arena,2175,38,76,11,0.08
+2/24/2018,Sioux City,2,Muskegon,6,L.C. Walker Arena,2135,36,68,13,0.01
+3/2/2018,Dubuque,5,Muskegon,4,L.C. Walker Arena,2986,35,64,10,0
+3/3/2018,Dubuque,3,Muskegon,5,L.C. Walker Arena,2548,35,48,5,0
+3/14/2018,Chicago,1,Muskegon,3,L.C. Walker Arena,1217,32,59,12,0.001
+3/16/2018,Cedar Rapids,1,Muskegon,2,L.C. Walker Arena,1961,29,53,7,0
+3/17/2018,Cedar Rapids,4,Muskegon,2,L.C. Walker Arena,2138,35,54,4,0
+3/30/2018,Omaha,4,Muskegon,2,L.C. Walker Arena,2278,35,51,9,0
+3/31/2018,Omaha,3,Muskegon,2,L.C. Walker Arena,3066,39,72,16,0.16
+10/6/2017,Tri-City,2,Omaha,1,Ralston Arena,3230,65,89,7,1.15
+10/13/2017,Sioux Falls,7,Omaha,2,Ralston Arena,1974,57,79,8,0.001
+10/15/2017,Tri-City,0,Omaha,5,Ralston Arena,1907,52,56,10,0
+10/21/2017,Fargo,5,Omaha,2,Ralston Arena,2341,64,68,16,0.08
+10/22/2017,Fargo,4,Omaha,1,Ralston Arena,2015,56,50,6,0
+10/27/2017,Des Moines,0,Omaha,3,Ralston Arena,2480,33,64,20,0.001
+11/10/2017,Green Bay,0,Omaha,5,Ralston Arena,2614,28,50,14,0
+11/11/2017,Green Bay,2,Omaha,5,Ralston Arena,2933,41,67,7,0.01
+11/17/2017,Cedar Rapids,4,Omaha,1,Ralston Arena,3266,51,70,11,0.01
+11/22/2017,Madison,2,Omaha,4,Ralston Arena,2275,28,57,9,0
+11/25/2017,Team USA,1,Omaha,6,Ralston Arena,3181,45,59,3,0
+12/1/2017,Sioux Falls,1,Omaha,4,Ralston Arena,2981,44,47,10,0
+12/15/2017,Des Moines,2,Omaha,5,Ralston Arena,2742,40,55,10,0
+12/28/2017,Waterloo,3,Omaha,0,Ralston Arena,3019,16,66,11,0.001
+1/5/2018,Waterloo,2,Omaha,3,Ralston Arena,3310,13,63,8,0.001
+1/13/2018,Lincoln,3,Omaha,4,Ralston Arena,3640,12,64,8,0.001
+1/19/2018,Des Moines,3,Omaha,0,Ralston Arena,3142,36,65,11,0
+1/26/2018,Lincoln,0,Omaha,6,Ralston Arena,3476,44,59,14,0
+1/28/2018,Tri-City,3,Omaha,2,Ralston Arena,2725,22,76,15,0.001
+2/2/2018,Central Illinois,1,Omaha,8,Ralston Arena,2991,21,61,12,0.001
+2/3/2018,Central Illinois,2,Omaha,4,Ralston Arena,2921,37,53,16,0
+2/9/2018,Dubuque,2,Omaha,3,Ralston Arena,2708,14,73,16,0.08
+2/11/2018,Des Moines,1,Omaha,4,Ralston Arena,2859,12,71,5,0.01
+2/17/2018,Lincoln,4,Omaha,2,Ralston Arena,3744,37,63,11,0.001
+3/9/2018,Chicago,2,Omaha,1,Ralston Arena,3793,39,59,10,0
+3/16/2018,Lincoln,3,Omaha,2,Ralston Arena,3528,39,73,15,0.87
+3/18/2018,Sioux City,4,Omaha,3,Ralston Arena,3213,48,64,17,0.09
+3/25/2018,Tri-City,1,Omaha,2,Ralston Arena,3408,46,58,10,0.001
+10/14/2017,Sioux Falls,1,Sioux City,2,Tyson Events Center,2839,51,90,11,0.001
+10/20/2017,Waterloo,4,Sioux City,1,Tyson Events Center,1723,63,75,16,0
+10/21/2017,Des Moines,3,Sioux City,1,Tyson Events Center,3740,56,77,12,0.28
+10/27/2017,Chicago,5,Sioux City,3,Tyson Events Center,2039,32,64,21,0.001
+10/28/2017,Tri-City,3,Sioux City,2,Tyson Events Center,1961,34,53,6,0
+11/3/2017,Waterloo,3,Sioux City,2,Tyson Events Center,1762,37,69,9,0.001
+11/4/2017,Lincoln,6,Sioux City,3,Tyson Events Center,1978,45,78,7,0
+11/11/2017,Fargo,4,Sioux City,2,Tyson Events Center,3374,39,62,6,0
+11/17/2017,Madison,1,Sioux City,2,Tyson Events Center,1799,49,76,11,0.06
+11/18/2017,Fargo,5,Sioux City,1,Tyson Events Center,2117,33,72,16,0.02
+11/24/2017,Tri-City,3,Sioux City,2,Tyson Events Center,2112,51,67,13,0.001
+12/9/2017,Omaha,3,Sioux City,0,Tyson Events Center,3364,26,71,11,0
+12/15/2017,Central Illinois,1,Sioux City,2,Tyson Events Center,1597,37,64,9,0
+12/30/2017,Lincoln,1,Sioux City,2,Tyson Events Center,2147,0,76,12,0.07
+12/31/2017,Omaha,1,Sioux City,2,Tyson Events Center,3061,-14,78,10,0.001
+1/26/2018,Fargo,1,Sioux City,2,Tyson Events Center,2333,38,64,15,0
+1/27/2018,Sioux Falls,2,Sioux City,1,Tyson Events Center,2806,28,78,6,0.001
+2/2/2018,Green Bay,2,Sioux City,4,Tyson Events Center,1765,15,75,9,0
+2/3/2018,Green Bay,2,Sioux City,4,Tyson Events Center,2376,30,70,13,0.001
+2/9/2018,Youngstown,2,Sioux City,5,Tyson Events Center,1690,10,76,13,0.05
+2/10/2018,Youngstown,4,Sioux City,2,Tyson Events Center,2378,-2,82,6,0
+2/16/2018,Sioux Falls,5,Sioux City,3,Tyson Events Center,2586,16,70,13,0
+3/3/2018,Waterloo,4,Sioux City,3,Tyson Events Center,3340,46,72,14,0
+3/4/2018,Tri-City,2,Sioux City,3,Tyson Events Center,1902,48,73,17,0
+3/17/2018,Sioux Falls,6,Sioux City,3,Tyson Events Center,3313,36,91,4,0
+3/25/2018,Fargo,3,Sioux City,1,Tyson Events Center,2082,35,87,12,0.01
+3/30/2018,Tri-City,2,Sioux City,5,Tyson Events Center,2132,43,62,10,0.001
+3/31/2018,Des Moines,1,Sioux City,5,Tyson Events Center,2488,36,61,20,0.001
+10/7/2017,Waterloo,4,Sioux Falls,2,Denny Sanford PREMIER Center,8615,63,72,8,0
+10/20/2017,Des Moines,4,Sioux Falls,3,Denny Sanford PREMIER Center,4913,67,65,20,0
+10/21/2017,Waterloo,4,Sioux Falls,2,Denny Sanford PREMIER Center,5189,58,78,15,0.001
+11/4/2017,Cedar Rapids,7,Sioux Falls,6,Denny Sanford PREMIER Center,9415,43,80,8,0
+11/10/2017,Sioux City,2,Sioux Falls,1,Denny Sanford PREMIER Center,5775,25,49,17,0
+11/17/2017,Muskegon,3,Sioux Falls,5,Denny Sanford PREMIER Center,5321,44,72,11,0.001
+11/18/2017,Muskegon,4,Sioux Falls,7,Denny Sanford PREMIER Center,6013,31,66,15,0
+11/24/2017,Team USA,3,Sioux Falls,6,Denny Sanford PREMIER Center,5306,51,68,12,0.001
+11/25/2017,Tri-City,2,Sioux Falls,4,Denny Sanford PREMIER Center,5731,39,75,4,0
+12/8/2017,Youngstown,5,Sioux Falls,3,Denny Sanford PREMIER Center,5643,27,85,11,0.001
+12/9/2017,Youngstown,3,Sioux Falls,4,Denny Sanford PREMIER Center,10036,26,79,10,0
+12/16/2017,Omaha,3,Sioux Falls,2,Denny Sanford PREMIER Center,6184,37,76,7,0
+12/17/2017,Central Illinois,3,Sioux Falls,5,Denny Sanford PREMIER Center,4713,31,85,4,0
+12/28/2017,Sioux City,3,Sioux Falls,1,Denny Sanford PREMIER Center,5313,10,81,11,0.001
+12/31/2017,Fargo,2,Sioux Falls,3,Denny Sanford PREMIER Center,7435,-14,75,8,0.01
+1/6/2018,Madison,6,Sioux Falls,4,Denny Sanford PREMIER Center,6305,10,74,15,0
+1/12/2018,Fargo,2,Sioux Falls,3,Denny Sanford PREMIER Center,5882,-1,68,8,0
+1/13/2018,Fargo,4,Sioux Falls,0,Denny Sanford PREMIER Center,7016,2,69,6,0
+2/2/2018,Des Moines,0,Sioux Falls,2,Denny Sanford PREMIER Center,6081,16,71,8,0
+2/3/2018,Des Moines,3,Sioux Falls,2,Denny Sanford PREMIER Center,10678,23,65,11,0.001
+2/6/2018,Fargo,3,Sioux Falls,4,Denny Sanford PREMIER Center,4607,-2,78,7,0.001
+2/9/2018,Lincoln,2,Sioux Falls,4,Denny Sanford PREMIER Center,5589,5,71,10,0.01
+2/10/2018,Omaha,3,Sioux Falls,2,Denny Sanford PREMIER Center,6973,-2,77,6,0
+3/9/2018,Sioux City,2,Sioux Falls,7,Denny Sanford PREMIER Center,7014,31,84,9,0.01
+3/10/2018,Chicago,1,Sioux Falls,5,Denny Sanford PREMIER Center,10678,33,84,7,0.05
+3/11/2018,Lincoln,5,Sioux Falls,2,Denny Sanford PREMIER Center,4908,29,89,13,0.001
+3/30/2018,Waterloo,2,Sioux Falls,3,Denny Sanford PREMIER Center,7170,37,67,9,0.001
+3/31/2018,Tri-City,2,Sioux Falls,4,Denny Sanford PREMIER Center,7435,35,62,19,0.001
+10/21/2017,Green Bay,1,Team USA,4,USA Hockey Arena,866,62,73,3,0
+10/22/2017,Green Bay,4,Team USA,6,USA Hockey Arena,704,64,65,6,0
+10/27/2017,Cedar Rapids,2,Team USA,3,USA Hockey Arena,806,50,76,10,0.2
+10/28/2017,Cedar Rapids,4,Team USA,3,USA Hockey Arena,749,42,73,10,0.01
+11/3/2017,Youngstown,4,Team USA,5,USA Hockey Arena,934,46,81,8,0.05
+11/17/2017,Chicago,6,Team USA,2,USA Hockey Arena,1517,37,75,6,0.04
+11/18/2017,Central Illinois,0,Team USA,5,USA Hockey Arena,1341,42,94,10,1.65
+11/30/2017,Fargo,3,Team USA,6,USA Hockey Arena,508,40,79,7,0.12
+12/1/2017,Fargo,6,Team USA,1,USA Hockey Arena,615,38,73,4,0
+12/9/2017,Central Illinois,2,Team USA,4,USA Hockey Arena,602,27,78,10,0
+12/19/2017,Muskegon,6,Team USA,3,USA Hockey Arena,2068,42,76,14,0
+12/30/2017,Youngstown,1,Team USA,4,USA Hockey Arena,861,11,73,10,0
+1/12/2018,Sioux City,5,Team USA,4,USA Hockey Arena,913,36,82,16,0.13
+1/13/2018,Sioux City,2,Team USA,9,USA Hockey Arena,1154,14,68,14,0
+1/15/2018,Muskegon,5,Team USA,8,USA Hockey Arena,708,19,81,9,0
+1/20/2018,Sioux Falls,3,Team USA,6,USA Hockey Arena,1898,38,75,14,0
+1/26/2018,Dubuque,4,Team USA,7,USA Hockey Arena,1314,38,67,7,0
+2/2/2018,Lincoln,5,Team USA,3,USA Hockey Arena,1120,16,58,13,0
+2/3/2018,Lincoln,4,Team USA,3,USA Hockey Arena,1067,24,60,13,0
+2/23/2018,Central Illinois,1,Team USA,4,USA Hockey Arena,726,44,87,10,0.12
+2/24/2018,Central Illinois,4,Team USA,7,USA Hockey Arena,734,40,74,10,0.03
+2/25/2018,Youngstown,1,Team USA,4,USA Hockey Arena,619,42,74,15,0.04
+3/3/2018,Omaha,2,Team USA,7,USA Hockey Arena,1077,34,56,7,0
+3/4/2018,Muskegon,5,Team USA,4,USA Hockey Arena,650,32,57,7,0
+3/15/2018,Madison,3,Team USA,10,USA Hockey Arena,559,32,57,13,0
+3/16/2018,Madison,4,Team USA,6,USA Hockey Arena,814,30,52,14,0
+3/23/2018,Chicago,4,Team USA,5,USA Hockey Arena,1355,35,50,9,0
+3/24/2018,Chicago,4,Team USA,8,USA Hockey Arena,1267,33,51,9,0
+3/30/2018,Youngstown,3,Team USA,2,USA Hockey Arena,1087,40,59,10,0
+10/13/2017,Sioux City,1,Tri-City,3,Viaero Center,2162,58,67,14,0
+10/20/2017,Omaha,1,Tri-City,4,Viaero Center,1936,66,63,22,0
+10/21/2017,Lincoln,0,Tri-City,3,Viaero Center,1982,53,67,17,0
+10/27/2017,Lincoln,1,Tri-City,6,Viaero Center,2037,32,47,17,0
+11/10/2017,Waterloo,1,Tri-City,0,Viaero Center,1884,30,62,13,0
+11/11/2017,Waterloo,0,Tri-City,1,Viaero Center,2673,43,74,4,0
+11/17/2017,Des Moines,0,Tri-City,4,Viaero Center,2599,49,72,12,0.09
+12/1/2017,Madison,2,Tri-City,5,Viaero Center,1931,39,63,7,0
+12/2/2017,Madison,0,Tri-City,3,Viaero Center,2940,41,52,6,0
+12/8/2017,Omaha,3,Tri-City,1,Viaero Center,2601,33,61,12,0
+12/15/2017,Dubuque,4,Tri-City,2,Viaero Center,2075,36,60,11,0
+12/16/2017,Dubuque,0,Tri-City,1,Viaero Center,1922,41,62,12,0
+1/5/2018,Sioux City,4,Tri-City,5,Viaero Center,2167,12,88,8,0.001
+1/6/2018,Omaha,4,Tri-City,1,Viaero Center,2342,15,79,11,0
+1/12/2018,Des Moines,1,Tri-City,3,Viaero Center,1980,5,71,9,0.001
+1/13/2018,Des Moines,2,Tri-City,1,Viaero Center,2384,9,81,9,0
+1/26/2018,Central Illinois,2,Tri-City,0,Viaero Center,2487,37,68,13,0
+1/27/2018,Central Illinois,0,Tri-City,4,Viaero Center,2916,34,65,8,0
+2/9/2018,Fargo,3,Tri-City,1,Viaero Center,2632,12,84,19,0
+2/10/2018,Fargo,6,Tri-City,3,Viaero Center,2657,6,75,9,0
+2/14/2018,Omaha,1,Tri-City,0,Viaero Center,1664,32,75,6,0
+3/2/2018,Cedar Rapids,4,Tri-City,1,Viaero Center,2370,47,44,17,0
+3/10/2018,Team USA,8,Tri-City,2,Viaero Center,2667,43,60,13,0
+3/11/2018,Team USA,9,Tri-City,5,Viaero Center,1924,32,67,15,0
+3/23/2018,Sioux Falls,1,Tri-City,2,Viaero Center,2349,55,73,17,0.31
+3/24/2018,Sioux Falls,4,Tri-City,3,Viaero Center,3467,37,86,13,0
+4/4/2018,Omaha,3,Tri-City,0,Viaero Center,707,37,55,12,0
+4/6/2018,Lincoln,6,Tri-City,2,Viaero Center,2529,28,81,17,0.03
+10/14/2017,Dubuque,1,Waterloo,0,Young Arena,2813,59,93,11,1.15
+10/27/2017,Fargo,3,Waterloo,1,Young Arena,1845,34,78,17,0.01
+10/28/2017,Madison,5,Waterloo,1,Young Arena,1961,29,78,10,0
+11/17/2017,Dubuque,2,Waterloo,3,Young Arena,2555,37,89,12,0.08
+11/18/2017,Green Bay,1,Waterloo,3,Young Arena,2334,33,79,19,0.05
+11/23/2017,Cedar Rapids,2,Waterloo,5,Young Arena,2962,36,60,5,0
+12/8/2017,Fargo,5,Waterloo,3,Young Arena,2055,27,63,9,0.001
+12/9/2017,Fargo,4,Waterloo,2,Young Arena,2585,25,60,14,0.001
+12/29/2017,Lincoln,3,Waterloo,4,Young Arena,2220,7,79,8,0.2
+12/31/2017,Des Moines,2,Waterloo,5,Young Arena,2603,-10,69,10,0.03
+1/6/2018,Central Illinois,2,Waterloo,7,Young Arena,2412,-5,76,9,0
+1/14/2018,Omaha,2,Waterloo,5,Young Arena,1986,6,79,9,0.1
+1/20/2018,Muskegon,4,Waterloo,1,Young Arena,3062,36,77,2,0
+1/27/2018,Cedar Rapids,3,Waterloo,7,Young Arena,3176,36,67,8,0
+1/28/2018,Sioux Falls,3,Waterloo,2,Young Arena,1859,22,79,11,0.001
+2/2/2018,Tri-City,1,Waterloo,4,Young Arena,2505,8,61,7,0.02
+2/3/2018,Tri-City,2,Waterloo,4,Young Arena,2727,28,72,9,0.09
+2/6/2018,Chicago,2,Waterloo,3,Young Arena,1450,-2,75,4,0.01
+2/10/2018,Cedar Rapids,1,Waterloo,4,Young Arena,3127,6,70,6,0.02
+2/24/2018,Lincoln,8,Waterloo,5,Young Arena,3078,27,92,13,0.23
+2/27/2018,Sioux City,1,Waterloo,2,Young Arena,2349,46,79,8,0
+3/10/2018,Dubuque,1,Waterloo,5,Young Arena,3213,28,77,8,0
+3/16/2018,Team USA,1,Waterloo,6,Young Arena,2603,34,70,17,0.09
+3/17/2018,Team USA,4,Waterloo,6,Young Arena,2455,37,67,6,0.001
+3/24/2018,Sioux City,3,Waterloo,6,Young Arena,2333,31,82,17,0.67
+3/31/2018,Dubuque,3,Waterloo,7,Young Arena,2591,33,68,21,0.01
+4/3/2018,Sioux City,3,Waterloo,4,Young Arena,2056,25,92,14,0.16
+4/6/2018,Sioux Falls,3,Waterloo,5,Young Arena,2953,26,60,20,0
+4/7/2018,Sioux Falls,1,Waterloo,4,Young Arena,3263,24,68,9,0
+10/7/2017,Central Illinois,4,Youngstown,2,Covelli Centre,1309,61,89,13,0.85
+10/8/2017,Central Illinois,5,Youngstown,1,Covelli Centre,521,63,64,9,0
+10/20/2017,Green Bay,2,Youngstown,1,Covelli Centre,1510,61,68,13,0
+10/21/2017,Muskegon,3,Youngstown,2,Covelli Centre,720,62,75,15,0.95
+10/27/2017,Muskegon,1,Youngstown,3,Covelli Centre,736,34,78,17,0.01
+11/17/2017,Team USA,8,Youngstown,5,Covelli Centre,1088,37,89,12,0.08
+11/18/2017,Chicago,3,Youngstown,4,Covelli Centre,1301,33,79,19,0.05
+11/22/2017,Muskegon,3,Youngstown,7,Covelli Centre,702,23,63,8,0
+12/1/2017,Team USA,0,Youngstown,2,Covelli Centre,1207,37,55,8,0
+12/14/2017,Cedar Rapids,1,Youngstown,2,Covelli Centre,145,21,73,6,0
+12/15/2017,Cedar Rapids,3,Youngstown,1,Covelli Centre,1799,31,66,10,0.001
+12/28/2017,Madison,7,Youngstown,5,Covelli Centre,1120,9,74,10,0.07
+12/29/2017,Madison,4,Youngstown,1,Covelli Centre,1881,7,79,8,0.2
+1/15/2018,Team USA,7,Youngstown,1,Covelli Centre,698,8,78,18,0.01
+1/19/2018,Tri-City,5,Youngstown,1,Covelli Centre,1742,32,72,10,0
+1/20/2018,Tri-City,2,Youngstown,1,Covelli Centre,2728,36,77,2,0
+1/27/2018,Dubuque,5,Youngstown,6,Covelli Centre,2745,36,67,8,0
+1/28/2018,Dubuque,1,Youngstown,2,Covelli Centre,874,22,79,11,0.001
+2/13/2018,Central Illinois,4,Youngstown,5,Covelli Centre,444,17,72,11,0
+2/16/2018,Waterloo,1,Youngstown,2,Covelli Centre,1016,17,73,12,0
+2/17/2018,Waterloo,2,Youngstown,5,Covelli Centre,2875,24,84,9,0.06
+2/22/2018,Omaha,8,Youngstown,1,Covelli Centre,801,29,82,13,0.06
+3/9/2018,Des Moines,1,Youngstown,4,Covelli Centre,1371,22,76,5,0
+3/10/2018,Des Moines,1,Youngstown,0,Covelli Centre,2208,28,77,8,0
+3/31/2018,Team USA,1,Youngstown,6,Covelli Centre,1183,33,68,21,0.01
+4/6/2018,Chicago,4,Youngstown,7,Covelli Centre,1089,26,60,20,0
+4/7/2018,Chicago,5,Youngstown,2,Covelli Centre,2433,24,68,9,0

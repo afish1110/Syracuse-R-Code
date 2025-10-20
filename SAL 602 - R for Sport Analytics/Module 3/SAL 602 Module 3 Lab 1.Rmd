@@ -1,0 +1,50 @@
+---
+title: "SAL 602 Module 3 Lab 1"
+author: "Andrew Fish"
+date: "2024-11-04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+```
+
+Reading in the files
+
+```{r}
+hofBatting <- read_csv("C:/Users/Andrew Fish/Documents/Baseball Data/hofbatting.csv")
+```
+
+Sorting hofBatting by Era and adding Career Length
+
+```{r}
+hofBatting %>%
+  mutate(MidCareer = (From + To) / 2,
+         Era = cut(MidCareer,
+                   breaks = c(1800, 1900, 1919, 1941, 1960, 1976, 1993, 2050),
+                   labels = c("19th Century", "Dead Ball", "Lively Ball", "Integration",
+                              "Expansion", "Free Agency", "Long Ball")),
+         CareerLength = To - From) -> hofBatting
+```
+
+```{r}
+hofBatting %>% group_by(Era) %>%
+  summarize(avgCareerLength = mean(CareerLength)) -> hofEra
+```
+
+```{r}
+ggplot(hofEra, aes(x = Era, y = avgCareerLength)) +
+  geom_col() +
+  xlab("Baseball Era") +
+  ylab("Average Career Length") +
+  ggtitle("Average Career Length by Era of the Nonpitching Hall of Famers")
+```
+
+```{r}
+ggsave("C:/Users/Andrew Fish/Documents/Syracuse/SAL 602/Module 3/mod3lab1bargraph.pdf")
+```
+

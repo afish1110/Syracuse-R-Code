@@ -1,0 +1,139 @@
+---
+title: "SAL 621 Group Project 2"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(readr)
+library(ggplot2)
+library(ggpubr)
+library(lmtest)
+library(sandwich)
+library(car)
+
+```
+
+```{r}
+mlb_bet <- read_csv('data/MLB_volume_percent_odds_621_2_27_25.csv')
+```
+
+```{r}
+##pulling out odds for O/U
+over_line <- substr(mlb_bet$bestodds...4, (nchar(mlb_bet$bestodds...4) - 3), nchar(mlb_bet$bestodds...4))
+under_line <- substr(mlb_bet$bestodds...5, (nchar(mlb_bet$bestodds...5) - 3), nchar(mlb_bet$bestodds...5))
+```
+
+```{r}
+##formatting dataframe and changing column names
+mlb_bet %>%
+  mutate(AwayTeam = TeamA...2,
+         HomeTeam = TeamB...3,
+         Away_bestodds = round(as.numeric(A_bestodds), 0),
+         Home_bestodds = round(as.numeric(B_bestodds), 0),
+         O_bestodds = round(as.numeric(over_line), 0),
+         U_bestodds = round(as.numeric(under_line), 0),
+         pct_bet_over = `pct bets A...6`,
+         pct_bet_under = `pct bet B...7`,
+         pct_bet_away = `pct bets A...13`,
+         pct_bet_home = `pct bet B...14`,
+         Total = c_Total,
+         TotalResult = c_TotalResult,
+         Volume = `Number of bets`,
+         AwaySP = c_AwaySP,
+         HomeSP = c_HomeSP,
+         AwayScore = c_AwayScore,
+         HomeScore = c_HomeScore) -> mlb_bet
+
+##choosing correct columns
+mlb_bet %>% select(date,
+                   AwayTeam,
+                   HomeTeam,
+                   Away_bestodds,
+                   Home_bestodds,
+                   pct_bet_home,
+                   pct_bet_away,
+                   Total,
+                   O_bestodds,
+                   U_bestodds,
+                   pct_bet_over,
+                   pct_bet_under,
+                   TotalResult,
+                   Volume,
+                   AwaySP,
+                   HomeSP,
+                   AwayScore,
+                   HomeScore
+                   ) -> mlb_bet
+```
+
+```{r}
+##dummies for markets winning
+mlb_bet %>%
+  mutate(
+    O_win = case_when(TotalResult == 'Over' ~ 1,
+                      .default = 0),
+    U_win = case_when(TotalResult == 'Under' ~ 1,
+                      .default = 0),
+    HomeWin = case_when(HomeScore > AwayScore ~ 1,
+                        .default = 0),
+    AwayWin = case_when(AwayScore > HomeScore ~ 1,
+                        .default = 0)) -> mlb_bet
+```
+
+
+```{r}
+summary(mlb_bet)
+```
+```{r}
+##calculating returns
+mlb_bet %>%
+  mutate(
+    ReturnsHome = case_when(
+    ((Home_bestodds < 0) & (HomeWin == 1)) ~ ((1 + (Home_bestodds / -100)) / (Home_bestodds / -100)),
+    ((Home_bestodds > 0) & (HomeWin == 1)) ~ 1 + (Home_bestodds / 100),
+    .default = 0),
+
+    ReturnsAway = case_when(
+    ((Away_bestodds < 0) & (AwayWin == 1)) ~ ((1 + (Away_bestodds / -100)) / (Away_bestodds / 100)),
+    ((Away_bestodds > 0) & (AwayWin == 1)) ~ 1 + (Away_bestodds / 100),
+    .default = 0),
+
+    ProfitHome = ReturnsHome - 1,
+    ProfitAway = ReturnsAway - 1) -> mlb_bet
+```
+
+```{r}
+sum(mlb_bet$ReturnsAway)
+sum(mlb_bet$ProfitAway)
+(sum(mlb_bet$ProfitAway) / length(mlb_bet$ProfitAway)) * 100
+summary(mlb_bet$AwayWin)
+summary(mlb_bet$pct_bet_away)
+summary(mlb_bet$Away_bestodds)
+```
+
+```{r}
+sum(mlb_bet$ReturnsHome)
+sum(mlb_bet$ProfitHome)
+(sum(mlb_bet$ProfitHome) / length(mlb_bet$ProfitHome)) * 100
+summary(mlb_bet$HomeWin)
+summary(mlb_bet$pct_bet_home)
+summary(mlb_bet$Home_bestodds)
+```
+
+```{r}
+t.test(mlb_bet$pct_bet_away, mu = 0.5)
+t.test(mlb_bet$pct_bet_home, mu = 0.5)
+```
+
+```{r}
+write_csv(mlb_bet, 'mlb_bet_data.csv')
+```
+
+

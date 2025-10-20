@@ -1,0 +1,1188 @@
+---
+title: "SAL 605 Final Project"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+##packages
+library(tidyverse)
+library(Lahman)
+library(readr)
+library(ggplot2)
+library(ggthemes)
+library(gt)
+library(gtExtras)
+library(shiny)
+```
+
+
+Data collection using Retrosheet data
+```{r}
+##uses retrosheet data already have the code that scrapes it elsewhere so previously scraped it all
+##years 2010-2019
+##reading in files
+fields <- read_csv('data/fields.csv')
+all2010 <- read_csv('data/all2010.csv', col_names = pull(fields, Header), na = character())
+all2011 <- read_csv('data/all2011.csv', col_names = pull(fields, Header), na = character())
+all2012 <- read_csv('data/all2012.csv', col_names = pull(fields, Header), na = character())
+all2013 <- read_csv('data/all2013.csv', col_names = pull(fields, Header), na = character())
+all2014 <- read_csv('data/all2014.csv', col_names = pull(fields, Header), na = character())
+all2015 <- read_csv('data/all2015.csv', col_names = pull(fields, Header), na = character())
+all2016 <- read_csv('data/all2016.csv', col_names = pull(fields, Header), na = character())
+all2017 <- read_csv('data/all2017.csv', col_names = pull(fields, Header), na = character())
+all2018 <- read_csv('data/all2018.csv', col_names = pull(fields, Header), na = character())
+all2019 <- read_csv('data/all2019.csv', col_names = pull(fields, Header), na = character())
+```
+
+
+```{r}
+##cy young winners
+##each vector has corresponding order so first last year of same position is one player
+##first names
+cy_young_first <- c('Felix', 'Roy', 'Justin', 'Clayton', 'David', 'R. A.', 'Max', 'Clayton', 'Corey', 'Clayton', 'Dallas', 'Jake', 'Rick', 'Max', 'Corey', 'Max', 'Blake', 'Jacob', 'Justin', 'Jacob')
+
+##last names
+cy_young_last <- c('Hernandez', 'Halladay', 'Verlander', 'Kershaw', 'Price', 'Dickey', 'Scherzer', 'Kershaw', 'Kluber', 'Kershaw', 'Keuchel', 'Arrieta', 'Porcello', 'Scherzer', 'Kluber', 'Scherzer', 'Snell', 'deGrom', 'Verlander', 'deGrom')
+
+##year each player won
+year_won <- c(2010, 2010, 2011, 2011, 2012, 2012, 2013, 2013, 2014, 2014, 2015, 2015, 2016, 2016, 2017, 2017, 2018, 2018, 2019, 2019)
+```
+
+
+```{r}
+##function to scrape retroIDs from Lahman Database of all cy_young pitchers
+scrape_retro_id <- function(firstname, lastname) {
+  ##empty vector to add ids too
+  retroIDs <- c()
+  ##loops through all names
+  for (i in 1:length(firstname)) {
+    ##pulls respective id from Lahman
+    id <- People %>%
+      filter(nameFirst == firstname[i] & nameLast == lastname[i]) %>% 
+      pull(retroID)
+    ##adds to id vector above
+    retroIDs <- append(retroIDs, id)
+  }
+  return(retroIDs)
+}
+```
+
+
+```{r}
+##creating data frame with cy young retrosheet id data for easy referencing later
+cy_young_database <- data.frame(
+  Player = paste(cy_young_first, cy_young_last, sep = ' '),
+  Year = year_won,
+  retroID = scrape_retro_id(cy_young_first, cy_young_last)
+)
+```
+
+
+Data formating and gathering into one source
+```{r}
+##setting up data for cy young pitchers and control
+##control will be the data with that years cy young winners taken out
+control2010 <- all2010 %>% 
+  filter(!(PIT_ID %in% cy_young_database$retroID[year_won == 2010])) %>% 
+  ##adding a year column so easier to tell which year is which when combined
+  mutate(YEAR_ID = 2010) %>% 
+  ##type issue with these rows couldn't be fixed didn't need them so removing
+  select(-c(RUN1_PLAY_TX, RUN2_PLAY_TX, RUN3_PLAY_TX))
+
+cy2010 <- all2010 %>% 
+  filter(PIT_ID %in% cy_young_database$retroID[year_won == 2010]) %>% 
+  mutate(YEAR_ID = 2010) %>% 
+  select(-c(RUN1_PLAY_TX, RUN2_PLAY_TX, RUN3_PLAY_TX))
+
+control2011 <- all2011 %>% 
+  filter(!(PIT_ID %in% cy_young_database$retroID[year_won == 2011])) %>% 
+  mutate(YEAR_ID = 2011) %>% 
+  select(-c(RUN1_PLAY_TX, RUN2_PLAY_TX, RUN3_PLAY_TX))
+
+cy2011 <- all2011 %>% 
+  filter(PIT_ID %in% cy_young_database$retroID[year_won == 2011]) %>% 
+  mutate(YEAR_ID = 2011) %>% 
+  select(-c(RUN1_PLAY_TX, RUN2_PLAY_TX, RUN3_PLAY_TX))
+
+control2012 <- all2012 %>% 
+  filter(!(PIT_ID %in% cy_young_database$retroID[year_won == 2012])) %>% 
+  mutate(YEAR_ID = 2012) %>% 
+  select(-c(RUN1_PLAY_TX, RUN2_PLAY_TX, RUN3_PLAY_TX))
+
+cy2012 <- all2012 %>% 
+  filter(PIT_ID %in% cy_young_database$retroID[year_won == 2012]) %>% 
+  mutate(YEAR_ID = 2012) %>% 
+  select(-c(RUN1_PLAY_TX, RUN2_PLAY_TX, RUN3_PLAY_TX))
+
+control2013 <- all2013 %>% 
+  filter(!(PIT_ID %in% cy_young_database$retroID[year_won == 2013])) %>% 
+  mutate(YEAR_ID = 2013) %>% 
+  select(-c(RUN1_PLAY_TX, RUN2_PLAY_TX, RUN3_PLAY_TX))
+
+cy2013 <- all2013 %>% 
+  filter(PIT_ID %in% cy_young_database$retroID[year_won == 2013]) %>% 
+  mutate(YEAR_ID = 2013) %>% 
+  select(-c(RUN1_PLAY_TX, RUN2_PLAY_TX, RUN3_PLAY_TX))
+
+control2014 <- all2014 %>% 
+  filter(!(PIT_ID %in% cy_young_database$retroID[year_won == 2014])) %>% 
+  mutate(YEAR_ID = 2014) %>% 
+  select(-c(RUN1_PLAY_TX, RUN2_PLAY_TX, RUN3_PLAY_TX))
+
+cy2014 <- all2014 %>% 
+  filter(PIT_ID %in% cy_young_database$retroID[year_won == 2014]) %>% 
+  mutate(YEAR_ID = 2014) %>% 
+  select(-c(RUN1_PLAY_TX, RUN2_PLAY_TX, RUN3_PLAY_TX))
+
+control2015 <- all2015 %>% 
+  filter(!(PIT_ID %in% cy_young_database$retroID[year_won == 2015])) %>% 
+  mutate(YEAR_ID = 2015) %>% 
+  select(-c(RUN1_PLAY_TX, RUN2_PLAY_TX, RUN3_PLAY_TX))
+
+cy2015 <- all2015 %>% 
+  filter(PIT_ID %in% cy_young_database$retroID[year_won == 2015]) %>% 
+  mutate(YEAR_ID = 2015) %>% 
+  select(-c(RUN1_PLAY_TX, RUN2_PLAY_TX, RUN3_PLAY_TX))
+
+control2016 <- all2016 %>% 
+  filter(!(PIT_ID %in% cy_young_database$retroID[year_won == 2016])) %>% 
+  mutate(YEAR_ID = 2016) %>% 
+  select(-c(RUN1_PLAY_TX, RUN2_PLAY_TX, RUN3_PLAY_TX))
+
+cy2016 <- all2016 %>% 
+  filter(PIT_ID %in% cy_young_database$retroID[year_won == 2016]) %>% 
+  mutate(YEAR_ID = 2016) %>% 
+  select(-c(RUN1_PLAY_TX, RUN2_PLAY_TX, RUN3_PLAY_TX))
+
+control2017 <- all2017 %>% 
+  filter(!(PIT_ID %in% cy_young_database$retroID[year_won == 2017])) %>% 
+  mutate(YEAR_ID = 2017) %>% 
+  select(-c(RUN1_PLAY_TX, RUN2_PLAY_TX, RUN3_PLAY_TX))
+
+cy2017 <- all2017 %>% 
+  filter(PIT_ID %in% cy_young_database$retroID[year_won == 2017]) %>% 
+  mutate(YEAR_ID = 2017) %>% 
+  select(-c(RUN1_PLAY_TX, RUN2_PLAY_TX, RUN3_PLAY_TX))
+
+control2018 <- all2018 %>% 
+  filter(!(PIT_ID %in% cy_young_database$retroID[year_won == 2018])) %>% 
+  mutate(YEAR_ID = 2018) %>% 
+  select(-c(RUN1_PLAY_TX, RUN2_PLAY_TX, RUN3_PLAY_TX))
+
+cy2018 <- all2018 %>% 
+  filter(PIT_ID %in% cy_young_database$retroID[year_won == 2018]) %>% 
+  mutate(YEAR_ID = 2018) %>% 
+  select(-c(RUN1_PLAY_TX, RUN2_PLAY_TX, RUN3_PLAY_TX))
+
+control2019 <- all2019 %>% 
+  filter(!(PIT_ID %in% cy_young_database$retroID[year_won == 2019])) %>% 
+  mutate(YEAR_ID = 2019) %>% 
+  select(-c(RUN1_PLAY_TX, RUN2_PLAY_TX, RUN3_PLAY_TX))
+
+cy2019 <- all2019 %>% 
+  filter(PIT_ID %in% cy_young_database$retroID[year_won == 2019]) %>% 
+  mutate(YEAR_ID = 2019) %>% 
+  select(-c(RUN1_PLAY_TX, RUN2_PLAY_TX, RUN3_PLAY_TX))
+```
+
+
+```{r}
+##combining the control and cy dfs created above to created one for each
+control <- bind_rows(control2010, control2011, control2013, control2014, control2015, control2016, control2017, control2018, control2019)
+
+cy_data <- bind_rows(cy2010, cy2011, cy2012, cy2013, cy2014, cy2015, cy2016, cy2017, cy2018, cy2019)
+```
+
+
+Data manipulations for run expectancy and run value
+```{r}
+##setting up data for run expectancy stuff will have to do it with both control and cy_data
+##already had all of the df maniuplations written in week 2's lab
+##calculates the number of runs on each play
+cy_data <- cy_data %>%
+  mutate(RUNS = AWAY_SCORE_CT + HOME_SCORE_CT,
+         ##unique identifier for each inning
+         HALF.INNING = paste(GAME_ID, INN_CT, BAT_HOME_ID),
+         ##if the destination for batter or runner is more than 3 that means they scored. So adding all the TRUE will give total runs per play
+         RUNS.SCORED = (BAT_DEST_ID > 3) + (RUN1_DEST_ID > 3) +
+           (RUN2_DEST_ID > 3) + (RUN3_DEST_ID > 3))
+
+##aggregates the runs per play data into runs per inning
+half_innings <- cy_data %>%
+  ##groups by inning identifier
+  group_by(HALF.INNING) %>%
+  ##adds the cummulative stats for each inning
+  summarize(Outs.Inning = sum(EVENT_OUTS_CT),
+            Runs.Inning = sum(RUNS.SCORED),
+            ##runs at start of inning
+            Runs.Start = first(RUNS),
+            ##total runs for the game current inning plus start of inning
+            MAX.RUNS = Runs.Inning + Runs.Start)
+
+##putting mutations for game state in one chunk 
+cy_data <- cy_data %>%
+  ##joins half_inning and all 2022
+  inner_join(., half_innings, by = join_by('HALF.INNING')) %>%
+  ##runs scored in remainder of inning from a given game state (will calulate game states later)
+  mutate(RUNS.ROI = MAX.RUNS - RUNS) %>%
+  ungroup() %>% 
+  #calculating game states
+  mutate(BASES = paste(ifelse(BASE1_RUN_ID > '', 1, 0),
+                       ifelse(BASE2_RUN_ID > '', 1, 0),
+                       ifelse(BASE3_RUN_ID > '', 1, 0), sep = ''),
+         ##game state being baserunners and outs so 100 1 is runner on first 1 out
+         STATE = paste(BASES, OUT_CT),
+         ##dummy variables to tell if bases are occupied after play
+         NRUNNER1 = as.numeric(RUN1_DEST_ID == 1 | BAT_DEST_ID == 1),
+         NRUNNER2 = as.numeric(RUN1_DEST_ID == 2 | RUN2_DEST_ID == 2 | BAT_DEST_ID == 2),
+         NRUNNER3 = as.numeric(RUN1_DEST_ID == 3 | RUN2_DEST_ID == 3 | RUN3_DEST_ID == 3 | BAT_DEST_ID == 3),
+         ##outs after the play
+         NOUTS = OUT_CT + EVENT_OUTS_CT,
+         ##game state after the play
+         NEW.BASES = paste(NRUNNER1, NRUNNER2, NRUNNER3, sep = ''),
+         NEW.STATE = paste(NEW.BASES, NOUTS))
+
+cy_data_c <- cy_data %>%
+  filter(((STATE != NEW.STATE) | (RUNS.SCORED > 0)) &
+           ##innings before 8th to avoid ghost runners
+           INN_CT <= 7 &
+           ##completed innings no walkoffs/delays
+           Outs.Inning == 3 &
+           ##batter events only
+           BAT_EVENT_FL == TRUE)
+```
+
+
+```{r}
+##doing the same as above but with control data set
+##calculates the number of runs on each play
+control <- control %>%
+  mutate(RUNS = AWAY_SCORE_CT + HOME_SCORE_CT,
+         ##unique identifier for each inning
+         HALF.INNING = paste(GAME_ID, INN_CT, BAT_HOME_ID),
+         ##if the destination for batter or runner is more than 3 that means they scored. So adding all the TRUE will give total runs per play
+         RUNS.SCORED = (BAT_DEST_ID > 3) + (RUN1_DEST_ID > 3) +
+           (RUN2_DEST_ID > 3) + (RUN3_DEST_ID > 3))
+
+##aggregates the runs per play data into runs per inning
+half_innings <- control %>%
+  ##groups by inning identifier
+  group_by(HALF.INNING) %>%
+  ##adds the cummulative stats for each inning
+  summarize(Outs.Inning = sum(EVENT_OUTS_CT),
+            Runs.Inning = sum(RUNS.SCORED),
+            ##runs at start of inning
+            Runs.Start = first(RUNS),
+            ##total runs for the game current inning plus start of inning
+            MAX.RUNS = Runs.Inning + Runs.Start)
+
+##putting mutations for game state in one chunk 
+control <- control %>%
+  ##joins half_inning and all 2022
+  inner_join(., half_innings, by = join_by('HALF.INNING')) %>%
+  ##runs scored in remainder of inning from a given game state (will calulate game states later)
+  mutate(RUNS.ROI = MAX.RUNS - RUNS) %>%
+  ungroup() %>% 
+  #calculating game states
+  mutate(BASES = paste(ifelse(BASE1_RUN_ID > '', 1, 0),
+                       ifelse(BASE2_RUN_ID > '', 1, 0),
+                       ifelse(BASE3_RUN_ID > '', 1, 0), sep = ''),
+         ##game state being baserunners and outs so 100 1 is runner on first 1 out
+         STATE = paste(BASES, OUT_CT),
+         ##dummy variables to tell if bases are occupied after play
+         NRUNNER1 = as.numeric(RUN1_DEST_ID == 1 | BAT_DEST_ID == 1),
+         NRUNNER2 = as.numeric(RUN1_DEST_ID == 2 | RUN2_DEST_ID == 2 | BAT_DEST_ID == 2),
+         NRUNNER3 = as.numeric(RUN1_DEST_ID == 3 | RUN2_DEST_ID == 3 | RUN3_DEST_ID == 3 | BAT_DEST_ID == 3),
+         ##outs after the play
+         NOUTS = OUT_CT + EVENT_OUTS_CT,
+         ##game state after the play
+         NEW.BASES = paste(NRUNNER1, NRUNNER2, NRUNNER3, sep = ''),
+         NEW.STATE = paste(NEW.BASES, NOUTS))
+
+control_c <- control %>%
+  filter(((STATE != NEW.STATE) | (RUNS.SCORED > 0)) &
+           ##innings before 8th to avoid ghost runners
+           INN_CT <= 7 &
+           ##completed innings no walkoffs/delays
+           Outs.Inning == 3 &
+           ##batter events only
+           BAT_EVENT_FL == TRUE)
+```
+
+
+Run value data manipulation
+```{r}
+##starting with the cy_data_c part then will do the control_c part
+RUNS.CY <- cy_data_c %>%
+  group_by(STATE) %>%
+  ##average runs scored in remainder of the inning
+  summarize(Mean = mean(RUNS.ROI)) %>%
+  ##creating outs by taking from state
+  mutate(Outs = substr(STATE, 5, 5)) %>%
+  ##arranging data set by total outs after grouping by state so will have sorted state then outs
+  arrange(Outs) %>%
+  ungroup()
+
+##RE matrix
+RUNS_out_cy <- matrix(round(RUNS.CY$Mean, 2),
+                   ##dimensions of matrix
+                   nrow = 8, ncol = 3,
+                   ##labels for rows and columns
+                   dimnames = list(c('000', '001', '010', '011', '100', '101', '110', '111'),
+                   c('0 outs', '1 outs', '2 outs')))
+
+cy_data <- cy_data %>%
+  #joins with RE matrix not using outs so STATE and Mean
+  left_join(., RUNS.CY %>%
+               select(-Outs),
+            ##joins by state identifier
+            by = join_by('STATE')) %>%
+  ##renaming Mean to Runs.State
+  rename(Runs.State = Mean) %>%
+  ##repeating the process for the post play state
+  left_join(., RUNS.CY %>%
+               select(-Outs),
+            by = join_by('NEW.STATE' == 'STATE')) %>%
+  rename(Runs.New.State = Mean) %>% 
+  replace_na(list(Runs.New.State = 0)) %>%
+  ##calculating run value
+  mutate(run_value = Runs.New.State - Runs.State + RUNS.SCORED)
+```
+
+
+```{r}
+RUNS.CONTROL <- control_c %>%
+  group_by(STATE) %>%
+  ##average runs scored in remainder of the inning
+  summarize(Mean = mean(RUNS.ROI)) %>%
+  ##creating outs by taking from state
+  mutate(Outs = substr(STATE, 5, 5)) %>%
+  ##arranging data set by total outs after grouping by state so will have sorted state then outs
+  arrange(Outs) %>%
+  ungroup()
+
+##RE matrix
+RUNS_out_control <- matrix(round(RUNS.CONTROL$Mean, 2),
+                   ##dimensions of matrix
+                   nrow = 8, ncol = 3,
+                   ##labels for rows and columns
+                   dimnames = list(c('000', '001', '010', '011', '100', '101', '110', '111'),
+                   c('0 outs', '1 outs', '2 outs')))
+
+control <- control %>%
+  #joins with RE matrix not using outs so STATE and Mean
+  left_join(., RUNS.CONTROL %>%
+               select(-Outs),
+            ##joins by state identifier
+            by = join_by('STATE')) %>%
+  ##renaming Mean to Runs.State
+  rename(Runs.State = Mean) %>%
+  ##repeating the process for the post play state
+  left_join(., RUNS.CONTROL %>%
+               select(-Outs),
+            by = join_by('NEW.STATE' == 'STATE')) %>%
+  rename(Runs.New.State = Mean) %>% 
+  replace_na(list(Runs.New.State = 0)) %>%
+  ##calculating run value
+  mutate(run_value = Runs.New.State - Runs.State + RUNS.SCORED)
+```
+
+
+```{r}
+##now that all the general data manipulation is completed can write to csvs
+write_csv(cy_young_database, 'data/cy_young_lookup.csv')
+write_csv(cy_data, 'data/cy_data.csv')
+write_csv(control, 'data/control_data.csv')
+```
+
+
+```{r}
+##making a data frame of RV over the entire season
+season_rv <- cy_data %>% 
+  ##joining with database info so have name and year
+  inner_join(., cy_young_database, by = join_by(PIT_ID == retroID, YEAR_ID == Year)) %>% 
+  #grouping by player year then base state for rv in each scenario
+  group_by(Player, YEAR_ID, BASES) %>% 
+  ##only want these columns
+  select(Player, YEAR_ID, BASES, run_value) %>% 
+  summarize(RUNS = sum(run_value),
+            Bat_faced = n()) %>% 
+  ##getting the rv for the entire year doesn't matter the base state
+  summarize(cum_RV = round(sum(RUNS), 2),
+            tot_BF = sum(Bat_faced))%>% 
+  ##sorting so lowest (best) at the top
+  arrange(cum_RV) %>% 
+  ungroup()
+```
+
+
+```{r}
+##making table for presentation using gt and gtExtras
+season_rv %>% 
+  gt() %>% 
+  tab_header('Cy Young Cummulative Run Value - 2010-19') %>% 
+  tab_footnote('Data from Retrosheet') %>% 
+  cols_label(Player = 'Pitcher',
+             YEAR_ID = 'Season',
+             cum_RV = 'RV',
+             tot_BF = 'Batters Faced') %>% 
+  gt_theme_538() %>% 
+  cols_align('center') %>% 
+  gtsave(filename = 'graphics/CummulativeRE24.png')
+```
+
+
+Shiny App
+```{r}
+##reading files in for ShinyApp
+control_data <- read_csv('data/control_data.csv')
+cy_data <- read_csv('data/cy_data.csv')
+##acting as possible pitchers and years with corresponding retroIDs
+cy_young_lookup <- read_csv('data/cy_young_lookup.csv')
+```
+
+
+```{r}
+##creating possible pitchers combined with retroIDs and player names
+possiblePitchers <- unique(cy_young_lookup$retroID)
+names(possiblePitchers) <- unique(cy_young_lookup$Player)
+
+ui <- fluidPage(
+  ##title of ui
+  titlePanel('Cy Young Winners Run Value by Game State - 2010-2019'),
+  sidebarLayout(
+    ##selections for player
+    sidebarPanel(position = 'left',
+                 selectInput(inputId = 'selectPitcher',
+                             label = h3('Pitcher'),
+                             choices = possiblePitchers,
+                             ##starting with Roy Halladay
+                             selected = 'hallr001')
+                 ),
+    ##selections for year
+    sidebarPanel(position = 'left',
+                 selectInput(inputId = 'years',
+                             label = h3('Year'),
+                             ##NULL choices because reacting to player selection
+                             ##code located in the server
+                             choices = NULL)
+                 )
+  ),
+  ##plots
+  mainPanel(position = 'right',
+            ##cy young plot
+            plotOutput(outputId = 'cy_plot'),
+            ##control plot
+            plotOutput(outputId = 'control_plot'))
+  )
+
+server <- function(input, output, session){
+  
+  ##reactive selection for cy young chart using cy_data
+  SelectedPitcherReactive.CY <- reactive({
+    cy_data %>% filter(PIT_ID == input$selectPitcher)
+  })
+  
+  ##reactive selection for control chart using control_data
+  SelectedPitcherReactive.CONTROL <- reactive({
+    control_data %>% filter(PIT_ID != input$selectPitcher)
+  })
+  
+  ##code for year input based on the player input
+  ##long if/else statement going through all possible options
+  observeEvent(input$selectPitcher, {
+    if (input$selectPitcher == 'hernf002') {
+      possibleYears <- 2010
+    } else if (input$selectPitcher == 'hallr001'){
+      possibleYears <- 2010
+    } else if (input$selectPitcher == 'verlj001') {
+      possibleYears <- c(2011, 2019)
+    } else if (input$selectPitcher == 'kersc001') {
+      possibleYears <- c(2011, 2013, 2014)
+    } else if (input$selectPitcher == 'pricd001'){
+      possibleYears <- 2012
+    } else if (input$selectPitcher == 'dickr001'){
+      possibleYears <- 2012
+    } else if (input$selectPitcher == 'schem001'){
+      possibleYears <- c(2013, 2016, 2017)
+    } else if (input$selectPitcher == 'klubc001'){
+      possibleYears <- c(2014, 2017)
+    } else if (input$selectPitcher == 'keucd001'){
+      possibleYears <- 2015
+    } else if (input$selectPitcher == 'arrij001'){
+      possibleYears <- 2015
+    } else if (input$selectPitcher == 'porcr001'){
+      possibleYears <- 2016
+    } else if (input$selectPitcher == 'snelb001'){
+      possibleYears <- 2018
+    } else if (input$selectPitcher == 'degrj001'){
+      possibleYears <- c(2018, 2019)
+    } else {
+      possibleYears <- NULL
+    }
+    updateSelectInput(session, 'years', choices = possibleYears)
+  })
+  
+  output$cy_plot <- renderPlot({
+    ##filtering for the correct year
+    selectedYears <- SelectedPitcherReactive.CY() %>%
+      filter(YEAR_ID == input$years)
+    
+    ggplot(selectedYears, aes(BASES, run_value)) +
+      geom_jitter(width = 0.25, alpha = 0.5, color = 'midnightblue') +
+      ##horizontal line for y = 0
+      geom_hline(yintercept = 0, color = 'springgreen2', size = 1.5) +
+      labs(title = 'Cy Young Winner Run Value',
+           x = 'Base State',
+           y = 'Run Value',
+           caption = 'Data from Retrosheet') +
+      theme_fivethirtyeight()
+  })
+  
+  output$control_plot <- renderPlot({
+    ##filtering for correct year
+    selectedData <- SelectedPitcherReactive.CONTROL() %>% 
+      filter(YEAR_ID == input$years)  %>% 
+      ##10% sample for year to compare
+      slice_sample(prop = 0.1)
+    
+    ggplot(selectedData, aes(BASES, run_value)) +
+      geom_jitter(width = 0.25, alpha = 0.5, color = 'orange2') +
+      ##horizontal line for y = 0
+      geom_hline(yintercept = 0, color = 'springgreen2', size = 1.5) +
+      labs(title = 'Control Run Value',
+           x = 'Base State',
+           y = 'Run Value',
+           caption = 'Data from Retrosheet') +
+      theme_fivethirtyeight()
+  })
+  
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+Benett Dervishaj
+```{r}
+library(Lahman)
+library(baseballr)
+library(ggplot2)
+library(tidyverse)
+library(shiny)
+library(dplyr)
+```
+
+## Shiny App and Data Mutations
+
+```{r}
+# 2019 CY YOUNG WINNERS
+# NL Winner - Jacob deGrom - New York Mets
+playerid_lookup("deGrom", "Jacob")
+fg_pitcher_game_logs(playerid = 10954, year = 2019) -> JD_2019
+JD_2019
+write.csv(JD_2019, "Jacob deGrom 2019.csv")
+
+# AL Winner - Justin Verlander - Houston Astros
+playerid_lookup("Verlander", "Justin")
+fg_pitcher_game_logs(playerid = 8700, year = 2019) -> JV_2019
+JV_2019
+write.csv(JV_2019, "Justin Verlander 2019.csv")
+```
+
+```{r}
+# 2018 CY YOUNG WINNERS
+
+# NL Winner - Jacob deGrom - New York Mets
+fg_pitcher_game_logs(playerid = 10954, year = 2018) -> JD_2018
+JD_2018
+write.csv(JD_2018, "Jacob deGrom 2018.csv")
+
+# AL Winner - Blake Snell - Tampa Bay Rays
+playerid_lookup("Snell", "Blake")
+fg_pitcher_game_logs(playerid = 13543, year = 2018) -> BS_2018
+BS_2018
+write.csv(BS_2018, "Blake Snell 2018.csv")
+```
+
+```{r}
+# 2017 CY YOUNG WINNERS
+
+# NL Winner - Max Scherzer - Washington Nationals
+playerid_lookup("Scherzer", "Max")
+fg_pitcher_game_logs(playerid = 3137, year = 2017) -> MS_2017
+MS_2017
+write.csv(MS_2017, "Max Scherzer 2017.csv")
+
+# AL Winner - Corey Kluber - Cleveland Guardians
+playerid_lookup("Kluber", "Corey")
+fg_pitcher_game_logs(playerid = 2429, year = 2017) -> CK_2017
+CK_2017
+write.csv(CK_2017, "Corey Kluber 2017.csv")
+```
+
+```{r}
+# 2016 CY YOUNG WINNERS
+
+# NL Winner - Max Scherzer - Washington Nationals
+fg_pitcher_game_logs(playerid = 3137, year = 2016) -> MS_2016
+MS_2016
+write.csv(MS_2016, "Max Scherzer 2016.csv")
+
+# AL Winner - Rick Porcello - Boston Red Sox
+playerid_lookup("Porcello", "Rick")
+fg_pitcher_game_logs(playerid = 2717, year = 2016) -> RP_2016
+RP_2016
+write.csv(RP_2016, "Rick Porcello 2016.csv")
+```
+
+```{r}
+# 2015 CY YOUNG WINNERS
+
+# NL Winner - Jake Arrieta - Chicago Cubs
+playerid_lookup("Arrieta", "Jake")
+fg_pitcher_game_logs(playerid = 4153, year = 2015) -> JA_2015
+JA_2015
+write.csv(JA_2015, "Jake Arrieta 2015.csv")
+
+# AL Winner - Dallas Keuchel - Houston Astros
+playerid_lookup("Keuchel", "Dallas")
+fg_pitcher_game_logs(playerid = 9434, year = 2015) -> DK_2015
+DK_2015
+write.csv(DK_2015, "Dallas Keuchel 2015.csv")
+```
+
+```{r}
+# 2014 CY YOUNG WINNERS
+
+# NL Winner - Clayton Kershaw - Los Angeles Dodgers
+playerid_lookup("Kershaw", "Clayton")
+fg_pitcher_game_logs(playerid = 2036, year = 2014) -> CKershaw_2014
+CKershaw_2014
+write.csv(CKershaw_2014, "Clayton Kershaw 2014.csv")
+
+# AL Winner - Corey Kluber - Cleveland Guardians
+fg_pitcher_game_logs(playerid = 2429, year = 2014) -> CK_2014
+CK_2014
+write.csv(CK_2014, "Corey Kluber 2014.csv")
+```
+
+```{r}
+# 2013 CY YOUNG WINNERS
+
+# NL Winner - Clayton Kershaw - Los Angeles Dodgers
+fg_pitcher_game_logs(playerid = 2036, year = 2013) -> CKershaw_2013
+CKershaw_2013
+write.csv(CKershaw_2013, "Clayton Kershaw 2013.csv")
+
+# AL Winner - Max Scherzer - Detroit Tigers
+fg_pitcher_game_logs(playerid = 3137, year = 2013) -> MS_2013
+MS_2013
+write.csv(MS_2013, "Max Scherzer 2013.csv")
+```
+
+```{r}
+# 2012 CY YOUNG WINNERS
+
+# NL Winner - R.A. Dickey - New York Mets
+playerid_lookup("Dickey")
+fg_pitcher_game_logs(playerid = 1245, year = 2012) -> RA_2012
+RA_2012
+write.csv(RA_2012, "R.A. Dickey 2012.csv")
+
+# AL Winner - David Price - Tampa Bay Rays
+playerid_lookup("Price", "David")
+fg_pitcher_game_logs(playerid = 3184, year = 2012) -> DP_2012
+DP_2012
+write.csv(DP_2012, "David Price 2012.csv")
+```
+
+```{r}
+# 2011 CY YOUNG WINNERS
+
+# NL Winner - Clayton Kershaw - Los Angeles Dodgers
+fg_pitcher_game_logs(playerid = 2036, year = 2011) -> CKershaw_2011
+CKershaw_2011
+write.csv(CKershaw_2011, "Clayton Kershaw 2011.csv")
+
+# AL Winner - Justin Verlander - Detroit Tigers
+fg_pitcher_game_logs(playerid = 8700, year = 2011) -> JV_2011
+JV_2011
+write.csv(JV_2011, "Justin Verlander 2011.csv")
+```
+
+```{r}
+# 2010 CY YOUNG WINNERS
+
+# NL Winner - Roy Halladay - Philadelphia Phillies
+playerid_lookup("Halladay", "Roy")
+fg_pitcher_game_logs(playerid = 1303, year = 2010) -> RH_2010
+RH_2010
+write.csv(RH_2010, "Roy Halladay 2010.csv")
+
+# AL Winner - Felix Hernandez - Seattle Mariners
+playerid_lookup("Hernández", "Félix")
+fg_pitcher_game_logs(playerid = 4772, year = 2010) -> FH_2010
+FH_2010
+write.csv(FH_2010, "Felix Hernandez 2010.csv")
+
+All_CyYoungWinners <- bind_rows(RH_2010, FH_2010, CKershaw_2011, JV_2011, RD_2012, DP_2012, CKershaw_2013, MS_2013, CKershaw_2014, CK_2014, DK_2015, JA_2015, RP_2016, MS_2016, MS_2017, CK_2017, BS_2018, JD_2019, JD_2019, JV_2019)
+
+write.csv(All_Cy_Young_Winners, "2010 - 2019 Cy Young Winners.csv")
+```
+
+```{r}
+# New Data Frame with Specific Pitch Metrics selected
+Cy_Young_Pitch_Mix <- All_Cy_Young_Winners %>%
+  select(PlayerName, season,
+         pfxFA.X, pfxFA.Z, pfxvFA,
+         pfxSL.X, pfxSL.Z, pfxvSL,
+         pfxCU.X, pfxCU.Z, pfxvCU,
+         pfxCH.X, pfxCH.Z, pfxvCH)
+
+Cy_Young_Pitch_Mix
+```
+
+```{r}
+# Separating Pitches
+Fastball <- Cy_Young_Pitch_Mix %>%
+  transmute(PlayerName, season, Pitch = "Fastball",
+            Hbreak = pfxFA.X, Vbreak = pfxFA.Z, Velo = pfxvFA)
+
+Slider <- Cy_Young_Pitch_Mix %>%
+  transmute(PlayerName, season, Pitch = "Slider",
+            Hbreak = pfxSL.X, Vbreak = pfxSL.Z, Velo = pfxvSL)
+
+Curveball <- Cy_Young_Pitch_Mix %>%
+  transmute(PlayerName, season, Pitch = "Curveball", 
+            Hbreak = pfxCU.X, Vbreak = pfxCU.Z, Velo = pfxvCU)
+
+Changeup <- Cy_Young_Pitch_Mix %>%
+  transmute(PlayerName, season, Pitch = "Changeup",
+            Hbreak = pfxCH.X, Vbreak = pfxCH.Z, Velo = pfxvCH)
+
+Cy_Young_Specified_Pitches <- bind_rows(Fastball, Slider, Curveball, Changeup)
+
+ggplot(Cy_Young_Specified_Pitches, aes(x = Hbreak, y = Vbreak, color = Pitch, size = Velo, label = PlayerName)) +
+  geom_point(alpha = 0.8) +
+  labs(title = "Pitch Movement and Velocity for 2010 - 2019 Cy Young Winners",
+       x = "Horizontal Break (inches)",
+       y = "Vertical Break (inches)",
+       color = "Pitch Type",
+       size = "Velocity (mph)") +
+  theme_minimal()
+```
+
+
+
+```{r}
+ui <- fluidPage(
+  titlePanel("Cy Young Winners Pitch Movement Visuals"),
+
+  sidebarLayout(
+    sidebarPanel(
+      selectInput("Pitcher", "Select Pitcher:",
+                  choices = unique(Cy_Young_Specified_Pitches$PlayerName),
+                  selected = unique(Cy_Young_Specified_Pitches$PlayerName)[1]),
+      sliderInput("VeloRange", "Velocity Range (mph):",
+                  min = floor(min(Cy_Young_Specified_Pitches$Velo, na.rm = TRUE)),
+                  max = ceiling(max(Cy_Young_Specified_Pitches$Velo, na.rm = TRUE)),
+                  value = c(floor(min(Cy_Young_Specified_Pitches$Velo, na.rm = TRUE)),
+                            ceiling(max(Cy_Young_Specified_Pitches$Velo, na.rm = TRUE))),
+                  step = 1)
+    ),
+    
+    mainPanel(
+      plotOutput("pitchPlot")
+    )
+  )
+)
+
+server <- function(input,output, session) {
+  
+  pitcher_data <- reactive({
+    Cy_Young_Specified_Pitches %>%
+      filter(PlayerName == input$Pitcher,
+             Velo >= input$VeloRange[1],
+             Velo <= input$VeloRange[2])
+  })
+  
+  output$pitchPlot <- renderPlot({
+    ggplot(pitcher_data(), aes(x = Hbreak, y = Vbreak, color = Pitch, size = Velo)) +
+      geom_point(alpha = 0.8) +
+      labs(title = paste("Pitch Movement for", input$Pitcher),
+           x = "Horizontal Break (inches)",
+           y = "Vertical Break (inches)",
+           color = "Pitch Type",
+           size = "Velocity (mph)") +
+      theme_minimal() +
+      theme(
+        legend.title = element_text(size = 14),
+        legend.text = element_text(size = 12)
+      )
+  })
+}
+
+shinyApp(ui, server)
+```
+
+
+
+## tOPS+ for both leagues
+
+
+
+```{r}
+# Labeling tOPS for each Cy Young Award Winner
+
+# 2019 Cy Young Winners
+JD_tOPS_2019 <- expand.grid(balls = 0:3, strikes = 0:2) %>%
+  mutate(
+    value = c(
+      214, 212, 267,
+      160, 160, 82,
+      139, 256, -4,
+      28, 44, 142)
+  )
+
+JV_tOPS_2019 <- expand.grid(balls = 0:3, strikes = 0:2) %>%
+  mutate(
+    value = c(
+      165, 163, 212,
+      1465, 248, 207,
+      215, 694, -42,
+      -13, 34, 171
+    )
+  )
+
+# 2018 Cy Young Winners
+JD_tOPS_2018 <- expand.grid(balls = 0:3, strikes = 0:2) %>%
+  mutate(
+    value = c(
+      265, 233, -4,
+      671, 224, 104,
+      234, 547, -18,
+      -14, 20, 114
+    )
+  )
+
+BS_tOPS_2018 <- expand.grid(balls = 0:3, strikes = 0:2) %>%
+  mutate(
+    value = c(
+      98, 185, 205,
+      250, 104, 164,
+      291, 459, -62,
+      -10, -12, 166
+    )
+  )
+
+# 2017 Cy Young Winners
+MS_tOPS_2017 <- expand.grid(balls = 0:3, strikes = 0:2) %>%
+  mutate(
+    value = c(
+      196, 243, 405,
+      159, 228, 252,
+      124, 541, -52,
+      12, -6, 118
+    )
+  )
+
+CK_tOPS_2017 <- expand.grid(balls = 0:3, strikes = 0:2) %>%
+  mutate(
+    value = c(
+      199, 134, 63,
+      265, 217, 117,
+      458, 211, 56,
+      -37, -9, 146
+    )
+  )
+
+# 2016 Cy Young Winners
+MS_tOPS_2016 <- expand.grid(balls = 0:3, strikes = 0:2) %>%
+  mutate(
+    value = c(
+      217, 177, 158,
+      0, 186, 210,
+      96, 459, -4,
+      32, -10, 144
+    )
+  )
+
+RP_tOPS_2016 <- expand.grid(balls = 0:3, strikes = 0:2) %>%
+  mutate(
+    value = c(
+      208, 180, 253,
+      471, 198, 109,
+      109, 171, 6,
+      1, 2, 161
+    )
+  )
+
+# 2015 Cy Young Winners
+JA_tOPS_2015 <- expand.grid(balls = 0:3, strikes = 0:2) %>%
+  mutate(
+    value = c(
+      162, 241, 256,
+      0, 84, 210,
+      153, 319, -29,
+      3, 26, 110
+    )
+  )
+
+DK_tOPS_2015 <- expand.grid(balls = 0:3, strikes = 0:2) %>%
+  mutate(
+    value = c(
+      152, 191, 221,
+      0, 117, 190,
+      177, 315, -51,
+      -10, -9, 108
+    )
+  )
+
+# 2014 Cy Young Winners
+CKershaw_tOPS_2014 <- expand.grid(balls = 0:3, strikes = 0:2) %>%
+  mutate(
+    value = c(
+      189, 79, -3,
+      1025, 193, 185,
+      228, 429, 13,
+      1, 16, 130
+    )
+  )
+
+CK_tOPS_2014 <- expand.grid(balls = 0:3, strikes = 0:2) %>%
+  mutate(
+    value = c(
+      162, 156, 305,
+      0, 177, 185,
+      249, 239, 5,
+      -11, -9, 156
+    )
+  )
+
+CK_tOPS_2014
+
+# 2013 Cy Young Winners
+CKershaw_tOPS_2013 <- expand.grid(balls = 0:3, strikes = 0:2) %>%
+  mutate(
+    value = c(
+      119, 172, 204,
+      0, 43, 218,
+      355, 258, -19,
+      24, 26, 162
+    )
+  )
+
+MS_tOPS_2013 <- expand.grid(balls = 0:3, strikes = 0:2) %>%
+  mutate(
+    value = c(
+      190, 270, 390,
+      902, 122, 130,
+      266, 287, -3,
+      4, 35, 93
+    )
+  )
+
+# 2012 Cy Young Winners
+RA_Dickey_tOPS_2012 <- expand.grid(balls = 0:3, strikes = 0:2) %>%
+  mutate(
+    value = c(
+      113, 275, 329,
+      220, 152, 138,
+      178, 316, 38,
+      -20, 6, 150
+    )
+  )
+
+DP_tOPS_2012 <- expand.grid(balls = 0:3, strikes = 0:2) %>%
+  mutate(
+    value = c(
+      138, 214, 133,
+      386, 99, 220,
+      186, 157, -2,
+      -3, 40, 134
+    )
+  )
+
+# 2011 Cy Young Winners
+CKershaw_tOPS_2011 <- expand.grid(balls = 0:3, strikes = 0:2) %>%
+  mutate(
+    value = c(
+      164, 58, 192,
+      269, 88, 147,
+      250, 365, -12,
+      -9, 31, 162
+    )
+  )
+
+JV_tOPS_2011 <- expand.grid(balls = 0:3, strikes = 0:2) %>%
+  mutate(
+    value = c(
+      191, 165, 136,
+      414, 197, 64,
+      204, 378, 1,
+      27, 34, 100
+    )
+  )
+
+# 2010 Cy Young Winners
+RH_tOPS_2010 <- expand.grid(balls = 0:3, strikes = 0:2) %>%
+  mutate(
+    value = c(
+      151, 223, 171,
+      207, 105, 98,
+      309, 147, -29,
+      27, 65, 115
+    )
+  )
+
+FH_tOPS_2010 <- expand.grid(balls = 0:3, strikes = 0:2) %>%
+  mutate(
+    value = c(
+      61, 260, 164,
+      396, 145, 168,
+      150, 562, -7,
+      -22, -11, 139
+    )
+  )
+
+# AL and NL data
+AL <- rbind(FH_tOPS_2010, JV_tOPS_2011, DP_tOPS_2012, MS_tOPS_2013, CK_tOPS_2014, DK_tOPS_2015, RP_tOPS_2016, CK_tOPS_2017, BS_tOPS_2018, JV_tOPS_2019)
+
+NL <- rbind(RH_tOPS_2010, CKershaw_tOPS_2011, RA_Dickey_tOPS_2012, CKershaw_tOPS_2013, CKershaw_tOPS_2014, JA_tOPS_2015, MS_tOPS_2016, MS_tOPS_2017, JD_tOPS_2018, JD_tOPS_2019)
+
+# tOPS+ Average
+AL_tOPS_AVG <- AL %>% 
+  group_by(balls, strikes) %>%
+  summarise(avg_tOPS = mean(value, na.rm = TRUE), .groups = "drop")
+
+AL_tOPS_AVG
+
+# tOPS+ Average
+NL_tOPS_AVG <- NL %>%
+  group_by(balls, strikes) %>%
+  summarise(avg_tOPS = mean(value, na.rm = TRUE), .groups = "drop")
+
+NL_tOPS_AVG
+
+# NL and AL
+MLB <- bind_rows(
+  AL_tOPS_AVG %>% mutate(League = "American League"),
+  NL_tOPS_AVG %>% mutate(League = "National League")
+)
+
+# American League
+ggplot(AL_tOPS_AVG, aes(x = strikes, y = balls, fill = avg_tOPS)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient2(low = "blue", mid = "white", high = "red", midpoint = 100) +
+  geom_text(aes(label = avg_tOPS), color = "black", size = 4) +
+  labs(title = "Average tOPS+ by Count - American League",
+       x = "Strikes", y = "Balls", fill = "Avg tOPS+")+
+  theme_minimal(base_size = 14)
+ggsave("AL 2010-2019 Cy Young Winner Average tOPS by Count.png")
+
+# National League
+ggplot(NL_tOPS_AVG, aes(x = strikes, y = balls, fill = avg_tOPS)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient2(low = "blue", mid = "white", high = "red", midpoint = 100) +
+  geom_text(aes(label = avg_tOPS), color = "black", size = 4) +
+  labs(title = "Average tOPS+ by Count - National League",
+       x = "Strikes", y = "Balls", fill = "Avg tOPS+") +
+  theme_minimal(base_size = 14)
+  ggsave("NL 2010-2019 Cy Young Winner Average tOPS by Count.png")
+```
+
+```{r}
+# tOPS Graph Function
+tOPS_graph <- function(data, title = "tOPS+ Heatmap") {
+  ggplot(data, aes(x = balls, y = strikes, fill = value)) +
+    geom_tile(color = "white", linewidth=1)+
+    geom_text(aes(label = value), color = "black", size = 4) +
+    scale_fill_gradient2(
+      low = "blue", mid = "white", high = "red",
+      midpoint = 100, name = "tOPS+"
+    ) +
+    scale_x_continuous(breaks = 0:3) +
+    scale_y_continuous(breaks = 0:2) +
+    labs(
+      title = title,
+      x = "Balls",
+      y = "Strikes",
+    ) +
+    theme_minimal(base_size = 14) +
+    theme(
+      plot.title = element_text(hjust = 0.5, face = "bold"),
+      legend.position = "right"
+    )
+}
+
+# All tOPS Graphs
+tOPS_graph(RH_tOPS_2010)
+tOPS_graph(FH_tOPS_2010)
+tOPS_graph(JV_tOPS_2011)
+tOPS_graph(CKershaw_tOPS_2011)
+tOPS_graph(RA_Dickey_tOPS_2012)
+tOPS_graph(DP_tOPS_2012)
+tOPS_graph(MS_tOPS_2013)
+tOPS_graph(CKershaw_tOPS_2013)
+tOPS_graph(CKershaw_tOPS_2014)
+tOPS_graph(CK_tOPS_2014)
+tOPS_graph(JA_tOPS_2015)
+tOPS_graph(DK_tOPS_2015)
+tOPS_graph(MS_tOPS_2016)
+tOPS_graph(RP_tOPS_2016)
+tOPS_graph(CK_tOPS_2017)
+tOPS_graph(MS_tOPS_2017)
+tOPS_graph(JD_tOPS_2018)
+tOPS_graph(BS_tOPS_2018)
+tOPS_graph(JD_tOPS_2019)
+tOPS_graph(JV_tOPS_2019)
+```
+
+Derek Cunius
+#Loading in Packages and Data
+```{r}
+library(tidyverse)
+library(BasketballAnalyzeR)
+
+cy_young_stats <- read_csv("cy_young_stats.csv")
+```
+
+#Creating a Cluster Tree for MLB Cy Young Award Winners
+```{r}
+#Renaming Columns to be Used in Later Analysis
+cy_young_stats <- cy_young_stats %>% rename(H.9 = `H/9`, 
+                                            HR.9 = `HR/9`,
+                                            BB.9 = `BB/9`,
+                                            K.9 = `K/9`) %>%
+  mutate(Winner = paste(Name, as.character(yearID), sep=" "))
+
+#Selecting data to be used in clusters based on Correlation Matrix from Previous Project
+cy_young_cluster_data <- cy_young_stats %>% select(CG, WHIP, BB.9, K.9, ERA)
+```
+
+#Finding the Optimal Number of Clusters
+```{r}
+set.seed(123)
+hclu1 <- hclustering(cy_young_cluster_data)
+variance_plot <- plot(hclu1)
+print(variance_plot) #The elbow of the plot suggests that 4 clusters should be used due to the 11% increase in explained variance before the line levels off
+```
+
+#Creating Radial Plots with K=4
+```{r}
+hclu2 <- hclustering(cy_young_cluster_data, labels=cy_young_stats$Winner, k=5)
+radial_plots <- plot(hclu2, profiles=TRUE)
+```
+
+#Creating Cluster Tree
+```{r}
+cluster_tree <- plot(hclu2, profiles=FALSE, rect=TRUE, colored.branches=TRUE, cex.labels=0.50)
+cluster_tree
+ggsave("cluster_tree.png")
+```

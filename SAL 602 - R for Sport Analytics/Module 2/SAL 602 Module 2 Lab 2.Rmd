@@ -1,0 +1,65 @@
+---
+title: "SAL 602 Module 2 Lab 2"
+author: "Andrew Fish"
+date: "2024-10-28"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+```
+
+Reading files into R using readr
+
+```{r}
+ALPerformance <- read_csv("Syracuse/SAL 602/Module 2/data/teamPerformanceAL.csv")
+NLPerformance <- read_csv("Syracuse/SAL 602/Module 2/data/teamPerformanceNL.csv")
+MLBAttentance <- read_csv("Syracuse/SAL 602/Module 2/data/MLBAttendanceData.csv")
+CoveredStad <- read_csv("Syracuse/SAL 602/Module 2/data/coveredStadiums.csv")
+```
+
+Joining AL and NL Performance data
+
+```{r}
+ALPerformance %>% bind_rows(NLPerformance) -> teamPerformance
+```
+
+Joining MLB Performance and Attendance Data
+
+```{r}
+teamPerformance %>% inner_join(MLBAttentance, by = c("franchID" = "Tm", "yearID" = "Year")) -> attendancePerformance
+```
+
+Joining Team Performance and Stadium Data
+
+```{r}
+attendancePerformance %>% left_join(CoveredStad, by = c("franchID" = "Tm")) -> attendancePerformanceStadium
+```
+
+Replacing NA values
+
+```{r}
+attendancePerformanceStadium %>% mutate(Covered = replace_na(Covered, 0)) -> attendancePerformanceStadium
+attendancePerformanceStadium %>% mutate(RoofType = replace_na(RoofType, "Open")) -> attendancePerformanceStadium
+```
+
+Aggregate Team Attendance Data
+
+```{r}
+attendancePerformance %>%
+  group_by(franchID) %>%
+  summarize(mean_Attendance = mean(Attendance),
+            mean_AttendanceG = mean(`Attend/G`)) -> avgAttendancePerformance
+```
+
+Write data frames to files
+
+```{r}
+write_csv(attendancePerformanceStadium, file = "Syracuse/SAL 602/Module 2/teamPerformanceAttendance.csv")
+write_csv(avgAttendancePerformance, file = "Syracuse/SAL 602/Module 2/teamAttendanceAverage.csv")
+```
+

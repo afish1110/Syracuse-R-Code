@@ -1,0 +1,131 @@
+---
+title: "SAL 604 Assignment 8"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(readr)
+library(foreign)
+library(rpart)
+library(rpart.plot)
+library(caret)
+library(randomForest)
+library(factoextra)
+library(stats)
+library(e1071)
+```
+
+```{r}
+ncaa_coach <- read_csv('data/NCAA_football_coaches.csv')
+skater <- read_csv('data/SkaterOnIceSalary.csv')
+```
+
+#1.
+##1,
+
+```{r}
+logit <- glm(cochange ~ wpct + gamesc + wpctsc + gameca, family = binomial(link = logit), data = ncaa_coach)
+summary(logit)
+```
+
+##2.
+
+In our logit model we have Intercept and wpct significant at the 0.1% level with small negative effects. gamesc is also significant at the 0.1% level with a small positive effect. wpctsc and gameca are significant at the 5% level with small positive and negative effects respectively.
+
+##3.
+
+```{r}
+logit <- glm(cochange ~ pfsc + pasc + gamesc + wpctsc + gameca, family = binomial(link = logit), data = ncaa_coach)
+summary(logit)
+```
+
+##4.
+
+Under the new logit model we have Intercept and gamesc still significant at the 0.1% level with no change in effects. pfsc and pasc are both significant at the 0.1% level and have small negative and positive effects respectively. gameca is now significant at the 1% level instead of 5% still has same effect. wpctsc is no longer significant.
+
+##5.
+
+```{r}
+logit <- glm(cochange ~ wpct + gamesc + wpctsc + gameca, family = binomial(link = logit), data = ncaa_coach)
+summary(logit)
+probit <- glm(cochange ~ wpct + gamesc + wpctsc + gameca, family = binomial(link = probit), data = ncaa_coach)
+summary(probit)
+```
+
+Using the first model in this assignment we created both logit and probit versions. When comparing both models we see that in this instance the logit and probit models have the same results. Intercept, wpct, gamesc are all significant at the 0.1% level with small negative, small negative, and small positive effects respectively. wpctsc and gameca are significant at the 5% level with small positive and small negative effects respectively.
+
+#2.
+
+```{r}
+set.seed(1234)
+sample_set <- sample(nrow(skater), round(nrow(skater) * 0.75), replace = FALSE)
+skater_train <- skater[sample_set,]
+skater_test <- skater[-sample_set,]
+```
+
+```{r}
+round(prop.table(table(select(skater, Position))), 2)
+round(prop.table(table(select(skater_train, Position))), 2)
+round(prop.table(table(select(skater_test, Position))), 2)
+```
+
+```{r}
+skater_mod <- naiveBayes(Position ~., data = skater_train, laplace = 1)
+skater_mod
+```
+
+```{r}
+skater_pred <- predict(skater_mod, skater_test, type = 'class')
+skater_pred_table <- table(skater_test$Position, skater_pred)
+skater_pred_table
+```
+
+```{r}
+sum(diag(skater_pred_table)) / nrow(skater_test)
+```
+
+Overall Naive Bayes doesn't appear to be very good in predicting the skater positions. But 3 of the positions are forwards. Difficult to differentiate between the three based on stats. As well many of the forwards will play multiple positions based on the lines. This is not a good look at the ML prediction. Will mutate the df to have only two positions F and D
+
+```{r}
+##change position to F and D then run again
+skater %>%
+  mutate(Position = case_when(Position == 'D' ~ 'D',
+                              .default = 'F')) -> skater
+```
+
+```{r}
+set.seed(1234)
+sample_set <- sample(nrow(skater), round(nrow(skater) * 0.75), replace = FALSE)
+skater_train <- skater[sample_set,]
+skater_test <- skater[-sample_set,]
+```
+
+```{r}
+round(prop.table(table(select(skater, Position))), 2)
+round(prop.table(table(select(skater_train, Position))), 2)
+round(prop.table(table(select(skater_test, Position))), 2)
+```
+
+```{r}
+skater_mod <- naiveBayes(Position ~., data = skater_train, laplace = 1)
+skater_mod
+```
+
+```{r}
+skater_pred <- predict(skater_mod, skater_test, type = 'class')
+skater_pred_table <- table(skater_test$Position, skater_pred)
+skater_pred_table
+```
+
+```{r}
+sum(diag(skater_pred_table)) / nrow(skater_test)
+```
+
+As we can see it is much better at differentiating between Forwards and Defensemen. The three different forward positions were throwing it off. We should not expect ML to predict the difference between L, R, and C without faceoff data and handedness. Still has some struggles with F as there are players on the 3rd and 4th lines that dont score as much so can appear as D based on stats. Overall good prediction of positions.

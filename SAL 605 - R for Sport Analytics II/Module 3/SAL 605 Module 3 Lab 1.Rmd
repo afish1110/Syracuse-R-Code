@@ -1,0 +1,93 @@
+---
+title: "SAL 605 Module 3 Lab 1"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+##packages
+library(tidyverse)
+library(readr)
+library(Lahman)
+library(ggplot2)
+library(ggthemes)
+library(zoo)
+```
+
+
+#1.
+```{r}
+##reading in retrosheet data for 2021
+fields <- read_csv('data/fields.csv')
+data2021 <- read_csv('data/all2021.csv',
+                     col_names = pull(fields, Header),
+                     na = character())
+```
+
+
+```{r}
+##getting retroID for Xander Bogaerts from Lahman Database
+bogaerts_id <- People %>%
+  filter(nameFirst == 'Xander' & nameLast == 'Bogaerts') %>% 
+  pull(retroID)
+
+##filters retrosheet data for only Xander Bogaerts ABs
+bogaerts_AB <- data2021 %>% 
+  filter(BAT_ID == bogaerts_id & AB_FL == TRUE)
+```
+
+
+#2.
+```{r}
+##creates a hit dummy variable and a date column as a identifier for each game
+bogaerts_AB <- bogaerts_AB %>% 
+  mutate(H = ifelse(H_FL > 0, 1, 0),
+         DATE = str_sub(GAME_ID, 4, 12),
+         AB = 1) %>% 
+  ##arranges the data by date so it is chronological with the season
+  arrange(DATE)
+```
+
+
+#3.
+```{r}
+##function for moving average
+moving_average <- function(df, width){
+  N <- nrow(df)
+  df %>% 
+    mutate(Game = row_number()) %>% 
+    transmute(Game = rollmean(Game, k = width, fill = NA),
+              Average = rollsum(H, k = width, fill = NA) / rollsum(AB, k = width, fill = NA))
+}
+```
+
+
+```{r}
+bogaerts.H <- bogaerts_AB %>% 
+  mutate(AB_num = row_number()) %>% 
+  filter(H == 1)
+
+##creating a plot of the running average over the course of the 2021 season
+moving_average(bogaerts_AB, 30) %>% 
+  ggplot(aes(Game, Average)) +
+  ##line plot
+  geom_line(color = 'midnightblue') +
+  ##intercept at mean
+  geom_hline(yintercept = mean(bogaerts_AB$H)) +
+  ##rug plot showing when hits occured or didn't
+  geom_rug(data = bogaerts.H, aes(AB_num, .3 * H), sides = 'b', color = 'orange2') +
+  ##labels and captions
+  labs(title = 'Xander Bogaerts Moving Average - 2021 Season',
+       x = 'At Bat',
+       caption = 'Data from Retrosheet') +
+  ##theme
+  theme_clean()
+
+ggsave('XanderBogaertsMovingAVG2021.png')
+```
+

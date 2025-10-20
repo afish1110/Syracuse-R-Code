@@ -1,0 +1,914 @@
+date,team,oppponent,scorediff,sumscore,teamscore,oppscore,favline,total
+24-Aug-24,SMU Mustangs,Nevada,5,53,29,24,28,55.5
+24-Aug-24,Florida State Seminoles,Georgia Tech,-3,45,21,24,10.5,54.5
+25-Aug-24,Hawaii Rainbow Warriors,Delaware State,21,49,35,14,40,54.5
+29-Aug-24,Arkansas Razorbacks,Arkansas-Pine Bluff,70,70,70,0,50.5,59.5
+29-Aug-24,Missouri Tigers,Murray State,51,51,51,0,49.5,64
+29-Aug-24,Kansas Jayhawks,Lindenwood,45,51,48,3,48.5,62.5
+29-Aug-24,Rutgers Scarlet Knights,Howard,37,51,44,7,38.5,51.5
+29-Aug-24,UCF Knights,New Hampshire,54,60,57,3,38,59.5
+29-Aug-24,Tulsa Golden Hurricane,Northwestern State,34,90,62,28,37.5,56
+29-Aug-24,Utah Utes,Southern Utah,49,49,49,0,37.5,55.5
+29-Aug-24,Wake Forest Demon Deacons,North Carolina A&T,32,58,45,13,33.5,50.5
+29-Aug-24,Central Michigan Chippewas,Central Connecticut State,56,76,66,10,32.5,55.5
+29-Aug-24,NC State Wolfpack,Western Carolina,17,59,38,21,32,61.5
+29-Aug-24,UAB Blazers,Alcorn State,38,44,41,3,29.5,55.5
+29-Aug-24,Illinois Fighting Illini,Eastern Illinois,45,45,45,0,28.5,50
+29-Aug-24,Tulane Green Wave,Southeastern Louisiana,52,52,52,0,28,55.5
+29-Aug-24,Toledo Rockets,Duquesne,39,59,49,10,27.5,53.5
+29-Aug-24,Bowling Green Falcons,Fordham,24,58,41,17,15.5,60.5
+29-Aug-24,Colorado Buffaloes,North Dakota State,5,57,31,26,11.5,54.5
+29-Aug-24,Louisiana-Monroe Warhawks,Jackson State,16,44,30,14,4.5,45.5
+29-Aug-24,Jacksonville State Gamecocks,Coastal Carolina,-28,82,27,55,3.5,54.5
+29-Aug-24,Buffalo Bulls,Lafayette,17,43,30,13,3.5,45.5
+29-Aug-24,San Jose State Spartans,Sacramento State,18,66,42,24,2.5,63.5
+29-Aug-24,North Carolina Tar Heels,Minnesota,2,36,19,17,2,53
+30-Aug-24,Oklahoma Sooners,Temple,48,54,51,3,42.5,57.5
+30-Aug-24,Army Black Knights,Lehigh,35,49,42,7,31.5,46.5
+30-Aug-24,Duke Blue Devils,Elon,23,29,26,3,24.5,49
+30-Aug-24,Wisconsin Badgers,Western Michigan,14,42,28,14,24,56.5
+30-Aug-24,Michigan State Spartans,Florida Atlantic,6,26,16,10,13,44.5
+30-Aug-24,TCU Horned Frogs,Stanford,7,61,34,27,7.5,59.5
+31-Aug-24,SMU Mustangs,Houston Baptist,52,66,59,7,50.5,62.5
+31-Aug-24,Oregon Ducks,Idaho,10,38,24,14,49.5,60.5
+31-Aug-24,Ohio State Buckeyes,Akron,46,58,52,6,48.5,56
+31-Aug-24,Auburn Tigers,Alabama A&M,70,76,73,3,48.5,59.5
+31-Aug-24,Ole Miss Rebels,Furman,76,76,76,0,46.5,60.5
+31-Aug-24,USF Bulls,Bethune-Cookman,45,51,48,3,43.5,59.5
+31-Aug-24,Liberty Flames,Campbell,17,65,41,24,40.5,58.5
+31-Aug-24,Louisville Cardinals,Austin Peay,62,62,62,0,39.5,54.5
+31-Aug-24,Tennessee Volunteers,Chattanooga,66,72,69,3,38.5,57.5
+31-Aug-24,Memphis Tigers,North Alabama,40,40,40,0,37.5,62.5
+31-Aug-24,Kansas State Wildcats,Tennessee-Martin,35,47,41,6,37.5,56.5
+31-Aug-24,Baylor Bears,Tarleton,42,48,45,3,35.5,54.5
+31-Aug-24,Purdue Boilermakers,Indiana State,49,49,49,0,35.5,51.5
+31-Aug-24,NIU Huskies,Western Illinois,39,69,54,15,35.5,54.5
+31-Aug-24,Louisiana-Lafayette Ragin' Cajuns,Grambling State,30,50,40,10,35.5,58.5
+31-Aug-24,Utah State Aggies,Robert Morris,22,50,36,14,35,59.5
+31-Aug-24,Texas Longhorns,Colorado State,52,52,52,0,35,62.5
+31-Aug-24,Alabama Crimson Tide,Western Kentucky,63,63,63,0,34.5,59.5
+31-Aug-24,Cincinnati Bearcats,Towson,18,58,38,20,33.5,57
+31-Aug-24,Texas State Bobcats,Lamar,7,61,34,27,33.5,61.5
+31-Aug-24,San Diego State Aztecs,Texas A&M-Commerce,31,59,45,14,33,57.5
+31-Aug-24,Appalachian State Mountaineers,East Tennessee State,28,48,38,10,32.5,59.5
+31-Aug-24,East Carolina Pirates,Norfolk State,39,45,42,3,31.5,51.5
+31-Aug-24,Navy Midshipmen,Bucknell,28,70,49,21,31.5,48.5
+31-Aug-24,Texas Tech Red Raiders,Abilene Christian,1,103,52,51,31.5,57.5
+31-Aug-24,Marshall Thundering Herd,Stony Brook,42,48,45,3,31,56.5
+31-Aug-24,Iowa State Cyclones,North Dakota,18,24,21,3,30.5,52
+31-Aug-24,Air Force Falcons,Merrimack,15,27,21,6,29.5,47.5
+31-Aug-24,Washington Huskies,Weber State,32,38,35,3,29,51.5
+31-Aug-24,Oregon State Beavers,Idaho State,23,53,38,15,29,57.5
+31-Aug-24,Arizona Wildcats,New Mexico,22,100,61,39,28,60.5
+31-Aug-24,Nebraska Cornhuskers,Texas El Paso,33,47,40,7,27.5,48.5
+31-Aug-24,Washington State Cougars,Portland State,40,100,70,30,26.5,58
+31-Aug-24,Mississippi State Bulldogs,Eastern Kentucky,49,63,56,7,26.5,62
+31-Aug-24,Indiana Hoosiers,Florida International,24,38,31,7,25.5,51.5
+31-Aug-24,Kentucky Wildcats,Southern Miss,31,31,31,0,25.5,50
+31-Aug-24,Middle Tennessee Blue Raiders,Tennessee Tech,7,57,32,25,24.5,52.5
+31-Aug-24,UTSA Roadrunners,Kennesaw State,12,44,28,16,24,48.5
+31-Aug-24,Pittsburgh Panthers,Kent State,31,79,55,24,24,55.5
+31-Aug-24,Iowa Hawkeyes,Illinois State,40,40,40,0,21.5,37
+31-Aug-24,Michigan Wolverines,Fresno State,20,40,30,10,21,44.5
+31-Aug-24,California Golden Bears,UC Davis,18,44,31,13,20.5,57.5
+31-Aug-24,Georgia Tech Yellow Jackets,Georgia State,23,47,35,12,20.5,55.5
+31-Aug-24,South Carolina Gamecocks,Old Dominion,4,42,23,19,20.5,49.5
+31-Aug-24,Virginia Cavaliers,Richmond,21,47,34,13,19.5,52
+31-Aug-24,Maryland Terrapins,Connecticut,43,57,50,7,18.5,45
+31-Aug-24,Syracuse Orange,Ohio,16,60,38,22,17,44.5
+31-Aug-24,BYU Cougars,Southern Illinois,28,54,41,13,17,49.5
+31-Aug-24,Virginia Tech Hokies,Vanderbilt,-7,61,27,34,13.5,49
+31-Aug-24,UCLA Bruins,Hawaii,3,29,16,13,13.5,52.5
+31-Aug-24,Oklahoma State Cowboys,South Dakota State,24,64,44,20,13,54.5
+31-Aug-24,Boise State Broncos,Georgia Southern,11,101,56,45,13,57.5
+31-Aug-24,Arkansas State Red Wolves,Central Arkansas,3,65,34,31,12.5,58.5
+31-Aug-24,Georgia Bulldogs,Clemson,31,37,34,3,10.5,49
+31-Aug-24,Rice Owls,Sam Houston State,-20,48,14,34,9.5,49.5
+31-Aug-24,New Mexico State Aggies,Southeast Missouri State,7,39,23,16,9.5,52.5
+31-Aug-24,Penn State Nittany Lions,West Virginia,22,46,34,12,7.5,49.5
+31-Aug-24,Troy Trojans,Nevada,-2,54,26,28,7.5,44.5
+31-Aug-24,LA Tech Bulldogs,Nicholls State,8,42,25,17,7,54.5
+31-Aug-24,Arizona State Sun Devils,Wyoming,41,55,48,7,6.5,47
+31-Aug-24,James Madison Dukes,Charlotte,23,37,30,7,6.5,48
+31-Aug-24,South Alabama Jaguars,North Texas,-14,90,38,52,6,61.5
+31-Aug-24,Houston Cougars,Nevada-Las Vegas,-20,34,7,27,3.5,55.5
+31-Aug-24,Northwestern Wildcats,Miami-OH,7,19,13,6,3,40.5
+31-Aug-24,Texas A&amp;M Aggies,Notre Dame,-10,36,13,23,3,47
+31-Aug-24,Massachusetts Minutemen,Eastern Michigan,-14,42,14,28,2.5,50.5
+31-Aug-24,Miami-FL Hurricanes,Florida,24,58,41,17,2,54
+1-Sep-24,LSU Tigers,Southern California,-7,47,20,27,4,66.5
+2-Sep-24,Florida State Seminoles,Boston College,-15,41,13,28,16.5,51.5
+6-Sep-24,Indiana Hoosiers,Western Illinois,74,80,77,3,44.5,54.5
+6-Sep-24,SMU Mustangs,Brigham Young,-3,33,15,18,12.5,55.5
+6-Sep-24,Northwestern Wildcats,Duke,-6,46,20,26,2.5,37
+7-Sep-24,Georgia Bulldogs,Tennessee Tech,45,51,48,3,54.5,67.5
+7-Sep-24,Miami-FL Hurricanes,Florida A&M,47,65,56,9,48.5,57.5
+7-Sep-24,Texas A&amp;M Aggies,McNeese State,42,62,52,10,47.5,57
+7-Sep-24,TCU Horned Frogs,LIU,45,45,45,0,46.5,56.5
+7-Sep-24,LSU Tigers,Nicholls State,23,65,44,21,46.5,57.5
+7-Sep-24,Ole Miss Rebels,Middle Tennessee,49,55,52,3,42,62
+7-Sep-24,West Virginia Mountaineers,Albany-NY,35,63,49,14,38.5,53.5
+7-Sep-24,Florida Gators,Samford,38,52,45,7,38.5,55.5
+7-Sep-24,Arizona Wildcats,Northern Arizona,12,32,22,10,37.5,64.5
+7-Sep-24,Ohio State Buckeyes,Western Michigan,56,56,56,0,37,54.5
+7-Sep-24,James Madison Dukes,Gardner-Webb,7,19,13,6,36.5,51.5
+7-Sep-24,Boston College Eagles,Duquesne,56,56,56,0,35.5,54.5
+7-Sep-24,Stanford Cardinal,Cal Poly,34,48,41,7,35,61
+7-Sep-24,Penn State Nittany Lions,Bowling Green,7,61,34,27,34,51
+7-Sep-24,Vanderbilt Commodores,Alcorn State,55,55,55,0,33.5,48.5
+7-Sep-24,Missouri Tigers,Buffalo,38,38,38,0,32.5,52
+7-Sep-24,USC Trojans,Utah State,48,48,48,0,31.5,64.5
+7-Sep-24,Colorado State Rams,Northern Colorado,21,55,38,17,30.5,52.5
+7-Sep-24,Alabama Crimson Tide,South Florida,26,58,42,16,30.5,64.5
+7-Sep-24,Rice Owls,Texas Southern,62,76,69,7,29.5,52.5
+7-Sep-24,Louisville Cardinals,Jacksonville State,35,63,49,14,28.5,56.5
+7-Sep-24,Notre Dame Fighting Irish,Northern Illinois,-2,30,14,16,28,47.5
+7-Sep-24,Minnesota Golden Gophers,Rhode Island,48,48,48,0,27.5,48
+7-Sep-24,Oklahoma Sooners,Houston,4,28,16,12,27.5,49.5
+7-Sep-24,Washington Huskies,Eastern Michigan,21,39,30,9,25,49
+7-Sep-24,Rutgers Scarlet Knights,Akron,32,66,49,17,24.5,41.5
+7-Sep-24,North Texas Mean Green,Stephen F. Austin,15,55,35,20,23.5,72.5
+7-Sep-24,Liberty Flames,New Mexico State,6,54,30,24,22.5,54
+7-Sep-24,UCF Knights,Sam Houston State,31,59,45,14,21.5,54
+7-Sep-24,North Carolina Tar Heels,Charlotte,18,58,38,20,21,48
+7-Sep-24,Virginia Tech Hokies,Marshall,17,45,31,14,21,53.5
+7-Sep-24,WKU Hilltoppers,Eastern Kentucky,31,31,31,0,20.5,61.5
+7-Sep-24,Fresno State Bulldogs,Sacramento State,16,76,46,30,19.5,57.5
+7-Sep-24,Memphis Tigers,Troy,21,55,38,17,18.5,56
+7-Sep-24,Wisconsin Badgers,South Dakota,14,40,27,13,18.5,45.5
+7-Sep-24,Oregon Ducks,Boise State,3,71,37,34,17.5,61.5
+7-Sep-24,Kent State Golden Flashes,St. Francis-PA,-6,40,17,23,17.5,50.5
+7-Sep-24,Toledo Rockets,Massachusetts,15,61,38,23,17.5,51.5
+7-Sep-24,Southern Miss Golden Eagles,Southeastern Louisiana,25,45,35,10,17,53.5
+7-Sep-24,Clemson Tigers,Appalachian State,46,86,66,20,16.5,52
+7-Sep-24,Coastal Carolina Chanticleers,William & Mary,19,61,40,21,16.5,54.5
+7-Sep-24,Utah Utes,Baylor,11,35,23,12,14.5,54.5
+7-Sep-24,UCONN Huskies,Merrimack,46,80,63,17,14.5,45.5
+7-Sep-24,Louisiana-Lafayette Ragin' Cajuns,Kennesaw State,24,44,34,10,14.5,46.5
+7-Sep-24,Auburn Tigers,California,-7,35,14,21,12,52.5
+7-Sep-24,Navy Midshipmen,Temple,27,49,38,11,11.5,42.5
+7-Sep-24,UAB Blazers,Louisiana-Monroe,-26,38,6,32,11,55
+7-Sep-24,Oklahoma State Cowboys,Arkansas,8,70,39,31,10,61.5
+7-Sep-24,Georgia State Panthers,Chattanooga,3,45,24,21,10,52.5
+7-Sep-24,Kentucky Wildcats,South Carolina,-25,37,6,31,9.5,41.5
+7-Sep-24,Arkansas State Red Wolves,Tulsa,4,52,28,24,9,65.5
+7-Sep-24,Kansas State Wildcats,Tulane,7,61,34,27,8.5,47.5
+7-Sep-24,Maryland Terrapins,Michigan State,-3,51,24,27,8.5,44.5
+7-Sep-24,Tennessee Volunteers,North Carolina State,41,61,51,10,8.5,60
+7-Sep-24,Wyoming Cowboys,Idaho,-4,30,13,17,7.5,40.5
+7-Sep-24,Nebraska Cornhuskers,Colorado,18,38,28,10,6.5,55
+7-Sep-24,UTEP Miners,Southern Utah,-3,51,24,27,6.5,55.5
+7-Sep-24,Texas Longhorns,Michigan,19,43,31,12,6.5,42
+7-Sep-24,Arizona State Sun Devils,Mississippi State,7,53,30,23,6,58.5
+7-Sep-24,Kansas Jayhawks,Illinois,-6,40,17,23,5.5,58.5
+7-Sep-24,Oregon State Beavers,San Diego State,21,21,21,0,5.5,53.5
+7-Sep-24,Central Michigan Chippewas,Florida International,-36,68,16,52,3.5,51.5
+7-Sep-24,Georgia Tech Yellow Jackets,Syracuse,-3,59,28,31,3,60.5
+7-Sep-24,Ball State Cardinals,Missouri State,8,76,42,34,3,51.5
+7-Sep-24,Air Force Falcons,San Jose State,-10,24,7,17,3,44.5
+7-Sep-24,Texas Tech Red Raiders,Washington State,-21,53,16,37,2.5,65.5
+7-Sep-24,Iowa Hawkeyes,Iowa State,-1,39,19,20,2.5,36
+7-Sep-24,Texas State Bobcats,Texas-San Antonio,39,59,49,10,2.5,58.5
+7-Sep-24,Cincinnati Bearcats,Pittsburgh,-1,55,27,28,1.5,63.5
+7-Sep-24,Old Dominion Monarchs,East Carolina,-6,34,14,20,1.5,54
+7-Sep-24,Florida Atlantic Owls,Army,-17,31,7,24,1,41.5
+7-Sep-24,Virginia Cavaliers,Wake Forest,1,61,31,30,1,55.5
+7-Sep-24,Nevada Wolf Pack,Georgia Southern,-3,37,17,20,1,56.5
+7-Sep-24,South Alabama Jaguars,Ohio,-7,47,20,27,1,55.5
+12-Sep-24,South Alabama Jaguars,Northwestern State,77,97,87,10,37.5,60.5
+12-Sep-24,Texas State Bobcats,Arizona State,-3,59,28,31,3,59.5
+13-Sep-24,Kansas Jayhawks,Nevada-Las Vegas,-3,43,20,23,9,57.5
+13-Sep-24,Kansas State Wildcats,Arizona,24,38,31,7,7,60.5
+14-Sep-24,Tennessee Volunteers,Kent State,71,71,71,0,49.5,62.5
+14-Sep-24,Georgia Tech Yellow Jackets,VMI,52,66,59,7,44.5,53.5
+14-Sep-24,Michigan State Spartans,Prairie View,40,40,40,0,42.5,53.5
+14-Sep-24,North Carolina Tar Heels,North Carolina Central,35,55,45,10,37.5,56
+14-Sep-24,Miami-FL Hurricanes,Ball State,62,62,62,0,36.5,56
+14-Sep-24,Texas Longhorns,Texas-San Antonio,49,63,56,7,35.5,55.5
+14-Sep-24,Western Michigan Broncos,Bethune-Cookman,28,90,59,31,33.5,54
+14-Sep-24,Nebraska Cornhuskers,Northern Iowa,31,37,34,3,30.5,50.5
+14-Sep-24,Georgia Southern Eagles,South Carolina State,28,56,42,14,27.5,54.5
+14-Sep-24,Ohio Bobcats,Morgan State,15,27,21,6,25.5,46.5
+14-Sep-24,Northwestern Wildcats,Eastern Illinois,24,38,31,7,24.5,37.5
+14-Sep-24,Liberty Flames,Texas El Paso,18,38,28,10,24,57.5
+14-Sep-24,Auburn Tigers,New Mexico,26,64,45,19,24,58
+14-Sep-24,Iowa Hawkeyes,Troy,17,59,38,21,23.5,39
+14-Sep-24,Arkansas Razorbacks,Alabama-Birmingham,10,64,37,27,23.5,61
+14-Sep-24,Michigan Wolverines,Arkansas State,10,46,28,18,21.5,47.5
+14-Sep-24,Georgia Bulldogs,Kentucky,1,25,13,12,21.5,45.5
+14-Sep-24,Illinois Fighting Illini,Central Michigan,21,39,30,9,21,50
+14-Sep-24,Ole Miss Rebels,Wake Forest,34,46,40,6,21,66
+14-Sep-24,NC State Wolfpack,Louisiana Tech,10,50,30,20,20.5,48
+14-Sep-24,Fresno State Bulldogs,New Mexico State,48,48,48,0,20,47.5
+14-Sep-24,Utah Utes,Utah State,17,59,38,21,19.5,43.5
+14-Sep-24,California Golden Bears,San Diego State,21,41,31,10,18.5,48.5
+14-Sep-24,Oregon Ducks,Oregon State,35,63,49,14,18.5,50
+14-Sep-24,Oklahoma State Cowboys,Tulsa,35,55,45,10,17.5,63.5
+14-Sep-24,San Jose State Spartans,Kennesaw State,21,41,31,10,17.5,42.5
+14-Sep-24,Duke Blue Devils,Connecticut,5,47,26,21,17,47.5
+14-Sep-24,Baylor Bears,Air Force,28,34,31,3,17,40.5
+14-Sep-24,Coastal Carolina Chanticleers,Temple,8,48,28,20,17,52.5
+14-Sep-24,Minnesota Golden Gophers,Nevada,27,27,27,0,16.5,44.5
+14-Sep-24,Virginia Tech Hokies,Old Dominion,20,54,37,17,16,47.5
+14-Sep-24,Charlotte 49ers,Gardner-Webb,1,53,27,26,14.5,46.5
+14-Sep-24,Alabama Crimson Tide,Wisconsin,32,52,42,10,14.5,47
+14-Sep-24,Missouri Tigers,Boston College,6,48,27,21,14.5,52
+14-Sep-24,Akron Zips,Colgate,11,51,31,20,13.5,48.5
+14-Sep-24,USF Bulls,Southern Miss,25,73,49,24,12.5,58.5
+14-Sep-24,Oklahoma Sooners,Tulane,15,53,34,19,12.5,48.5
+14-Sep-24,Texas Tech Red Raiders,North Texas,45,87,66,21,10.5,70.5
+14-Sep-24,Mississippi State Bulldogs,Toledo,-24,58,17,41,10.5,57.5
+14-Sep-24,BYU Cougars,Wyoming,20,48,34,14,9.5,40
+14-Sep-24,Vanderbilt Commodores,Georgia State,-4,68,32,36,8.5,44.5
+14-Sep-24,Colorado Buffaloes,Colorado State,19,37,28,9,7.5,58.5
+14-Sep-24,WKU Hilltoppers,Middle Tennessee,28,70,49,21,7.5,54.5
+14-Sep-24,Notre Dame Fighting Irish,Purdue,59,73,66,7,7.5,47
+14-Sep-24,Florida State Seminoles,Memphis,-8,32,12,20,6.5,54.5
+14-Sep-24,Washington Huskies,Washington State,-5,43,19,24,6,54
+14-Sep-24,LSU Tigers,South Carolina,3,69,36,33,6,48.5
+14-Sep-24,Houston Cougars,Rice,26,40,33,7,4.5,45
+14-Sep-24,Florida Atlantic Owls,Florida International,18,58,38,20,3.5,45
+14-Sep-24,Indiana Hoosiers,California-Los Angeles,29,55,42,13,3.5,46.5
+14-Sep-24,Sam Houston State Bearkats,Hawaii,18,44,31,13,3.5,48.5
+14-Sep-24,Buffalo Bulls,Massachusetts,31,37,34,3,3.5,46
+14-Sep-24,Cincinnati Bearcats,Miami-OH,11,43,27,16,3,47.5
+14-Sep-24,Texas A&amp;M Aggies,Florida,13,53,33,20,3,45.5
+14-Sep-24,Virginia Cavaliers,Maryland,-14,40,13,27,2.5,56.5
+14-Sep-24,TCU Horned Frogs,Central Florida,-1,69,34,35,2.5,61.5
+14-Sep-24,Jacksonville State Gamecocks,Eastern Michigan,-3,71,34,37,2.5,54
+14-Sep-24,West Virginia Mountaineers,Pittsburgh,-4,72,34,38,1.5,62
+14-Sep-24,Appalachian State Mountaineers,East Carolina,2,40,21,19,1,58.5
+19-Sep-24,Appalachian State Mountaineers,South Alabama,-34,62,14,48,7.5,62.5
+20-Sep-24,Washington State Cougars,San Jose State,2,106,54,52,13,55.5
+20-Sep-24,Syracuse Orange,Stanford,-2,50,24,26,9.5,57
+20-Sep-24,Nebraska Cornhuskers,Illinois,-7,55,24,31,9.5,42.5
+21-Sep-24,Penn State Nittany Lions,Kent State,56,56,56,0,48.5,57.5
+21-Sep-24,Texas Longhorns,Louisiana-Monroe,48,54,51,3,43.5,53.5
+21-Sep-24,Boise State Broncos,Portland State,42,70,56,14,42.5,69.5
+21-Sep-24,Ohio State Buckeyes,Marshall,35,63,49,14,39.5,57
+21-Sep-24,UTSA Roadrunners,Houston Baptist,38,52,45,7,35.5,54.5
+21-Sep-24,Ole Miss Rebels,Georgia Southern,39,65,52,13,35.5,68.5
+21-Sep-24,Indiana Hoosiers,Charlotte,38,66,52,14,28.5,50.5
+21-Sep-24,Notre Dame Fighting Irish,Miami-OH,25,31,28,3,27.5,43.5
+21-Sep-24,Pittsburgh Panthers,Youngstown State,56,90,73,17,26.5,60
+21-Sep-24,Eastern Michigan Eagles,St. Francis-PA,36,36,36,0,24.5,45.5
+21-Sep-24,South Carolina Gamecocks,Akron,43,57,50,7,24.5,41.5
+21-Sep-24,Maryland Terrapins,Villanova,18,58,38,20,22.5,47.5
+21-Sep-24,LSU Tigers,California-Los Angeles,17,51,34,17,21.5,56.5
+21-Sep-24,Troy Trojans,Florida A&M,22,46,34,12,21.5,49.5
+21-Sep-24,Kentucky Wildcats,Ohio,35,47,41,6,21,41.5
+21-Sep-24,Iowa State Cyclones,Arkansas State,45,59,52,7,20.5,52
+21-Sep-24,Texas A&amp;M Aggies,Bowling Green,6,46,26,20,20.5,50.5
+21-Sep-24,Massachusetts Minutemen,Central Connecticut State,4,66,35,31,19.5,52
+21-Sep-24,Clemson Tigers,North Carolina State,24,94,59,35,17.5,44
+21-Sep-24,Missouri Tigers,Vanderbilt,3,57,30,27,17.5,52.5
+21-Sep-24,Miami-FL Hurricanes,South Florida,35,65,50,15,16.5,65
+21-Sep-24,Sam Houston State Bearkats,New Mexico State,20,42,31,11,15,44.5
+21-Sep-24,Duke Blue Devils,Middle Tennessee,28,62,45,17,14.5,51.5
+21-Sep-24,Nevada Wolf Pack,Eastern Washington,33,65,49,16,13.5,55.5
+21-Sep-24,NIU Huskies,Buffalo,-3,43,20,23,13,42.5
+21-Sep-24,FIU Panthers,Monmouth-New Jersey,-3,87,42,45,12.5,60.5
+21-Sep-24,Washington Huskies,Northwestern,19,29,24,5,12,42.5
+21-Sep-24,Fresno State Bulldogs,New Mexico,17,59,38,21,12,61
+21-Sep-24,North Carolina Tar Heels,James Madison,-20,120,50,70,11,48.5
+21-Sep-24,Memphis Tigers,Navy,-12,100,44,56,9,47
+21-Sep-24,Colorado State Rams,Texas El Paso,10,44,27,17,9,48.5
+21-Sep-24,Louisville Cardinals,Georgia Tech,12,50,31,19,8.5,56.5
+21-Sep-24,Army Black Knights,Rice,23,51,37,14,7.5,43.5
+21-Sep-24,Kansas State Wildcats,Brigham Young,-29,47,9,38,7.5,49.5
+21-Sep-24,Liberty Flames,East Carolina,11,59,35,24,7.5,54.5
+21-Sep-24,North Texas Mean Green,Wyoming,27,61,44,17,7,55
+21-Sep-24,Florida Gators,Mississippi State,17,73,45,28,7,58
+21-Sep-24,Central Michigan Chippewas,Ball State,3,71,37,34,6.5,50.5
+21-Sep-24,Utah State Aggies,Temple,-16,74,29,45,6.5,53.5
+21-Sep-24,Jacksonville State Gamecocks,Southern Miss,37,51,44,7,6,59.5
+21-Sep-24,Tennessee Volunteers,Oklahoma,10,40,25,15,5.5,57
+21-Sep-24,Boston College Eagles,Michigan State,4,42,23,19,4.5,45.5
+21-Sep-24,Texas Tech Red Raiders,Arizona State,8,52,30,22,4.5,58.5
+21-Sep-24,USC Trojans,Michigan,-3,51,24,27,4,44
+21-Sep-24,Virginia Cavaliers,Coastal Carolina,19,67,43,24,3.5,52.5
+21-Sep-24,Cincinnati Bearcats,Houston,34,34,34,0,3.5,47.5
+21-Sep-24,Virginia Tech Hokies,Rutgers,-3,49,23,26,3,45
+21-Sep-24,LA Tech Bulldogs,Tulsa,-3,43,20,23,3,57
+21-Sep-24,Florida State Seminoles,California,5,23,14,9,2.5,44.5
+21-Sep-24,Colorado Buffaloes,Baylor,7,69,38,31,2.5,53
+21-Sep-24,Iowa Hawkeyes,Minnesota,17,45,31,14,2.5,35
+21-Sep-24,Toledo Rockets,Western Kentucky,-5,47,21,26,2.5,60.5
+21-Sep-24,Auburn Tigers,Arkansas,-10,38,14,24,2.5,53.5
+21-Sep-24,Tulane Green Wave,Louisiana-Lafayette,8,74,41,33,1.5,53.5
+21-Sep-24,TCU Horned Frogs,Southern Methodist,-24,108,42,66,1.5,58.5
+21-Sep-24,Oklahoma State Cowboys,Utah,-3,41,19,22,1,53.5
+21-Sep-24,West Virginia Mountaineers,Kansas,4,60,32,28,1,55
+21-Sep-24,UCONN Huskies,Florida Atlantic,34,62,48,14,1,45.5
+21-Sep-24,Oregon State Beavers,Purdue,17,59,38,21,1,50.5
+22-Sep-24,Hawaii Rainbow Warriors,Northern Iowa,29,43,36,7,10,46.5
+26-Sep-24,Army Black Knights,Temple,28,56,42,14,12.5,47
+27-Sep-24,Miami-FL Hurricanes,Virginia Tech,4,72,38,34,17.5,55.5
+27-Sep-24,Rutgers Scarlet Knights,Washington,3,39,21,18,1,45.5
+28-Sep-24,Texas Longhorns,Mississippi State,22,48,35,13,37.5,58.5
+28-Sep-24,Florida Atlantic Owls,Wagner,31,51,41,10,34.5,51.5
+28-Sep-24,Syracuse Orange,Holy Cross,28,56,42,14,30.5,59.5
+28-Sep-24,Memphis Tigers,Middle Tennessee,17,31,24,7,27,61.5
+28-Sep-24,Clemson Tigers,Stanford,26,54,40,14,24,58
+28-Sep-24,Oregon Ducks,California-Los Angeles,21,47,34,13,24,54.5
+28-Sep-24,Ohio State Buckeyes,Michigan State,31,45,38,7,23.5,48.5
+28-Sep-24,James Madison Dukes,Ball State,56,70,63,7,21.5,56
+28-Sep-24,LSU Tigers,South Alabama,32,52,42,10,21,64
+28-Sep-24,Penn State Nittany Lions,Illinois,14,28,21,7,19.5,48.5
+28-Sep-24,Iowa State Cyclones,Houston,20,20,20,0,16,42.5
+28-Sep-24,Miami-OH RedHawks,Massachusetts,3,43,23,20,16,44.5
+28-Sep-24,Ole Miss Rebels,Kentucky,-3,37,17,20,15.5,51.5
+28-Sep-24,USC Trojans,Wisconsin,17,59,38,21,14,50.5
+28-Sep-24,Eastern Michigan Eagles,Kent State,19,85,52,33,14,45.5
+28-Sep-24,UCF Knights,Colorado,-27,69,21,48,13.5,61.5
+28-Sep-24,Michigan Wolverines,Minnesota,3,51,27,24,10.5,34.5
+28-Sep-24,Bowling Green Falcons,Old Dominion,-3,57,27,30,10.5,51.5
+28-Sep-24,Texas State Bobcats,Sam Houston State,-1,79,39,40,10.5,55.5
+28-Sep-24,Nebraska Cornhuskers,Purdue,18,38,28,10,10,47
+28-Sep-24,New Mexico Lobos,New Mexico State,10,90,50,40,9,54
+28-Sep-24,Ohio Bobcats,Akron,20,40,30,10,8.5,46.5
+28-Sep-24,Boston College Eagles,Western Kentucky,1,41,21,20,7.5,48.5
+28-Sep-24,NC State Wolfpack,Northern Illinois,7,41,24,17,7.5,46.5
+28-Sep-24,Utah Utes,Arizona,-13,33,10,23,7.5,47
+28-Sep-24,Indiana Hoosiers,Maryland,14,70,42,28,7.5,50.5
+28-Sep-24,North Texas Mean Green,Tulsa,32,72,52,20,7,66.5
+28-Sep-24,Notre Dame Fighting Irish,Louisville,7,55,31,24,6.5,45.5
+28-Sep-24,Boise State Broncos,Washington State,21,69,45,24,6.5,66.5
+28-Sep-24,Troy Trojans,Louisiana-Monroe,-4,22,9,13,6.5,46
+28-Sep-24,SMU Mustangs,Florida State,26,58,42,16,6,46.5
+28-Sep-24,Kansas State Wildcats,Oklahoma State,22,62,42,20,6,58
+28-Sep-24,UCONN Huskies,Buffalo,44,50,47,3,6,44.5
+28-Sep-24,Texas A&amp;M Aggies,Arkansas,4,38,21,17,5.5,50.5
+28-Sep-24,Navy Midshipmen,Alabama-Birmingham,23,59,41,18,4.5,56.5
+28-Sep-24,Rice Owls,Charlotte,-1,41,20,21,4.5,47.5
+28-Sep-24,Tulane Green Wave,South Florida,35,55,45,10,4,60.5
+28-Sep-24,Air Force Falcons,Wyoming,-12,50,19,31,4,33.5
+28-Sep-24,Georgia State Panthers,Georgia Southern,-17,59,21,38,3.5,57.5
+28-Sep-24,Marshall Thundering Herd,Western Michigan,7,47,27,20,3.5,54
+28-Sep-24,Wake Forest Demon Deacons,Louisiana-Lafayette,-3,79,38,41,3,60.5
+28-Sep-24,Baylor Bears,Brigham Young,-6,62,28,34,3,46.5
+28-Sep-24,Texas Tech Red Raiders,Cincinnati,3,85,44,41,3,59.5
+28-Sep-24,LA Tech Bulldogs,Florida International,-7,27,10,17,2.5,49.5
+28-Sep-24,Central Michigan Chippewas,San Diego State,1,43,22,21,2.5,48
+28-Sep-24,UNLV Rebels,Fresno State,45,73,59,14,2.5,50.5
+28-Sep-24,East Carolina Pirates,Texas-San Antonio,10,50,30,20,2,53.5
+28-Sep-24,North Carolina Tar Heels,Duke,-1,41,20,21,1.5,55.5
+28-Sep-24,Kansas Jayhawks,Texas Christian,-11,65,27,38,1.5,59
+28-Sep-24,Georgia Bulldogs,Alabama,-7,75,34,41,1.5,49.5
+28-Sep-24,Auburn Tigers,Oklahoma,-6,48,21,27,1,43.5
+3-Oct-24,Texas State Bobcats,Troy,21,55,38,17,14,56
+3-Oct-24,Sam Houston State Bearkats,Texas El Paso,20,62,41,21,10,49.5
+4-Oct-24,Oregon Ducks,Michigan State,21,41,31,10,22.5,52.5
+4-Oct-24,Jacksonville State Gamecocks,Kennesaw State,39,87,63,24,17,49.5
+4-Oct-24,TCU Horned Frogs,Houston,-11,49,19,30,16.5,52
+4-Oct-24,UNLV Rebels,Syracuse,-3,85,41,44,5.5,55.5
+5-Oct-24,Penn State Nittany Lions,California-Los Angeles,16,38,27,11,29.5,47.5
+5-Oct-24,Boise State Broncos,Utah State,32,92,62,30,28,66.5
+5-Oct-24,Alabama Crimson Tide,Vanderbilt,-5,75,35,40,23.5,53.5
+5-Oct-24,Georgia Bulldogs,Auburn,18,44,31,13,21.5,50.5
+5-Oct-24,Tulane Green Wave,Alabama-Birmingham,51,91,71,20,19.5,52.5
+5-Oct-24,Ohio State Buckeyes,Iowa,28,42,35,7,17.5,45.5
+5-Oct-24,UCONN Huskies,Temple,9,49,29,20,17.5,49.5
+5-Oct-24,Louisiana-Lafayette Ragin' Cajuns,Southern Miss,10,36,23,13,17,57.5
+5-Oct-24,Clemson Tigers,Florida State,16,42,29,13,16.5,47.5
+5-Oct-24,Bowling Green Falcons,Akron,7,47,27,20,16.5,48.5
+5-Oct-24,James Madison Dukes,Louisiana-Monroe,-2,40,19,21,16.5,48
+5-Oct-24,Army Black Knights,Tulsa,42,56,49,7,14,50.5
+5-Oct-24,NIU Huskies,Massachusetts,14,54,34,20,14,41.5
+5-Oct-24,Tennessee Volunteers,Arkansas,-5,33,14,19,14,57.5
+5-Oct-24,Indiana Hoosiers,Northwestern,17,65,41,24,13,40.5
+5-Oct-24,Iowa State Cyclones,Baylor,22,64,43,21,12.5,44.5
+5-Oct-24,Wisconsin Badgers,Purdue,46,58,52,6,12.5,44.5
+5-Oct-24,Oregon State Beavers,Colorado State,8,70,39,31,10.5,47.5
+5-Oct-24,Navy Midshipmen,Air Force,27,41,34,7,10,37
+5-Oct-24,Georgia Tech Yellow Jackets,Duke,10,38,24,14,10,53
+5-Oct-24,Miami-FL Hurricanes,California,1,77,39,38,10,54
+5-Oct-24,Western Michigan Broncos,Ball State,3,87,45,42,10,57.5
+5-Oct-24,Ole Miss Rebels,South Carolina,24,30,27,3,10,53.5
+5-Oct-24,Virginia Tech Hokies,Stanford,24,38,31,7,9.5,49.5
+5-Oct-24,East Carolina Pirates,Charlotte,-31,79,24,55,9,47.5
+5-Oct-24,USC Trojans,Minnesota,-7,41,17,24,8.5,46
+5-Oct-24,San Jose State Spartans,Nevada,4,66,35,31,7.5,51
+5-Oct-24,Louisville Cardinals,Southern Methodist,-7,61,27,34,7,55.5
+5-Oct-24,Nebraska Cornhuskers,Rutgers,7,21,14,7,7,39.5
+5-Oct-24,Arizona Wildcats,Texas Tech,-6,50,22,28,6,63.5
+5-Oct-24,Toledo Rockets,Miami-OH,10,50,30,20,5.5,44
+5-Oct-24,Coastal Carolina Chanticleers,Old Dominion,8,82,45,37,4.5,51.5
+5-Oct-24,NC State Wolfpack,Wake Forest,-4,64,30,34,3.5,52.5
+5-Oct-24,Oklahoma State Cowboys,West Virginia,-24,52,14,38,3,64.5
+5-Oct-24,Marshall Thundering Herd,Appalachian State,15,89,52,37,3,56.5
+5-Oct-24,Pittsburgh Panthers,North Carolina,10,58,34,24,2.5,63.5
+5-Oct-24,Arizona State Sun Devils,Kansas,4,66,35,31,2.5,50
+5-Oct-24,Texas A&amp;M Aggies,Missouri,31,51,41,10,2.5,47.5
+5-Oct-24,South Alabama Jaguars,Arkansas State,-2,34,16,18,2.5,62
+5-Oct-24,Virginia Cavaliers,Boston College,10,38,24,14,1.5,52.5
+5-Oct-24,Washington Huskies,Michigan,10,44,27,17,1.5,39.5
+5-Oct-24,San Diego State Aztecs,Hawaii,3,51,27,24,1.5,47.5
+5-Oct-24,UCF Knights,Florida,-11,37,13,24,1,62
+8-Oct-24,Liberty Flames,Florida International,7,55,31,24,16.5,55.5
+9-Oct-24,Jacksonville State Gamecocks,New Mexico State,41,67,54,13,21,59
+10-Oct-24,WKU Hilltoppers,Texas El Paso,27,61,44,17,19.5,56
+10-Oct-24,James Madison Dukes,Coastal Carolina,32,46,39,7,7.5,59.5
+10-Oct-24,LA Tech Bulldogs,Middle Tennessee,27,69,48,21,5,48
+11-Oct-24,UNLV Rebels,Utah State,16,84,50,34,19,67.5
+11-Oct-24,Maryland Terrapins,Northwestern,-27,47,10,37,10.5,45.5
+11-Oct-24,Utah Utes,Arizona State,-8,46,19,27,6,46.5
+12-Oct-24,Georgia Bulldogs,Mississippi State,10,72,41,31,33.5,54.5
+12-Oct-24,Army Black Knights,Alabama-Birmingham,34,54,44,10,27.5,55.5
+12-Oct-24,Missouri Tigers,Massachusetts,42,48,45,3,27.5,53.5
+12-Oct-24,Illinois Fighting Illini,Purdue,1,99,50,49,22.5,47.5
+12-Oct-24,Notre Dame Fighting Irish,Stanford,42,56,49,7,22.5,45.5
+12-Oct-24,Alabama Crimson Tide,South Carolina,2,52,27,25,21.5,50.5
+12-Oct-24,Clemson Tigers,Wake Forest,35,63,49,14,21,63
+12-Oct-24,Boise State Broncos,Hawaii,21,35,28,7,21,60
+12-Oct-24,Texas Longhorns,Oklahoma,31,37,34,3,17,49
+12-Oct-24,Tennessee Volunteers,Florida,6,40,23,17,14.5,55.5
+12-Oct-24,Texas State Bobcats,Arkansas State,32,50,41,9,13.5,66
+12-Oct-24,Kentucky Wildcats,Vanderbilt,-7,33,13,20,12.5,44.5
+12-Oct-24,Toledo Rockets,Buffalo,-15,45,15,30,10.5,44.5
+12-Oct-24,Louisiana-Lafayette Ragin' Cajuns,Appalachian State,10,58,34,24,10.5,64.5
+12-Oct-24,Memphis Tigers,South Florida,18,24,21,3,10,60.5
+12-Oct-24,Western Michigan Broncos,Akron,10,58,34,24,9.5,48.5
+12-Oct-24,Louisville Cardinals,Virginia,4,44,24,20,7.5,54
+12-Oct-24,New Mexico Lobos,Air Force,15,89,52,37,6.5,55.5
+12-Oct-24,North Texas Mean Green,Florida Atlantic,4,78,41,37,5.5,58.5
+12-Oct-24,Louisiana-Monroe Warhawks,Southern Miss,17,59,38,21,4.5,41
+12-Oct-24,Ole Miss Rebels,Louisiana State,-3,55,26,29,4,64
+12-Oct-24,UTSA Roadrunners,Rice,-2,56,27,29,3.5,51
+12-Oct-24,Georgia Tech Yellow Jackets,North Carolina,7,75,41,34,3.5,61
+12-Oct-24,Pittsburgh Panthers,California,2,32,17,15,3.5,57.5
+12-Oct-24,Kansas State Wildcats,Colorado,3,59,31,28,3.5,55.5
+12-Oct-24,Minnesota Golden Gophers,California-Los Angeles,4,38,21,17,3.5,39.5
+12-Oct-24,Ohio State Buckeyes,Oregon,-1,63,31,32,3.5,54.5
+12-Oct-24,Penn State Nittany Lions,Southern California,3,63,33,30,3.5,51.5
+12-Oct-24,Washington State Cougars,Fresno State,8,42,25,17,3.5,60.5
+12-Oct-24,BYU Cougars,Arizona,22,60,41,19,3,48.5
+12-Oct-24,Iowa State Cyclones,West Virginia,12,44,28,16,3,53.5
+12-Oct-24,Iowa Hawkeyes,Washington,24,56,40,16,3,41.5
+12-Oct-24,Ball State Cardinals,Kent State,2,72,37,35,3,58.5
+12-Oct-24,Bowling Green Falcons,Northern Illinois,-10,24,7,17,3,46.5
+12-Oct-24,Miami-OH RedHawks,Eastern Michigan,24,52,38,14,3,45.5
+12-Oct-24,Ohio Bobcats,Central Michigan,2,52,27,25,3,50
+12-Oct-24,Oregon State Beavers,Nevada,-5,79,37,42,3,46.5
+12-Oct-24,Georgia State Panthers,Old Dominion,-7,35,14,21,3,53.5
+12-Oct-24,Colorado State Rams,San Jose State,7,55,31,24,2.5,55.5
+12-Oct-24,UCF Knights,Cincinnati,-6,32,13,19,2,58.5
+12-Oct-24,Rutgers Scarlet Knights,Wisconsin,-35,49,7,42,1.5,44
+12-Oct-24,Wyoming Cowboys,San Diego State,-3,51,24,27,1.5,43
+12-Oct-24,Syracuse Orange,North Carolina State,7,41,24,17,1,51.5
+12-Oct-24,Georgia Southern Eagles,Marshall,1,47,24,23,1,58.5
+15-Oct-24,LA Tech Bulldogs,New Mexico State,-3,63,30,33,12.5,49
+15-Oct-24,South Alabama Jaguars,Troy,16,34,25,9,10,53.5
+15-Oct-24,Middle Tennessee Blue Raiders,Kennesaw State,9,19,14,5,8.5,49.5
+16-Oct-24,FIU Panthers,Texas El Paso,-9,51,21,30,7,47
+16-Oct-24,Sam Houston State Bearkats,Western Kentucky,-17,45,14,31,1.5,55
+17-Oct-24,Marshall Thundering Herd,Georgia State,15,55,35,20,9,51.5
+17-Oct-24,Virginia Tech Hokies,Boston College,21,63,42,21,8.5,47.5
+18-Oct-24,Oregon Ducks,Purdue,35,35,35,0,30,61
+18-Oct-24,BYU Cougars,Oklahoma State,3,73,38,35,8.5,53.5
+18-Oct-24,Fresno State Bulldogs,Nevada,3,45,24,21,3,50
+18-Oct-24,Duke Blue Devils,Florida State,7,39,23,16,2.5,43
+19-Oct-24,Vanderbilt Commodores,Ball State,10,38,24,14,27.5,57.5
+19-Oct-24,Bowling Green Falcons,Kent State,21,33,27,6,24,54.5
+19-Oct-24,Tulane Green Wave,Rice,14,34,24,10,22.5,54.5
+19-Oct-24,Texas A&amp;M Aggies,Mississippi State,10,58,34,24,21,55.5
+19-Oct-24,Clemson Tigers,Virginia,17,79,48,31,20.5,57.5
+19-Oct-24,Washington State Cougars,Hawaii,32,52,42,10,18.5,55.5
+19-Oct-24,Army Black Knights,East Carolina,17,73,45,28,17.5,54.5
+19-Oct-24,Navy Midshipmen,Charlotte,34,68,51,17,16.5,57.5
+19-Oct-24,SMU Mustangs,Stanford,30,50,40,10,16.5,52.5
+19-Oct-24,USF Bulls,Alabama-Birmingham,10,60,35,25,14,55.5
+19-Oct-24,Notre Dame Fighting Irish,Georgia Tech,18,44,31,13,14,50
+19-Oct-24,Iowa State Cyclones,Central Florida,3,73,38,35,13.5,49.5
+19-Oct-24,San Jose State Spartans,Wyoming,10,38,24,14,12.5,53
+19-Oct-24,Memphis Tigers,North Texas,8,96,52,44,10.5,68
+19-Oct-24,Texas State Bobcats,Old Dominion,-10,38,14,24,10.5,60.5
+19-Oct-24,James Madison Dukes,Georgia Southern,-14,42,14,28,10,58.5
+19-Oct-24,California Golden Bears,North Carolina State,-1,47,23,24,9.5,46
+19-Oct-24,Wisconsin Badgers,Northwestern,20,26,23,3,9.5,42.5
+19-Oct-24,USC Trojans,Maryland,-1,57,28,29,7,57
+19-Oct-24,Arkansas State Red Wolves,Southern Miss,16,72,44,28,7,56.5
+19-Oct-24,Indiana Hoosiers,Nebraska,49,63,56,7,6.5,49
+19-Oct-24,Iowa Hawkeyes,Michigan State,-12,52,20,32,6.5,39.5
+19-Oct-24,UNLV Rebels,Oregon State,8,58,33,25,6.5,61
+19-Oct-24,Louisiana-Lafayette Ragin' Cajuns,Coastal Carolina,10,58,34,24,6.5,56.5
+19-Oct-24,Colorado State Rams,Air Force,8,34,21,13,6,44
+19-Oct-24,Cincinnati Bearcats,Arizona State,10,38,24,14,5.5,51
+19-Oct-24,Michigan Wolverines,Illinois,-14,28,7,21,5.5,44.5
+19-Oct-24,Kansas Jayhawks,Houston,28,56,42,14,5,46
+19-Oct-24,UTSA Roadrunners,Florida Atlantic,14,62,38,24,4.5,52.5
+19-Oct-24,Texas Tech Red Raiders,Baylor,-24,94,35,59,4.5,56
+19-Oct-24,Rutgers Scarlet Knights,California-Los Angeles,-3,67,32,35,4.5,42
+19-Oct-24,Miami-FL Hurricanes,Louisville,7,97,52,45,4,61
+19-Oct-24,Texas Longhorns,Georgia,-15,45,15,30,4,57
+19-Oct-24,Eastern Michigan Eagles,Central Michigan,4,72,38,34,3.5,52.5
+19-Oct-24,Miami-OH RedHawks,Ohio,10,50,30,20,3.5,43.5
+19-Oct-24,Alabama Crimson Tide,Tennessee,-7,41,17,24,3.5,57.5
+19-Oct-24,Missouri Tigers,Auburn,4,38,21,17,3.5,49.5
+19-Oct-24,Temple Owls,Tulsa,10,30,20,10,3,51.5
+19-Oct-24,Utah Utes,Texas Christian,-6,20,7,13,3,52
+19-Oct-24,NIU Huskies,Toledo,-7,19,6,13,3,42.5
+19-Oct-24,LSU Tigers,Arkansas,24,44,34,10,3,57
+19-Oct-24,Wake Forest Demon Deacons,Connecticut,3,43,23,20,2.5,55.5
+19-Oct-24,Arizona Wildcats,Colorado,-27,41,7,34,2.5,57.5
+19-Oct-24,Kansas State Wildcats,West Virginia,27,63,45,18,2.5,56
+19-Oct-24,Kentucky Wildcats,Florida,-28,68,20,48,2.5,42.5
+19-Oct-24,Western Michigan Broncos,Buffalo,7,89,48,41,1,49.5
+19-Oct-24,New Mexico Lobos,Utah State,5,95,50,45,1,78.5
+19-Oct-24,South Carolina Gamecocks,Oklahoma,26,44,35,9,1,40.5
+22-Oct-24,LA Tech Bulldogs,Texas El Paso,4,24,14,10,6.5,49
+22-Oct-24,Sam Houston State Bearkats,Florida International,45937,45937,45937,0,5,47
+23-Oct-24,Liberty Flames,Kennesaw State,-3,51,24,27,27,48
+23-Oct-24,Jacksonville State Gamecocks,Middle Tennessee,22,62,42,20,20.5,64.5
+24-Oct-24,Pittsburgh Panthers,Syracuse,28,54,41,13,4.5,62.5
+24-Oct-24,Georgia Southern Eagles,Old Dominion,-28,66,19,47,1,52
+25-Oct-24,USC Trojans,Rutgers,22,62,42,20,14,57
+25-Oct-24,Louisville Cardinals,Boston College,4,58,31,27,7,54
+25-Oct-24,Boise State Broncos,Nevada-Las Vegas,5,53,29,24,4,64
+26-Oct-24,Ohio State Buckeyes,Nebraska,4,38,21,17,25,48.5
+26-Oct-24,James Madison Dukes,Southern Miss,17,47,32,15,24,54
+26-Oct-24,Massachusetts Minutemen,Wagner,28,42,35,7,23.5,48.5
+26-Oct-24,Miami-FL Hurricanes,Florida State,22,50,36,14,22.5,54.5
+26-Oct-24,Oregon Ducks,Illinois,29,47,38,9,22,54.5
+26-Oct-24,Western Michigan Broncos,Kent State,31,73,52,21,19,61.5
+26-Oct-24,Ole Miss Rebels,Oklahoma,12,40,26,14,19,50
+26-Oct-24,Memphis Tigers,Charlotte,5,61,33,28,17,56.5
+26-Oct-24,Texas Longhorns,Vanderbilt,3,51,27,24,17,51.5
+26-Oct-24,Iowa Hawkeyes,Northwestern,26,54,40,14,16.5,38
+26-Oct-24,Washington State Cougars,San Diego State,3,55,29,26,16.5,56.5
+26-Oct-24,Alabama Crimson Tide,Missouri,34,34,34,0,16,51.5
+26-Oct-24,Notre Dame Fighting Irish,Navy,37,65,51,14,13.5,50.5
+26-Oct-24,NIU Huskies,Ball State,-2,48,23,25,13.5,47.5
+26-Oct-24,California Golden Bears,Oregon State,37,51,44,7,13,51
+26-Oct-24,SMU Mustangs,Duke,1,55,28,27,11.5,49.5
+26-Oct-24,Virginia Tech Hokies,Georgia Tech,15,27,21,6,11,52.5
+26-Oct-24,Miami-OH RedHawks,Central Michigan,39,53,46,7,10.5,49
+26-Oct-24,Kansas State Wildcats,Kansas,2,56,29,27,10,55.5
+26-Oct-24,UTSA Roadrunners,Tulsa,-1,91,45,46,9.5,52.5
+26-Oct-24,East Carolina Pirates,Temple,22,90,56,34,8,48.5
+26-Oct-24,Tulane Green Wave,North Texas,8,82,45,37,7.5,70.5
+26-Oct-24,Arkansas Razorbacks,Mississippi State,33,83,58,25,7.5,55
+26-Oct-24,Arkansas State Red Wolves,Troy,3,65,34,31,7.5,50
+26-Oct-24,Baylor Bears,Oklahoma State,10,66,38,28,7,64.5
+26-Oct-24,Appalachian State Mountaineers,Georgia State,7,59,33,26,7,59
+26-Oct-24,South Alabama Jaguars,Louisiana-Monroe,29,63,46,17,7,45
+26-Oct-24,Colorado Buffaloes,Cincinnati,11,57,34,23,6.5,57
+26-Oct-24,Penn State Nittany Lions,Wisconsin,15,41,28,13,6.5,47.5
+26-Oct-24,UCONN Huskies,Rice,7,27,17,10,6.5,46.5
+26-Oct-24,Fresno State Bulldogs,San Jose State,23,43,33,10,6.5,55
+26-Oct-24,Minnesota Golden Gophers,Maryland,25,71,48,23,6,45.5
+26-Oct-24,Arizona Wildcats,West Virginia,-5,57,26,31,5.5,51.5
+26-Oct-24,Indiana Hoosiers,Washington,14,48,31,17,5.5,54
+26-Oct-24,TCU Horned Frogs,Texas Tech,1,69,35,34,5,66.5
+26-Oct-24,Utah Utes,Houston,-3,31,14,17,4.5,36.5
+26-Oct-24,Virginia Cavaliers,North Carolina,-27,55,14,41,3.5,58.5
+26-Oct-24,Ohio Bobcats,Buffalo,31,63,47,16,3.5,46.5
+26-Oct-24,Colorado State Rams,New Mexico,11,23,17,6,3.5,62
+26-Oct-24,Wake Forest Demon Deacons,Stanford,3,51,27,24,3,53
+26-Oct-24,Michigan Wolverines,Michigan State,7,41,24,17,3,38.5
+26-Oct-24,UCF Knights,Brigham Young,-13,61,24,37,2.5,53.5
+26-Oct-24,Eastern Michigan Eagles,Akron,-4,46,21,25,2.5,50.5
+26-Oct-24,Utah State Aggies,Wyoming,2,52,27,25,2.5,57
+26-Oct-24,Toledo Rockets,Bowling Green,-15,67,26,41,2,47.5
+26-Oct-24,Kentucky Wildcats,Auburn,-14,34,10,24,1.5,43.5
+26-Oct-24,Texas A&amp;M Aggies,Louisiana State,15,61,38,23,1.5,54.5
+27-Oct-24,Hawaii Rainbow Warriors,Nevada,21,47,34,13,2.5,41.5
+29-Oct-24,Sam Houston State Bearkats,Louisiana Tech,45903,45903,45903,0,10.5,45.5
+29-Oct-24,FIU Panthers,New Mexico State,21,47,34,13,7,43.5
+29-Oct-24,Texas State Bobcats,Louisiana-Lafayette,-6,40,17,23,4.5,60.5
+30-Oct-24,WKU Hilltoppers,Kennesaw State,17,45,31,14,24,49
+30-Oct-24,Liberty Flames,Jacksonville State,-10,52,21,31,2.5,64.5
+31-Oct-24,Tulane Green Wave,Charlotte,31,37,34,3,14.5,55
+1-Nov-24,Boise State Broncos,San Diego State,32,80,56,24,24.5,55.5
+1-Nov-24,UCONN Huskies,Georgia State,7,61,34,27,7,48
+1-Nov-24,USF Bulls,Florida Atlantic,23,65,44,21,1.5,48
+2-Nov-24,Oklahoma Sooners,Maine,45,73,59,14,37.5,48.5
+2-Nov-24,Miami-FL Hurricanes,Duke,22,84,53,31,21,55.5
+2-Nov-24,Mississippi State Bulldogs,Massachusetts,25,65,45,20,19,59.5
+2-Nov-24,Army Black Knights,Air Force,17,23,20,3,18,38.5
+2-Nov-24,Tennessee Volunteers,Kentucky,10,46,28,18,17.5,45.5
+2-Nov-24,Oregon Ducks,Michigan,21,55,38,17,14.5,45
+2-Nov-24,Georgia Bulldogs,Florida,14,54,34,20,14.5,52.5
+2-Nov-24,Iowa State Cyclones,Texas Tech,-1,45,22,23,13.5,56
+2-Nov-24,Kansas State Wildcats,Houston,-5,43,19,24,13,45.5
+2-Nov-24,Navy Midshipmen,Rice,-14,34,10,24,12.5,49.5
+2-Nov-24,Fresno State Bulldogs,Hawaii,-1,41,20,21,11.5,45.5
+2-Nov-24,Clemson Tigers,Louisville,-12,54,21,33,11,62.5
+2-Nov-24,Marshall Thundering Herd,Louisiana-Monroe,5,51,28,23,10.5,48
+2-Nov-24,Toledo Rockets,Eastern Michigan,1,57,29,28,10,54.5
+2-Nov-24,NC State Wolfpack,Stanford,31,87,59,28,9.5,46.5
+2-Nov-24,Auburn Tigers,Vanderbilt,-10,24,7,17,8,48
+2-Nov-24,Indiana Hoosiers,Michigan State,37,57,47,10,7.5,53.5
+2-Nov-24,Nebraska Cornhuskers,California-Los Angeles,-7,47,20,27,7.5,38.5
+2-Nov-24,New Mexico Lobos,Wyoming,-4,94,45,49,7.5,60.5
+2-Nov-24,Ole Miss Rebels,Arkansas,32,94,63,31,7.5,54
+2-Nov-24,Memphis Tigers,Texas-San Antonio,-8,80,36,44,7,61.5
+2-Nov-24,SMU Mustangs,Pittsburgh,23,73,48,25,7,55.5
+2-Nov-24,UCF Knights,Arizona,44,68,56,12,6,55
+2-Nov-24,South Alabama Jaguars,Georgia Southern,-4,64,30,34,5.5,60
+2-Nov-24,Arizona State Sun Devils,Oklahoma State,21,63,42,21,5,57.5
+2-Nov-24,Virginia Tech Hokies,Syracuse,-7,69,31,38,4,53.5
+2-Nov-24,Coastal Carolina Chanticleers,Troy,-14,62,24,38,4,51.5
+2-Nov-24,Iowa Hawkeyes,Wisconsin,32,52,42,10,3,40.5
+2-Nov-24,Ohio State Buckeyes,Penn State,7,33,20,13,3,47.5
+2-Nov-24,Texas A&amp;M Aggies,South Carolina,-24,64,20,44,3,43.5
+2-Nov-24,Old Dominion Monarchs,Appalachian State,-8,48,20,28,3,58
+2-Nov-24,UAB Blazers,Tulsa,38,80,59,21,2.5,57.5
+2-Nov-24,North Carolina Tar Heels,Florida State,24,46,35,11,2.5,50.5
+2-Nov-24,Baylor Bears,Texas Christian,3,71,37,34,2.5,64.5
+2-Nov-24,Minnesota Golden Gophers,Illinois,8,42,25,17,2.5,47
+2-Nov-24,Purdue Boilermakers,Northwestern,-6,46,20,26,2.5,44.5
+2-Nov-24,USC Trojans,Washington,-5,47,21,26,2,55.5
+2-Nov-24,UTEP Miners,Middle Tennessee,-7,33,13,20,2,48
+2-Nov-24,Colorado State Rams,Nevada,17,59,38,21,2,45.5
+2-Nov-24,Buffalo Bulls,Akron,11,71,41,30,1,49
+5-Nov-24,Bowling Green Falcons,Central Michigan,10,36,23,13,16,48.5
+5-Nov-24,Miami-OH RedHawks,Ball State,6,48,27,21,12.5,48
+6-Nov-24,Ohio Bobcats,Kent State,41,41,41,0,20.5,53
+6-Nov-24,NIU Huskies,Western Michigan,14,70,42,28,2,52
+7-Nov-24,East Carolina Pirates,Florida Atlantic,35,63,49,14,7.5,58.5
+7-Nov-24,Appalachian State Mountaineers,Coastal Carolina,-14,62,24,38,2,62.5
+8-Nov-24,Memphis Tigers,Rice,7,47,27,20,7,50.5
+8-Nov-24,California Golden Bears,Wake Forest,10,82,46,36,7,55.5
+8-Nov-24,Iowa Hawkeyes,California-Los Angeles,-3,37,17,20,6.5,45.5
+8-Nov-24,San Diego State Aztecs,New Mexico,-5,37,16,21,1.5,65.5
+9-Nov-24,Ohio State Buckeyes,Purdue,45,45,45,0,37.5,55.5
+9-Nov-24,Tulane Green Wave,Temple,46,58,52,6,26.5,50.5
+9-Nov-24,Notre Dame Fighting Irish,Florida State,49,55,52,3,25.5,43.5
+9-Nov-24,Tennessee Volunteers,Mississippi State,19,47,33,14,25.5,61.5
+9-Nov-24,Oregon Ducks,Maryland,21,57,39,18,24,57.5
+9-Nov-24,Boise State Broncos,Nevada,7,49,28,21,23.5,61.5
+9-Nov-24,Texas Longhorns,Florida,32,66,49,17,23,48.5
+9-Nov-24,Washington State Cougars,Utah State,21,77,49,28,20.5,68.5
+9-Nov-24,WKU Hilltoppers,New Mexico State,13,69,41,28,17.5,53.5
+9-Nov-24,Indiana Hoosiers,Michigan,5,35,20,15,14.5,47.5
+9-Nov-24,James Madison Dukes,Georgia State,31,45,38,7,14.5,53.5
+9-Nov-24,Louisiana-Lafayette Ragin' Cajuns,Arkansas State,36,74,55,19,14,60.5
+9-Nov-24,Penn State Nittany Lions,Washington,29,41,35,6,13.5,47.5
+9-Nov-24,Marshall Thundering Herd,Southern Miss,34,40,37,3,13.5,53.5
+9-Nov-24,Liberty Flames,Middle Tennessee,20,54,37,17,12.5,54.5
+9-Nov-24,UNLV Rebels,Hawaii,2,56,29,27,12.5,51.5
+9-Nov-24,TCU Horned Frogs,Oklahoma State,25,51,38,13,10.5,68.5
+9-Nov-24,Jacksonville State Gamecocks,Louisiana Tech,7,81,44,37,10,55.5
+9-Nov-24,Fresno State Bulldogs,Air Force,-8,64,28,36,9.5,40.5
+9-Nov-24,Texas State Bobcats,Louisiana-Monroe,21,55,38,17,9.5,50
+9-Nov-24,Miami-FL Hurricanes,Georgia Tech,-5,51,23,28,8.5,65
+9-Nov-24,UCONN Huskies,Alabama-Birmingham,8,54,31,23,7.5,54.5
+9-Nov-24,Pittsburgh Panthers,Virginia,-5,43,19,24,7,57.5
+9-Nov-24,Army Black Knights,North Texas,11,17,14,3,6.5,68
+9-Nov-24,Minnesota Golden Gophers,Rutgers,-7,45,19,26,6.5,44.5
+9-Nov-24,South Carolina Gamecocks,Vanderbilt,21,35,28,7,6,44.5
+9-Nov-24,Clemson Tigers,Virginia Tech,10,38,24,14,5.5,54.5
+9-Nov-24,Cincinnati Bearcats,West Virginia,-7,55,24,31,5.5,54.5
+9-Nov-24,Navy Midshipmen,South Florida,21,35,28,7,4.5,58.5
+9-Nov-24,Colorado Buffaloes,Texas Tech,14,68,41,27,4.5,62.5
+9-Nov-24,UTEP Miners,Kennesaw State,8,78,43,35,4.5,42.5
+9-Nov-24,Boston College Eagles,Syracuse,6,68,37,31,3,52.5
+9-Nov-24,NC State Wolfpack,Duke,-10,48,19,29,3,51.5
+9-Nov-24,BYU Cougars,Utah,1,43,22,21,3,40.5
+9-Nov-24,Oregon State Beavers,San Jose State,-11,37,13,24,3,58.5
+9-Nov-24,Alabama Crimson Tide,Louisiana State,29,55,42,13,3,58.5
+9-Nov-24,Oklahoma Sooners,Missouri,-7,53,23,30,3,42.5
+9-Nov-24,Arizona State Sun Devils,Central Florida,4,66,35,31,2.5,56
+9-Nov-24,Iowa State Cyclones,Kansas,-9,81,36,45,2.5,52.5
+9-Nov-24,Georgia Bulldogs,Mississippi,-18,38,10,28,2,55.5
+12-Nov-24,Toledo Rockets,Central Michigan,27,47,37,10,14.5,52
+12-Nov-24,Bowling Green Falcons,Western Michigan,18,44,31,13,9.5,57.5
+12-Nov-24,Buffalo Bulls,Ball State,3,99,51,48,3.5,55.5
+13-Nov-24,Miami-OH RedHawks,Kent State,27,41,34,7,30.5,47.5
+13-Nov-24,NIU Huskies,Akron,13,45,29,16,14,43.5
+13-Nov-24,Ohio Bobcats,Eastern Michigan,25,45,35,10,10.5,51.5
+14-Nov-24,East Carolina Pirates,Tulsa,7,69,38,31,16.5,63
+15-Nov-24,Colorado State Rams,Wyoming,14,34,24,10,8.5,47.5
+15-Nov-24,Washington Huskies,California-Los Angeles,12,50,31,19,4.5,47
+15-Nov-24,UTSA Roadrunners,North Texas,21,75,48,27,1.5,73
+15-Nov-24,Arizona Wildcats,Houston,24,30,27,3,1.5,46.5
+16-Nov-24,Alabama Crimson Tide,Mercer,45,59,52,7,41.5,58.5
+16-Nov-24,Kentucky Wildcats,Murray State,42,54,48,6,41.5,53.5
+16-Nov-24,Texas A&amp;M Aggies,New Mexico State,35,41,38,3,38.5,54.5
+16-Nov-24,Penn State Nittany Lions,Purdue,39,59,49,10,30,51.5
+16-Nov-24,Ohio State Buckeyes,Northwestern,24,38,31,7,28,43.5
+16-Nov-24,Texas State Bobcats,Southern Miss,55,61,58,3,27.5,56.5
+16-Nov-24,Auburn Tigers,Louisiana-Monroe,34,62,48,14,24.5,46
+16-Nov-24,UNLV Rebels,San Diego State,21,61,41,20,21.5,54.5
+16-Nov-24,Louisville Cardinals,Stanford,-3,73,35,38,21,57.5
+16-Nov-24,Sam Houston State Bearkats,Kennesaw State,6,40,23,17,21,42.5
+16-Nov-24,Notre Dame Fighting Irish,Virginia,21,49,35,14,20.5,51
+16-Nov-24,SMU Mustangs,Boston College,10,66,38,28,19.5,53.5
+16-Nov-24,Liberty Flames,Massachusetts,1,69,35,34,16.5,52.5
+16-Nov-24,Memphis Tigers,Alabama-Birmingham,35,71,53,18,16,62.5
+16-Nov-24,Boise State Broncos,San Jose State,21,63,42,21,14,62.5
+16-Nov-24,Colorado Buffaloes,Utah,25,73,49,24,13.5,43.5
+16-Nov-24,Oregon Ducks,Wisconsin,3,29,16,13,13.5,49.5
+16-Nov-24,Texas Longhorns,Arkansas,10,30,20,10,13.5,56.5
+16-Nov-24,Clemson Tigers,Pittsburgh,4,44,24,20,12.5,51.5
+16-Nov-24,Jacksonville State Gamecocks,Florida International,3,65,34,31,12.5,58.5
+16-Nov-24,WKU Hilltoppers,Louisiana Tech,-45998,45998,0,45998,11.5,52.5
+16-Nov-24,California Golden Bears,Syracuse,-8,58,25,33,10.5,58
+16-Nov-24,North Carolina Tar Heels,Wake Forest,7,55,31,24,10.5,64
+16-Nov-24,Washington State Cougars,New Mexico,-3,73,35,38,10.5,72.5
+16-Nov-24,South Carolina Gamecocks,Missouri,4,64,34,30,10.5,42.5
+16-Nov-24,Georgia Bulldogs,Tennessee,14,48,31,17,8.5,46.5
+16-Nov-24,Kansas State Wildcats,Arizona State,-10,38,14,24,7.5,51.5
+16-Nov-24,Marshall Thundering Herd,Coastal Carolina,12,50,31,19,7.5,57
+16-Nov-24,Tulane Green Wave,Navy,35,35,35,0,7,49
+16-Nov-24,Iowa State Cyclones,Cincinnati,17,51,34,17,7,52.5
+16-Nov-24,Georgia Southern Eagles,Troy,-8,48,20,28,7,54
+16-Nov-24,USC Trojans,Nebraska,8,48,28,20,6.5,51
+16-Nov-24,Louisiana-Lafayette Ragin' Cajuns,South Alabama,-2,46,22,24,6.5,60
+16-Nov-24,Maryland Terrapins,Rutgers,-14,48,17,31,4,54.5
+16-Nov-24,LSU Tigers,Florida,-11,43,16,27,3.5,57
+16-Nov-24,Oregon State Beavers,Air Force,-28,28,0,28,3,44.5
+16-Nov-24,BYU Cougars,Kansas,-4,30,13,17,2.5,55.5
+16-Nov-24,Hawaii Rainbow Warriors,Utah State,-45,65,10,55,2.5,62
+16-Nov-24,Georgia State Panthers,Arkansas State,-7,47,20,27,2.5,59.5
+16-Nov-24,Temple Owls,Florida Atlantic,3,33,18,15,2,50
+16-Nov-24,Baylor Bears,West Virginia,14,84,49,35,2,59.5
+16-Nov-24,Charlotte 49ers,South Florida,-35,83,24,59,1.5,53.5
+16-Nov-24,Illinois Fighting Illini,Michigan State,22,54,38,16,1.5,47.5
+16-Nov-24,James Madison Dukes,Old Dominion,3,67,35,32,1,51
+19-Nov-24,Akron Zips,Kent State,21,55,38,17,10.5,49
+19-Nov-24,Western Michigan Broncos,Central Michigan,-2,30,14,16,6,56
+19-Nov-24,Miami-OH RedHawks,Northern Illinois,11,29,20,9,1,42.5
+20-Nov-24,Toledo Rockets,Ohio,-17,31,7,24,1.5,46.5
+20-Nov-24,Eastern Michigan Eagles,Buffalo,-17,57,20,37,1,53.5
+21-Nov-24,Georgia Tech Yellow Jackets,North Carolina State,1,59,30,29,7.5,51.5
+22-Nov-24,UTSA Roadrunners,Temple,24,78,51,27,16.5,56
+22-Nov-24,Michigan State Spartans,Purdue,7,41,24,17,14,48.5
+22-Nov-24,UNLV Rebels,San Jose State,11,43,27,16,7.5,59.5
+23-Nov-24,Clemson Tigers,The Citadel,37,65,51,14,48.5,58.5
+23-Nov-24,Georgia Bulldogs,Massachusetts,38,80,59,21,42.5,55.5
+23-Nov-24,South Carolina Gamecocks,Wofford,44,68,56,12,42.5,49.5
+23-Nov-24,Tennessee Volunteers,Texas El Paso,56,56,56,0,41.5,54.5
+23-Nov-24,Florida State Seminoles,Charleston Southern,34,48,41,7,34,44.5
+23-Nov-24,Miami-FL Hurricanes,Wake Forest,28,56,42,14,23.5,67.5
+23-Nov-24,Arkansas Razorbacks,Louisiana Tech,21,49,35,14,23.5,48.5
+23-Nov-24,South Alabama Jaguars,Southern Miss,21,49,35,14,23.5,54
+23-Nov-24,Boise State Broncos,Wyoming,4,30,17,13,22.5,54
+23-Nov-24,Texas State Bobcats,Georgia State,-8,96,44,52,22.5,59.5
+23-Nov-24,Texas Longhorns,Kentucky,17,45,31,14,18.5,46.5
+23-Nov-24,USF Bulls,Tulsa,33,93,63,30,17.5,60.5
+23-Nov-24,California Golden Bears,Stanford,3,45,24,21,14.5,53.5
+23-Nov-24,Notre Dame Fighting Irish,Army,35,63,49,14,14.5,44.5
+23-Nov-24,Alabama Crimson Tide,Oklahoma,-21,27,3,24,14,46.5
+23-Nov-24,Ole Miss Rebels,Florida,-7,41,17,24,13.5,57.5
+23-Nov-24,Bowling Green Falcons,Ball State,25,51,38,13,12.5,54.5
+23-Nov-24,SMU Mustangs,Virginia,26,40,33,7,11.5,54.5
+23-Nov-24,Penn State Nittany Lions,Minnesota,1,51,26,25,11.5,45
+23-Nov-24,Washington State Cougars,Oregon State,-3,79,38,41,11,56.5
+23-Nov-24,TCU Horned Frogs,Arizona,21,77,49,28,10.5,60
+23-Nov-24,Michigan Wolverines,Northwestern,44,56,50,6,10.5,35.5
+23-Nov-24,Ohio State Buckeyes,Indiana,23,53,38,15,10.5,52.5
+23-Nov-24,Syracuse Orange,Connecticut,7,55,31,24,10,53.5
+23-Nov-24,LSU Tigers,Vanderbilt,7,41,24,17,9.5,52.5
+23-Nov-24,Missouri Tigers,Mississippi State,19,59,39,20,9.5,57.5
+23-Nov-24,FIU Panthers,Kennesaw State,-1,53,26,27,9,42.5
+23-Nov-24,Kansas State Wildcats,Cincinnati,26,56,41,15,7.5,54
+23-Nov-24,James Madison Dukes,Appalachian State,-14,54,20,34,7.5,57.5
+23-Nov-24,Louisiana-Lafayette Ragin' Cajuns,Troy,21,81,51,30,7.5,52
+23-Nov-24,Rice Owls,Alabama-Birmingham,-26,54,14,40,7,52
+23-Nov-24,Louisville Cardinals,Pittsburgh,28,46,37,9,7,57.5
+23-Nov-24,Baylor Bears,Houston,10,30,20,10,7,51
+23-Nov-24,Iowa State Cyclones,Utah,3,59,31,28,6.5,42.5
+23-Nov-24,Jacksonville State Gamecocks,Sam Houston State,10,32,21,11,5.5,57
+23-Nov-24,Utah State Aggies,San Diego State,21,61,41,20,5.5,60
+23-Nov-24,USC Trojans,California-Los Angeles,6,32,19,13,5,53
+23-Nov-24,Texas Tech Red Raiders,Oklahoma State,8,104,56,48,4.5,64
+23-Nov-24,Iowa Hawkeyes,Maryland,16,42,29,13,4.5,40.5
+23-Nov-24,Arizona State Sun Devils,Brigham Young,5,51,28,23,3.5,49.5
+23-Nov-24,Middle Tennessee Blue Raiders,New Mexico State,-15,57,21,36,3.5,53.5
+23-Nov-24,Fresno State Bulldogs,Colorado State,6,50,28,22,3.5,43.5
+23-Nov-24,Charlotte 49ers,Florida Atlantic,12,66,39,27,3,49.5
+23-Nov-24,UCF Knights,West Virginia,-10,52,21,31,3,60.5
+23-Nov-24,Nevada Wolf Pack,Air Force,-3,41,19,22,3,44.5
+23-Nov-24,Arkansas State Red Wolves,Louisiana-Monroe,7,49,28,21,3,51.5
+23-Nov-24,Old Dominion Monarchs,Marshall,-7,77,35,42,3,51.5
+23-Nov-24,North Texas Mean Green,East Carolina,-12,68,28,40,2.5,74.5
+23-Nov-24,North Carolina Tar Heels,Boston College,-20,62,21,41,2.5,51
+23-Nov-24,Virginia Tech Hokies,Duke,-3,59,28,31,2.5,45.5
+23-Nov-24,Colorado Buffaloes,Kansas,-16,58,21,37,2.5,59.5
+23-Nov-24,Rutgers Scarlet Knights,Illinois,-7,69,31,38,2.5,48
+23-Nov-24,Texas A&amp;M Aggies,Auburn,-2,84,41,43,2.5,47.5
+23-Nov-24,Coastal Carolina Chanticleers,Georgia Southern,-20,32,6,26,2.5,59.5
+23-Nov-24,Nebraska Cornhuskers,Wisconsin,19,69,44,25,1.5,41
+23-Nov-24,Liberty Flames,Western Kentucky,17,59,38,21,1,56.5
+26-Nov-24,Buffalo Bulls,Kent State,36,50,43,7,23.5,51
+26-Nov-24,Toledo Rockets,Akron,-7,35,14,21,9,49.5
+28-Nov-24,Tulane Green Wave,Memphis,-10,58,24,34,13.5,54
+29-Nov-24,Ole Miss Rebels,Mississippi State,12,40,26,14,26,63
+29-Nov-24,Ohio Bobcats,Ball State,21,63,42,21,17.5,51.5
+29-Nov-24,Boise State Broncos,Oregon State,16,52,34,18,17.5,58
+29-Nov-24,Georgia Bulldogs,Georgia Tech,2,86,44,42,17,49
+29-Nov-24,Colorado Buffaloes,Oklahoma State,52,52,52,0,14.5,66.5
+29-Nov-24,UCF Knights,Utah,-14,42,14,28,10,46
+29-Nov-24,Colorado State Rams,Utah State,5,79,42,37,5,57
+29-Nov-24,East Carolina Pirates,Navy,-14,54,20,34,3,54.5
+29-Nov-24,Iowa Hawkeyes,Nebraska,3,23,13,10,3,41.5
+29-Nov-24,Liberty Flames,Sam Houston State,-2,38,18,20,2.5,47.5
+29-Nov-24,Bowling Green Falcons,Miami-OH,-16,40,12,28,2.5,39
+29-Nov-24,San Jose State Spartans,Stanford,3,65,34,31,2.5,54.5
+29-Nov-24,Texas State Bobcats,South Alabama,7,83,45,38,2.5,61
+29-Nov-24,Minnesota Golden Gophers,Wisconsin,17,31,24,7,1.5,40.5
+30-Nov-24,Indiana Hoosiers,Purdue,66,66,66,0,29,56.5
+30-Nov-24,Penn State Nittany Lions,Maryland,37,51,44,7,26.5,50.5
+30-Nov-24,Ohio State Buckeyes,Michigan,-3,23,10,13,19.5,41.5
+30-Nov-24,Washington State Cougars,Wyoming,-1,29,14,15,18.5,54.5
+30-Nov-24,Oregon Ducks,Washington,28,70,49,21,17.5,50.5
+30-Nov-24,UNLV Rebels,Nevada,24,52,38,14,17.5,54.5
+30-Nov-24,Troy Trojans,Southern Miss,32,72,52,20,17.5,49
+30-Nov-24,Florida Gators,Florida State,20,42,31,11,17,45.5
+30-Nov-24,NIU Huskies,Central Michigan,8,40,24,16,13.5,40
+30-Nov-24,SMU Mustangs,California,32,44,38,6,12.5,54.5
+30-Nov-24,BYU Cougars,Houston,12,48,30,18,12.5,40.5
+30-Nov-24,Miami-FL Hurricanes,Syracuse,-4,80,38,42,12,67.5
+30-Nov-24,North Texas Mean Green,Temple,7,41,24,17,11.5,63.5
+30-Nov-24,Alabama Crimson Tide,Auburn,14,42,28,14,10.5,51
+30-Nov-24,FIU Panthers,Middle Tennessee,11,59,35,24,10,50.5
+30-Nov-24,LA Tech Bulldogs,Kennesaw State,33,33,33,0,10,41.5
+30-Nov-24,Tennessee Volunteers,Vanderbilt,13,59,36,23,9.5,47
+30-Nov-24,Illinois Fighting Illini,Northwestern,10,66,38,28,8.5,43.5
+30-Nov-24,Louisiana-Lafayette Ragin' Cajuns,Louisiana-Monroe,14,60,37,23,8.5,50
+30-Nov-24,UCONN Huskies,Massachusetts,5,89,47,42,8,50.5
+30-Nov-24,Arizona State Sun Devils,Arizona,42,56,49,7,7.5,53.5
+30-Nov-24,UCLA Bruins,Fresno State,7,33,20,13,7.5,46.5
+30-Nov-24,Notre Dame Fighting Irish,Southern California,14,84,49,35,7,53
+30-Nov-24,Western Michigan Broncos,Eastern Michigan,8,44,26,18,6.5,55.5
+30-Nov-24,New Mexico Lobos,Hawaii,-8,68,30,38,6.5,59.5
+30-Nov-24,Army Black Knights,Texas-San Antonio,5,53,29,24,6,53.5
+30-Nov-24,Air Force Falcons,San Diego State,11,51,31,20,6,43.5
+30-Nov-24,LSU Tigers,Oklahoma,20,54,37,17,6,48
+30-Nov-24,USF Bulls,Rice,-7,63,28,35,5.5,54
+30-Nov-24,Old Dominion Monarchs,Arkansas State,8,72,40,32,5.5,58.5
+30-Nov-24,Louisville Cardinals,Kentucky,27,55,41,14,4.5,49.5
+30-Nov-24,Virginia Tech Hokies,Virginia,20,54,37,17,4.5,45
+30-Nov-24,Texas Longhorns,Texas A&M,10,24,17,7,4.5,50.5
+30-Nov-24,James Madison Dukes,Marshall,-2,68,33,35,4,52.5
+30-Nov-24,Boston College Eagles,Pittsburgh,11,57,34,23,3.5,50.5
+30-Nov-24,Duke Blue Devils,Wake Forest,6,40,23,17,3.5,53.5
+30-Nov-24,New Mexico State Aggies,Texas El Paso,-7,77,35,42,3,51.5
+30-Nov-24,Missouri Tigers,Arkansas,7,49,28,21,3,51
+30-Nov-24,Clemson Tigers,South Carolina,-3,31,14,17,2.5,49.5
+30-Nov-24,TCU Horned Frogs,Cincinnati,7,33,20,13,2.5,58.5
+30-Nov-24,Texas Tech Red Raiders,West Virginia,37,67,52,15,2.5,62.5
+30-Nov-24,Georgia Southern Eagles,Appalachian State,9,49,29,20,2.5,60.5
+30-Nov-24,North Carolina Tar Heels,North Carolina State,-5,65,30,35,2,54.5
+30-Nov-24,Iowa State Cyclones,Kansas State,8,50,29,21,2,51.5
+30-Nov-24,Kansas Jayhawks,Baylor,-28,62,17,45,1.5,62
+30-Nov-24,Michigan State Spartans,Rutgers,-27,55,14,41,1.5,46.5
+30-Nov-24,WKU Hilltoppers,Jacksonville State,2,36,19,17,1.5,62
+30-Nov-24,Charlotte 49ers,Alabama-Birmingham,2,56,29,27,1,60.5
+30-Nov-24,Tulsa Golden Hurricane,Florida Atlantic,-47,79,16,63,1,58
+30-Nov-24,Georgia State Panthers,Coastal Carolina,-21,75,27,48,1,53.5
+7-Dec-24,Louisiana-Lafayette Ragin' Cajuns,Marshall,-28,34,3,31,5,58
+7-Dec-24,Oregon Ducks,Penn State,8,82,45,37,3,52
+7-Dec-24,Texas Longhorns,Georgia,-3,41,19,22,3,51
+7-Dec-24,SMU Mustangs,Clemson,-3,65,31,34,2.5,56.5
+7-Dec-24,Miami-OH RedHawks,Ohio,-35,41,3,38,2,44
+7-Dec-24,Iowa State Cyclones,Arizona State,-26,64,19,45,1,50.5
+14-Dec-24,Army Black Knights,Navy,-18,44,13,31,6.5,39.5
+14-Dec-24,South Alabama Jaguars,Western Michigan,7,53,30,23,6,54
+17-Dec-24,Memphis Tigers,West Virginia,5,79,42,37,5,59.5
+18-Dec-24,James Madison Dukes,Western Kentucky,10,44,27,17,7,50.5
+18-Dec-24,UNLV Rebels,California,11,37,24,13,3.5,45
+19-Dec-24,Georgia Southern Eagles,Sam Houston State,-5,57,26,31,3.5,48.5
+20-Dec-24,Florida Gators,Tulane,25,41,33,8,10,50.5
+20-Dec-24,Notre Dame Fighting Irish,Indiana,10,44,27,17,7,50.5
+20-Dec-24,Ohio Bobcats,Jacksonville State,3,57,30,27,6.5,57.5
+21-Dec-24,Texas Longhorns,Clemson,14,62,38,24,13.5,49.5
+21-Dec-24,Penn State Nittany Lions,Southern Methodist,28,48,38,10,9,52
+21-Dec-24,Ohio State Buckeyes,Tennessee,25,59,42,17,7.5,47
+23-Dec-24,UTSA Roadrunners,Coastal Carolina,29,59,44,15,12.5,56.5
+23-Dec-24,NIU Huskies,Fresno State,8,48,28,20,2.5,41
+24-Dec-24,USF Bulls,San Jose State,2,80,41,39,1,66.5
+26-Dec-24,Bowling Green Falcons,Arkansas State,-7,69,31,38,10,53.5
+26-Dec-24,Kansas State Wildcats,Rutgers,3,85,44,41,7.5,52
+26-Dec-24,Pittsburgh Panthers,Toledo,-2,94,46,48,6.5,48.5
+27-Dec-24,Syracuse Orange,Washington State,17,87,52,35,18.5,58.5
+27-Dec-24,Texas A&amp;M Aggies,Southern California,-4,66,31,35,3.5,56.5
+27-Dec-24,Georgia Tech Yellow Jackets,Vanderbilt,-8,62,27,35,3,49
+27-Dec-24,Texas Tech Red Raiders,Arkansas,-13,65,26,39,3,53
+27-Dec-24,Oklahoma Sooners,Navy,-1,41,20,21,1,44
+28-Dec-24,Army Black Knights,Louisiana Tech,21,33,27,6,14.5,44.5
+28-Dec-24,TCU Horned Frogs,Louisiana-Lafayette,31,37,34,3,9.5,61
+28-Dec-24,NC State Wolfpack,East Carolina,-5,47,21,26,7,61
+28-Dec-24,Miami-FL Hurricanes,Iowa State,-1,83,41,42,5,61.5
+28-Dec-24,Nebraska Cornhuskers,Boston College,5,35,20,15,3.5,47.5
+28-Dec-24,Colorado Buffaloes,Brigham Young,-22,50,14,36,3,54.5
+28-Dec-24,North Carolina Tar Heels,Connecticut,-13,41,14,27,2,53.5
+28-Dec-24,Miami-OH RedHawks,Colorado State,26,60,43,17,1.5,42.5
+30-Dec-24,Missouri Tigers,Iowa,3,51,27,24,1,41
+31-Dec-24,Alabama Crimson Tide,Michigan,-6,32,13,19,16.5,45
+31-Dec-24,Penn State Nittany Lions,Boise State,17,45,31,14,11.5,55
+31-Dec-24,South Carolina Gamecocks,Illinois,-4,38,17,21,9.5,50.5
+31-Dec-24,Baylor Bears,Louisiana State,-13,75,31,44,3.5,62.5
+31-Dec-24,Washington Huskies,Louisville,-1,69,34,35,1.5,50.5
+1-Jan-25,Texas Longhorns,Arizona State,8,70,39,31,13.5,52
+1-Jan-25,Ohio State Buckeyes,Oregon,20,62,41,21,2.5,55.5
+2-Jan-25,Ole Miss Rebels,Duke,32,72,52,20,18,51
+2-Jan-25,Notre Dame Fighting Irish,Georgia,13,33,23,10,1,45.5
+3-Jan-25,Texas State Bobcats,North Texas,2,58,30,28,15.5,66.5
+3-Jan-25,Minnesota Golden Gophers,Virginia Tech,14,34,24,10,10,43.5
+4-Jan-25,Buffalo Bulls,Liberty,19,33,26,7,4,51
+9-Jan-25,Penn State Nittany Lions,Notre Dame,-3,51,24,27,1,45.5
+10-Jan-25,Ohio State Buckeyes,Texas,14,42,28,14,6,51.5
+20-Jan-25,Ohio State Buckeyes,Notre Dame,11,57,34,23,8.5,46

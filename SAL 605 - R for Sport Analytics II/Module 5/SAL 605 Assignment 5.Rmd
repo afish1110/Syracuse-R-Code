@@ -1,0 +1,51 @@
+---
+title: "SAL 605 Assignment 5"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+##packages
+library(tidyverse)
+library(BasketballAnalyzeR)
+```
+
+```{r}
+##transforming play by play and mutate the coordinates
+PbP <- PbPmanipulation(PbP.BDB) %>% 
+  mutate(xx = original_x / 10,
+         yy = original_y / 10 - 41.75)
+```
+
+
+```{r}
+##dfs for our desired players Green and Iguodala
+draymondGreen <- PbP %>%
+  filter(player == 'Draymond Green')
+
+andreIg <- PbP %>% 
+  filter(player == 'Andre Iguodala')
+```
+
+
+```{r}
+##shot chart with scatter and color
+shotchart(data = draymondGreen, x = 'xx', y = 'yy', z = 'result', scatter = TRUE) +
+  labs(title = 'Draymond Green Shot Chart 2017-18 Season',
+       caption = 'Data from BasketballAnalyzeR')
+ggsave('graphics/DraymondGreenShotChart.png')
+```
+
+```{r}
+##shot chart by regions, color for length, and includes make percentages
+shotchart(data = andreIg, x = 'xx', y = 'yy', z = 'playlength', num.sect = 5, type = 'sectors', scatter = FALSE, result = 'result', text.col = 'black') +
+  labs(title = 'Andre Iguodala Shot Chart 2017-18 Season',
+       caption = 'Data from BasketballAnalyzeR')
+ggsave('graphics/AndreIguodalaShotChart.png')
+```
+

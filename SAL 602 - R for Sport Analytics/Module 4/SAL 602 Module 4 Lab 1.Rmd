@@ -1,0 +1,71 @@
+---
+title: "SAL 602 Module 4 Lab 1"
+author: "Andrew Fish"
+date: "2024-11-13"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(broom)
+options(scipen = 1)
+```
+
+```{r}
+nhl2023 <- read_csv("C:/Users/Andrew Fish/Documents/Syracuse/SAL 602/Module 4/NHLdata2023.csv")
+nhl2022 <- read_csv("C:/Users/Andrew Fish/Documents/Syracuse/SAL 602/Module 4/NHLdata2022.csv")
+```
+
+```{r}
+nhl2022 %>% bind_rows(nhl2023) -> nhldata
+```
+
+Manipulating data to get the desired statistics
+
+```{r}
+nhldata <- nhldata %>%
+  select(Team, Year, GP, W, L, OL, GF, GA) %>%
+  mutate(Wpct = W / GP,
+         GD = GF - GA)
+```
+
+Linear Regression using Goal Differential (GD) to predict Winning Percentage (Wpct)
+
+```{r}
+linfit <- lm(Wpct ~ GD, nhldata)
+summary(linfit)
+```
+
+Using augment() to create the residuals and then plotting them using ggplot
+
+```{r}
+nhldata_aug <- augment(linfit, data = nhldata)
+
+nhl_resid <- ggplot(nhldata_aug, aes(x = GD, y = .resid)) +
+  geom_point(alpha = 0.3, color = "darkred") +
+  geom_hline(yintercept = 0, linetype = 2, color = "cornflowerblue") +
+  xlab("Goal Differential") + ylab("Residual") +
+  ggtitle("Goal Differential Residuals - NHL Seasons 2022-23 & 2023-24")
+```
+
+```{r}
+ggsave("C:/Users/Andrew Fish/Documents/Syracuse/SAL 602/Module 4/mod4lab1resid.pdf")
+```
+
+
+Calculating RMSE
+
+```{r}
+resid_sum <- nhldata_aug %>%
+  summarize(N = n(),
+            avg = mean(.resid),
+            RMSE = sqrt(mean(.resid^2)))
+rmse <- resid_sum %>%
+  pull(RMSE)
+rmse
+```
+

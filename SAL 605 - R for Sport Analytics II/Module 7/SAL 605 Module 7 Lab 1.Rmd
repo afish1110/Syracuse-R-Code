@@ -1,0 +1,56 @@
+---
+title: "SAL 605 Module 7 Lab 1"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(BasketballAnalyzeR)
+```
+
+
+```{r}
+FF <-  fourfactors(Tbox, Obox)
+data <- FF %>%
+  transmute(OD.Rtg = ORtg / DRtg,
+            F1.r = F1.Off / F1.Def,
+            F2.r = F2.Def / F2.Off,
+            F3.r = F3.Off / F3.Def,
+            F4.r = F4.Off / F4.Def,
+            P3M = Tbox$P3M)
+```
+
+
+```{r}
+set.seed(8) ##Kobe
+kclu1 <- kclustering(data)
+plot(kclu1)
+```
+
+```{r}
+set.seed(24) ##Kobe
+kclu2 <- kclustering(data, labels = Tbox$Team, k = 5)
+plot(kclu2)
+```
+
+
+```{r}
+FF <- FF %>% 
+  inner_join(kclu2$Subjects, by = join_by(Team == Label)) %>% 
+  inner_join(Tbox, by = join_by(Team)) %>% 
+  inner_join(Obox, by = join_by(Team), suffix = c('', '.Opp')) %>% 
+  mutate(Cluster = as.factor(Cluster))
+```
+
+```{r}
+bubbleplot(FF, id = 'Team', x = 'PTS', y = 'PTS.Opp', col = 'Cluster', size = 'W',
+           labels = c('PTS', 'PTS.Opp', 'cluster', 'Wins'))
+```
+
+

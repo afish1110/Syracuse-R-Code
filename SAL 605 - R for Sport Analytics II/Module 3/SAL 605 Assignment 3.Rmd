@@ -1,0 +1,145 @@
+---
+title: "SAL 605 Assignment 3"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(Lahman)
+library(readr)
+```
+
+#1.
+```{r}
+##reading in retrosheet data
+fields <- read_csv('data/fields.csv')
+data2021 <- read_csv('data/all2021.csv',
+                     col_names = pull(fields, Header),
+                     na = character())
+```
+
+#2.
+```{r}
+data2021_AB <- data2021 %>% 
+  ##filters for only AB data
+  filter(AB_FL == TRUE) %>% 
+  ##changes H to an indicator variable for if hit occurred
+  mutate(H = ifelse(H_FL > 0, 1, 0),
+         ##pulling date identifier from GAME_ID
+         DATE = str_sub(GAME_ID, 4, 12),
+         AB = 1) %>%
+  ##arranges the data by date so it is chronological with the season
+  arrange(DATE)
+```
+
+#3.
+```{r}
+streaks <- function(y) {
+  x <- rle(y)
+  class(x) <- 'list'
+  return(as_tibble(x))
+}
+
+longest_streak <- function(batter, df = data2021_AB) {
+  df %>%
+    ##filters so only have wanted player's info
+    filter(BAT_ID == batter) %>%
+    ##creates a vector for hits
+    pull(H) %>%
+    ##calls the streaks function that calculates hitting streaks
+    streaks() %>%
+    filter(values == 1) %>%
+    ##gives vector of all the lengths
+    summarize(max_streak = max(lengths))
+}
+```
+
+
+#4.
+```{r}
+players_400 <- data2021_AB %>% 
+  ##groups by batter
+  group_by(BAT_ID) %>% 
+  ##sums up the ABs using summarize
+  summarize(AB = sum(AB_FL)) %>% 
+  ##need to ungroup when grouping
+  # ungroup() %>%
+  ##only want those with more than 400
+  filter(AB >= 400) %>% 
+  ##grabs the BAT_ID for all players with more than 400 ABs
+  pull(BAT_ID)
+```
+
+
+#5.
+```{r}
+data2021_streaks <- map_df(players_400, longest_streak) %>%
+  ##adding bat_id column
+  mutate(BAT_ID = players_400) %>% 
+  ##sorting by longest hitting streak
+  arrange(desc(max_streak))
+  
+head(data2021_streaks)
+```
+
+
+#6.
+```{r}
+random_mix <- function(h){
+  h %>%
+    sample() %>% 
+    streaks() %>% 
+    filter(values == 0) %>% 
+    summarize(C = sum(lengths ^ 2)) %>% 
+    pull()
+}
+```
+
+
+```{r}
+clump_test <- function(data = data2021_AB, playerid){
+  set.seed(50) ##Mookie Betts
+  player.AB <- data %>% 
+    filter(BAT_ID == playerid, AB_FL == TRUE) %>% 
+    mutate(H = ifelse(H_FL > 0, 1, 0),
+           DATE = substr(GAME_ID, 4, 12)) %>% 
+    arrange(DATE)
+  
+  stat <- player.AB %>% 
+    pull(H) %>% 
+    streaks() %>% 
+    filter(values == 0) %>% 
+    summarize(C = sum(lengths ^ 2)) %>% 
+    pull()
+  
+  ST <- replicate(1000, random_mix(player.AB$H))
+  cumulative_distribution_function <- ecdf(ST)
+  
+  ggplot(data.frame(ST), aes(ST)) +
+    geom_histogram(aes(y = stat(density)), bins = 20, color = 'midnightblue', fill = 'lightsalmon1') +
+    geom_vline(xintercept = stat, size = 2) +
+    annotate(geom = 'text', x = stat * 1.10,
+             y = 0.0010, label = paste('OBSERVED', cumulative_distribution_function(stat)), size = 5)
+}
+```
+
+
+```{r}
+##miggy
+clump_test(data2021_AB, data2021_streaks$BAT_ID[1])
+ggsave('MiggyClumpTest.png')
+```
+
+
+```{r}
+##mullins
+clump_test(data2021_AB, data2021_streaks$BAT_ID[2])
+ggsave('MullinsClumpTest.png')
+```
+

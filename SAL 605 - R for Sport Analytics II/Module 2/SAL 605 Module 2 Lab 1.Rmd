@@ -1,0 +1,206 @@
+---
+title: "SAL 605 Module 2 Lab 1"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+##packages
+library(tidyverse)
+library(Lahman)
+library(readr)
+library(ggplot2)
+library(ggthemes)
+```
+
+#1.
+Calculating the RE matrix for 2022
+```{r}
+##reading in csv for fields and 2022 retrosheet data
+fields <- read_csv('data/fields.csv')
+##need to pull columns names from fields since not in the all2022
+all2022 <- read_csv('data/all2022.csv',
+                    col_names = pull(fields, Header),
+                    na = character())
+```
+
+
+```{r}
+##calculates the number of runs on each play
+all2022 <- all2022 %>%
+  mutate(RUNS = AWAY_SCORE_CT + HOME_SCORE_CT,
+         ##unique identifier for each inning
+         HALF.INNING = paste(GAME_ID, INN_CT, BAT_HOME_ID),
+         ##if the destination for batter or runner is more than 3 that means they scored. So adding all the TRUE will give total runs per play
+         RUNS.SCORED = (BAT_DEST_ID > 3) + (RUN1_DEST_ID > 3) +
+           (RUN2_DEST_ID > 3) + (RUN3_DEST_ID > 3))
+```
+
+
+```{r}
+##aggregates the runs per play data into runs per inning
+half_innings <- all2022 %>%
+  ##groups by inning identifier
+  group_by(HALF.INNING) %>%
+  ##adds the cummulative stats for each inning
+  summarize(Outs.Inning = sum(EVENT_OUTS_CT),
+            Runs.Inning = sum(RUNS.SCORED),
+            ##runs at start of inning
+            Runs.Start = first(RUNS),
+            ##total runs for the game current inning plus start of inning
+            MAX.RUNS = Runs.Inning + Runs.Start)
+```
+
+
+```{r}
+##putting mutations for game state in one chunk 
+all2022 <- all2022 %>%
+  ##joins half_inning and all 2022
+  inner_join(., half_innings, by = join_by('HALF.INNING')) %>%
+  ##runs scored in remainder of inning from a given game state (will calulate game states later)
+  mutate(RUNS.ROI = MAX.RUNS - RUNS) %>%
+  ungroup() %>% 
+  #calculating game states
+  mutate(BASES = paste(ifelse(BASE1_RUN_ID > '', 1, 0),
+                       ifelse(BASE2_RUN_ID > '', 1, 0),
+                       ifelse(BASE3_RUN_ID > '', 1, 0), sep = ''),
+         ##game state being baserunners and outs so 100 1 is runner on first 1 out
+         STATE = paste(BASES, OUTS_CT),
+         ##dummy variables to tell if bases are occupied after play
+         NRUNNER1 = as.numeric(RUN1_DEST_ID == 1 | BAT_DEST_ID == 1),
+         NRUNNER2 = as.numeric(RUN1_DEST_ID == 2 | RUN2_DEST_ID == 2 | BAT_DEST_ID == 2),
+         NRUNNER3 = as.numeric(RUN1_DEST_ID == 3 | RUN2_DEST_ID == 3 | RUN3_DEST_ID == 3 | BAT_DEST_ID == 3),
+         ##outs after the play
+         NOUTS = OUTS_CT + EVENT_OUTS_CT,
+         ##game state after the play
+         NEW.BASES = paste(NRUNNER1, NRUNNER2, NRUNNER3, sep = ''),
+         NEW.STATE = paste(NEW.BASES, NOUTS))
+```
+
+
+```{r}
+##only want plays when state changes or runs scored
+all2022c <- all2022 %>%
+  filter(((STATE != NEW.STATE) | (RUNS.SCORED > 0)) &
+           ##innings before 8th to avoid ghost runners
+           INN_CT <= 7 &
+           ##completed innings no walkoffs/delays
+           Outs.Inning == 3 &
+           ##batter events only
+           BAT_EVENT_FL == TRUE)
+```
+
+
+```{r}
+RUNS <- all2022c %>%
+  group_by(STATE) %>%
+  ##average runs scored in remainder of the inning
+  summarize(Mean = mean(RUNS.ROI)) %>%
+  ##creating outs by taking from state
+  mutate(Outs = substr(STATE, 5, 5)) %>%
+  ##arranging data set by total outs after grouping by state so will have sorted state then outs
+  arrange(Outs) %>%
+  ungroup()
+```
+
+
+```{r}
+##RE matrix
+RUNS_out <- matrix(round(RUNS$Mean, 2),
+                   ##dimensions of matrix
+                   nrow = 8, ncol = 3,
+                   ##labels for rows and columns
+                   dimnames = list(c('000', '001', '010', '011', '100', '101', '110', '111'),
+                   c('0 outs', '1 outs', '2 outs')))
+```
+
+
+#2.
+Run Value per PA
+```{r}
+##using the RE matrix to get run value per PA
+all2022 <- all2022 %>%
+  #joins with RE matrix not using outs so STATE and Mean
+  left_join(., RUNS %>%
+               select(-Outs),
+            ##joins by state identifier
+            by = join_by('STATE')) %>%
+  ##renaming Mean to Runs.State
+  rename(Runs.State = Mean) %>%
+  ##repeating the process for the post play state
+  left_join(., RUNS %>%
+               select(-Outs),
+            by = join_by('NEW.STATE' == 'STATE')) %>%
+  rename(Runs.New.State = Mean) %>% 
+  replace_na(list(Runs.New.State = 0)) %>%
+  ##calculating run value
+  mutate(run_value = Runs.New.State - Runs.State + RUNS.SCORED)
+```
+
+
+#3.
+Comparing Jeff McNeil and Luis Arraez (BA Leaders in NL and AL respectively)
+```{r}
+##getting playerID from People
+mcneilID <- People %>%
+  filter(nameFirst == 'Jeff', nameLast == 'McNeil') %>% 
+  pull(retroID)
+
+arraezID <- People %>% 
+  filter(nameFirst == 'Luis', nameLast == 'Arraez') %>% 
+  pull(retroID)
+
+##filtering all2022 for just players mcneil and arraez
+mcneil <- all2022 %>%
+  filter(BAT_ID == mcneilID, BAT_EVENT_FL == TRUE)
+
+arraez <- all2022 %>% 
+  filter(BAT_ID == arraezID, BAT_EVENT_FL == TRUE)
+
+ba_champs <- bind_rows(mcneil, arraez)
+```
+
+
+```{r}
+##plotting both players run value together in a jitter plot
+ggplot(ba_champs, aes(BASES, run_value, color = BAT_ID)) +
+  geom_jitter(width = 0.25, alpha = 0.5) +
+  ##horizontal line for y = 0
+  geom_hline(yintercept = 0, color = 'indianred4', size = 1.5) +
+  ##labels for the chart
+  labs(title = '2022 Jeff McNeil and Luis Arraez Run Value',
+       x = 'Base State',
+       y = 'Run Value',
+       ##changes legend label
+       color = 'Player') +
+  ##changes the names in the legend from retroID to player names
+  ##changes the colors of the legend
+  scale_color_manual(labels = c('Luis Arraez', 'Jeff McNeil'), values = c('orange2', 'midnightblue')) +
+  ##theme for chart
+  theme_fivethirtyeight()
+
+ggsave('McNeilArraezRunValue.png')
+```
+
+
+```{r}
+runs_mcneil <- mcneil %>%
+  group_by(BASES) %>%
+  summarize(RUNS = sum(run_value),
+            PA = n()) %>%
+  mutate(RUNS_per_PA = RUNS / PA)
+runs_mcneil %>% summarize(RE24 = sum(RUNS))
+
+runs_arraez <- arraez %>%
+  group_by(BASES) %>%
+  summarize(RUNS = sum(run_value),
+            PA = n()) %>%
+  mutate(RUNS_per_PA = RUNS / PA)
+runs_arraez %>% summarize(RE24 = sum(RUNS))
+```
+

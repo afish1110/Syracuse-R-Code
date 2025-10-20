@@ -1,0 +1,146 @@
+---
+title: "SAL 621 Exam 2 Analytics Q1"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(readr)
+library(car)
+library(ggplot2)
+library(ggpubr)
+```
+
+```{r}
+##importing data
+nfl_data <- read_csv('data/NFL_data_3_27_25.csv')
+```
+
+#Analytics Q1
+
+Examining the balanced book hypothesis in the NFL. The data includes betting percentages on the Spread and Total so will examine those markets
+```{r}
+##looking at mean values of pct bet for markets
+summary(nfl_data)
+```
+
+Looking at the summary statistics and focusing on the pct_bets we see that for this data set we have means that are 55 and 44 for the spread and 75 and 35 for the totals.
+
+```{r}
+##spreads testing if mean is statistically significant
+t.test(nfl_data$pct_bets_home_spread, mu = .5)
+t.test(nfl_data$pct_bets_vis_spread, mu = .5)
+```
+
+```{r}
+##Totals testing if mean statistically significant
+t.test(nfl_data$pct_bets_over, mu = .5)
+t.test(nfl_data$pct_bets_under, mu = .5)
+```
+
+```{r}
+##visualizing the totals over market pct bet
+ggplot(nfl_data, aes(Total, pct_bets_over)) +
+  geom_point() +
+  geom_hline(yintercept = mean(nfl_data$pct_bets_over), color = 'blue') +
+  annotate('text', x = 30, y = 0.76, label = 'Over Mean', size = 3) +
+  geom_hline(yintercept = 0.5, color = 'red') +
+  annotate('text', x = 35, y = 0.51, label = 'Balanced Book', size = 3) +
+  xlab('Totals') + ylab('Percentage Bet Over') +
+  ggtitle('Totals v Bets on Over')
+```
+
+Looking at significance of betting strategies
+
+```{r}
+##adding dummy variables
+nfl_data %>% mutate(
+  sumscore = HomeScore + AwayScore,
+  OU = case_when(sumscore > Total ~ 'O',
+                 sumscore < Total ~ 'U',
+                 sumscore == Total ~ 'P'),
+  OverWin = case_when(sumscore > Total ~ 1,
+                      .default = 0),
+  UnderWin = case_when(sumscore < Total ~ 1,
+                       .default = 0),
+  HomeCover = case_when(
+    ((HomeSpread < 0) & (HomeScore - AwayScore > AwaySpread)) ~ 1,
+    ((HomeSpread > 0) & (AwayScore - HomeScore > HomeSpread)) ~ 1,
+    ((HomeSpread == 0) & (HomeScore - AwayScore > AwaySpread)) ~ 1,
+    .default = 0),
+  AwayCover = case_when(
+    HomeCover == 1 ~ 0,
+    ((HomeScore - AwayScore == AwaySpread) & (AwayScore - HomeScore == HomeSpread)) ~ 0,
+    .default = 1)) -> nfl_data
+```
+
+
+Spreads and Totals markets are usually on the 11/10 payouts so want to test if betting a certain way is profitable. 52.4% is considered the line for profitability with the 11/10 line. Using the dummy variables the means will be the rate it hits. So can run t tests to see if significantly different than 52.4%
+
+
+
+```{r}
+##looking at means of wining percentages and quartiles for spreads and totals
+summary(nfl_data)
+```
+
+```{r}
+##t-test for profitbality
+t.test(nfl_data$OverWin, mu = 0.524, alternative = 'greater')
+t.test(nfl_data$UnderWin, mu = 0.524, alternative = 'greater')
+```
+
+```{r}
+t.test(nfl_data$HomeCover, mu = 0.524, alternative = 'greater')
+t.test(nfl_data$AwayCover, mu = 0.524, alternative = 'greater')
+```
+
+Will look at the tails of the distribution for Totals market.
+
+```{r}
+nfl_data %>% filter(Total > 47) -> totalq3
+nfl_data %>% filter(Total < 41.5) -> totalq1
+```
+
+```{r}
+t.test(totalq1$OverWin, mu = 0.524, alternative = 'greater')
+t.test(totalq1$UnderWin, mu = 0.524, alternative = 'greater')
+```
+
+```{r}
+t.test(totalq3$OverWin, mu = 0.524, alternative = 'greater')
+t.test(totalq3$UnderWin, mu = 0.524, alternative = 'greater')
+```
+
+
+```{r}
+ggplot(nfl_data, aes(OU, fill = OU)) +
+  geom_bar()
+```
+
+```{r}
+bar2 <- ggplot(totalq1, aes(OU, fill = OU)) +
+  geom_bar(show.legend = FALSE) +
+  ylab('Count') +
+  xlab('O/U') +
+  ggtitle('Over/Under Split - Q1')
+```
+
+```{r}
+bar3 <- ggplot(totalq3, aes(OU, fill = OU)) +
+  geom_bar() +
+  ylab('Count') +
+  xlab('O/U') +
+  ggtitle('Over/Under Split - Q3')
+```
+
+```{r}
+##creates dashboard in R using the two plots above
+ggarrange(bar2, bar3, ncol = 2, nrow = 1)
+```

@@ -1,0 +1,359 @@
+---
+title: "SAL 621 Group Project 3"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(readr)
+library(lmtest)
+library(car)
+library(sandwich)
+library(foreign)
+library(ggplot2)
+```
+
+```{r}
+nba_bet <- read_csv('data/nba_df_1_29_24.csv')
+```
+
+```{r}
+##addding dummy variables and reformating character columns that need to be numeric
+nba_bet %>%
+  mutate(starter = case_when(starter == 'Y' ~ 1,
+                             .default = 0),
+         HomeGame = case_when(venue == 'H' ~ 1,
+                              .default = 0),
+         AwayGame = case_when(venue == 'R' ~ 1,
+                              .default = 0),
+         daysrest = as.numeric(daysrest),
+         draftsal = as.numeric(draftsal),
+         fansal = as.numeric(fansal),
+         yahsal = as.numeric(yahsal)) -> nba_bet
+na.omit(nba_bet) -> nba_bet
+```
+
+```{r}
+##testing linear relationship between salary and points DK
+dk <- lm(draftp ~ draftsal, data = nba_bet)
+summary(dk)
+linearHypothesis(dk, c('(Intercept) = 0', 'draftsal = 1'))
+```
+
+```{r}
+##model including possible factors for pts 
+dk1 <- lm(draftp ~ draftsal + MINUTES + usage + HomeGame + starter + daysrest, data = nba_bet)
+summary(dk1)
+vif(dk1)
+```
+
+```{r}
+##heteroskedasticity test
+bptest(dk1)
+```
+
+```{r}
+##correcting for heteroskedasticity bp test rejects null of no heteroskedasticity
+coeftest(dk1, vcov. = hccm)
+```
+
+```{r}
+##comparing models to see which is better AIC lower is better
+AIC(dk, dk1)
+```
+
+```{r}
+##testing linear relationship between salary and points FD
+fd <- lm(fanp ~ fansal, data = nba_bet)
+summary(fd)
+linearHypothesis(fd, c('(Intercept) = 0', 'fansal = 1'))
+```
+
+```{r}
+##model including possible factors for pts 
+fd1 <- lm(fanp ~ fansal + MINUTES + usage + HomeGame + starter + daysrest, data = nba_bet)
+summary(fd1)
+vif(fd1)
+```
+
+```{r}
+bptest(fd1)
+```
+
+```{r}
+coeftest(fd1, vcov. = hccm)
+```
+
+```{r}
+AIC(fd, fd1)
+```
+
+```{r}
+##testing linear relationship between salary and points Yahoo
+yah <- lm(yahp ~ yahsal, data = nba_bet)
+summary(yah)
+linearHypothesis(yah, c('(Intercept) = 0', 'yahsal = 1'))
+```
+
+```{r}
+##model including possible factors for pts 
+yah1 <- lm(yahp ~ yahsal + MINUTES + usage + HomeGame + starter + daysrest, data = nba_bet)
+summary(yah1)
+vif(yah1)
+```
+
+```{r}
+bptest(yah1)
+```
+
+```{r}
+coeftest(yah1, vcov. = hccm)
+```
+
+```{r}
+AIC(yah, yah1)
+```
+
+```{r}
+##adding model predictions to dataframe as well as dummies for over and under perform by platform
+nba_bet %>%
+  mutate(draftp_pred = predict(dk1),
+         fanp_pred = predict(fd1),
+         yahp_pred = predict(yah1),
+         draft_over = case_when(draftp_pred < draftp ~ 1,
+                                .default = 0),
+         draft_under = case_when(draftp_pred > draftp ~ 1,
+                                 .default = 0),
+         fan_over = case_when(fanp_pred < fanp ~ 1,
+                                .default = 0),
+         fan_under = case_when(fanp_pred > fanp ~ 1,
+                                 .default = 0),
+         yah_over = case_when(yahp_pred < yahp ~ 1,
+                                .default = 0),
+         yah_under = case_when(yahp_pred > yahp ~ 1,
+                                 .default = 0),
+         draft_res = resid(dk1),
+         fan_res = resid(fd1),
+         yah_res = resid(yah1)) -> nba_bet
+```
+
+```{r}
+##counts total number of over/under perform dk
+nba_bet %>%
+  filter(draft_res >= 10) %>%
+  count(PLAYER) -> dk_op
+
+nba_bet %>%
+  filter(PLAYER %in% dk_op$PLAYER) %>%
+  count(PLAYER) -> dk_tot
+
+merge(dk_op, dk_tot, by = 'PLAYER') -> dk_op
+
+nba_bet %>%
+  filter(draft_res <= -10) %>%
+  count(PLAYER) -> dk_up
+
+nba_bet %>%
+  filter(PLAYER %in% dk_up$PLAYER) %>%
+  count(PLAYER) -> dk_tot
+
+merge(dk_up, dk_tot, by = 'PLAYER') -> dk_up
+```
+
+```{r}
+##counts total number of over/under perform fd
+nba_bet %>%
+  filter(fan_res >= 10) %>%
+  count(PLAYER) -> fd_op
+
+nba_bet %>%
+  filter(PLAYER %in% fd_op$PLAYER) %>%
+  count(PLAYER) -> fd_tot
+
+merge(fd_op, fd_tot, by = 'PLAYER') -> fd_op
+
+nba_bet %>%
+  filter(fan_res <= -10) %>%
+  count(PLAYER) -> fd_up
+
+nba_bet %>%
+  filter(PLAYER %in% fd_up$PLAYER) %>%
+  count(PLAYER) -> fd_tot
+
+merge(fd_up, fd_tot, by = 'PLAYER') -> fd_up
+```
+
+
+```{r}
+##counts total number of over/under perform yahoo
+nba_bet %>%
+  filter(yah_res >= 10) %>%
+  count(PLAYER) -> yah_op
+
+nba_bet %>%
+  filter(PLAYER %in% yah_op$PLAYER) %>%
+  count(PLAYER) -> yah_tot
+
+merge(yah_op, yah_tot, by = 'PLAYER') -> yah_op
+
+nba_bet %>%
+  filter(yah_res <= -10) %>%
+  count(PLAYER) -> yah_up
+
+nba_bet %>%
+  filter(PLAYER %in% yah_up$PLAYER) %>%
+  count(PLAYER) -> yah_tot
+
+merge(yah_up, yah_tot, by = 'PLAYER') -> yah_up
+```
+
+
+```{r}
+##percent the player outperforms or underperforms
+dk_op %>%
+  filter(n.y > 75) %>%
+  mutate(Percent = (n.x / n.y) * 100,
+         Platform = 'DraftKings') -> dk_op
+
+dk_up %>%
+  filter(n.y > 75) %>%
+  mutate(Percent = (n.x / n.y) * 100,
+         Platform = 'DraftKings') -> dk_up
+
+fd_op %>%
+  filter(n.y > 75) %>%
+  mutate(Percent = (n.x / n.y) * 100,
+         Platform = 'FanDuel') -> fd_op
+
+fd_up %>%
+  filter(n.y > 75) %>%
+  mutate(Percent = (n.x / n.y) * 100,
+         Platform = 'FanDuel') -> fd_up
+
+yah_op %>%
+  filter(n.y > 75) %>%
+  mutate(Percent = (n.x / n.y) * 100,
+         Platform = 'Yahoo') -> yah_op
+
+yah_up %>%
+  filter(n.y > 75) %>%
+  mutate(Percent = (n.x / n.y) * 100,
+         Platform = 'Yahoo') -> yah_up
+```
+
+```{r}
+##adding average salary and points per player by platform starting with DK
+##dummy vector to add to later
+dk_sal_avg <- c()
+dk_pts_avg <- c()
+for (i in 1:length(dk_op$PLAYER)) {
+  ##filters og df by wanted player
+  nba_bet %>%
+    filter(PLAYER == dk_op$PLAYER[i]) -> op_player
+  ##calc mean
+  avg_sal <- mean(op_player$draftsal)
+  avg_pts <- mean(op_player$draftp)
+  ##adds to dummy list
+  append(dk_sal_avg, avg_sal) -> dk_sal_avg
+  append(dk_pts_avg, avg_pts) -> dk_pts_avg
+}
+
+dk_op %>%
+  mutate(avg_sal = dk_sal_avg,
+         avg_pts = dk_pts_avg) -> dk_op
+
+##repeat of above but dk_up
+dk_sal_avg <- c()
+dk_pts_avg <- c()
+for (i in 1:length(dk_up$PLAYER)) {
+  nba_bet %>%
+    filter(PLAYER == dk_up$PLAYER[i]) -> up_player
+  avg_sal <- mean(up_player$draftsal)
+  avg_pts <- mean(up_player$draftp)
+  append(dk_sal_avg, avg_sal) -> dk_sal_avg
+  append(dk_pts_avg, avg_pts) -> dk_pts_avg
+}
+
+dk_up %>%
+  mutate(avg_sal = dk_sal_avg,
+         avg_pts = dk_pts_avg) -> dk_up
+```
+
+```{r}
+##repeating again for the other platforms
+fd_sal_avg <- c()
+fd_pts_avg <- c()
+for (i in 1:length(fd_op$PLAYER)) {
+  nba_bet %>%
+    filter(PLAYER == fd_op$PLAYER[i]) -> op_player
+  avg_sal <- mean(op_player$fansal)
+  avg_pts <- mean(op_player$fanp)
+  append(fd_sal_avg, avg_sal) -> fd_sal_avg
+  append(fd_pts_avg, avg_pts) -> fd_pts_avg
+}
+
+fd_op %>%
+  mutate(avg_sal = fd_sal_avg,
+         avg_pts = fd_pts_avg) -> fd_op
+
+fd_sal_avg <- c()
+fd_pts_avg <- c()
+for (i in 1:length(fd_up$PLAYER)) {
+  nba_bet %>%
+    filter(PLAYER == fd_up$PLAYER[i]) -> up_player
+  avg_sal <- mean(up_player$fansal)
+  avg_pts <- mean(up_player$fanp)
+  append(fd_sal_avg, avg_sal) -> fd_sal_avg
+  append(fd_pts_avg, avg_pts) -> fd_pts_avg
+}
+
+fd_up %>%
+  mutate(avg_sal = fd_sal_avg,
+         avg_pts = fd_pts_avg) -> fd_up
+```
+
+```{r}
+yah_sal_avg <- c()
+yah_pts_avg <- c()
+for (i in 1:length(yah_op$PLAYER)) {
+  nba_bet %>%
+    filter(PLAYER == yah_op$PLAYER[i]) -> op_player
+  avg_sal <- mean(op_player$yahsal)
+  avg_pts <- mean(op_player$yahp)
+  append(yah_sal_avg, avg_sal) -> yah_sal_avg
+  append(yah_pts_avg, avg_pts) -> yah_pts_avg
+}
+
+yah_op %>%
+  mutate(avg_sal = yah_sal_avg,
+         avg_pts = yah_pts_avg) -> yah_op
+
+yah_sal_avg <- c()
+yah_pts_avg <- c()
+for (i in 1:length(yah_up$PLAYER)) {
+  nba_bet %>%
+    filter(PLAYER == yah_up$PLAYER[i]) -> up_player
+  avg_sal <- mean(up_player$yahsal)
+  avg_pts <- mean(up_player$yahp)
+  append(yah_sal_avg, avg_sal) -> yah_sal_avg
+  append(yah_pts_avg, avg_pts) -> yah_pts_avg
+}
+
+yah_up %>%
+  mutate(avg_sal = yah_sal_avg,
+         avg_pts = yah_pts_avg) -> yah_up
+```
+
+```{r}
+rbind(dk_op, fd_op, yah_op) -> nba_ob
+rbind(dk_up, fd_up, yah_up) -> nba_up
+
+```
+
+

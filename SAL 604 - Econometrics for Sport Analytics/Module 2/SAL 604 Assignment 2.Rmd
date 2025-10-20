@@ -1,0 +1,84 @@
+---
+title: "SAL 604 Assignment 2"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(readr)
+```
+
+```{r}
+##reading in both data files to be used for the assignment
+nfl_data <- read_csv('data/NFL_Betting.csv')
+ushl_data <- read_csv('data/USHL_Weather.csv')
+```
+
+#1.
+##1.
+```{r}
+##regression of percent home bets as dependent and spread and roadfav as independent
+nfl_mod1 <- lm(HomePercOfBets ~ absspread + roadfav, data = nfl_data)
+summary(nfl_mod1)
+```
+
+##2.
+The percentage of bets on the home team is not entirely independent of the absolute value of the point spread. There is a small positive relationship between the two with a coefficient of 0.01742 that is statistically significant. While the point spread increases the number of home bets the road team being a favorite decreases the percentage of home bets. The coefficient is -0.12940 and is statistically significant.
+
+##3.
+```{r}
+##same as the first regression but change dependent variable to number of bets instead of percentage
+nfl_mod2 <- lm(Bets ~ absspread + roadfav, data = nfl_data)
+summary(nfl_mod2)
+```
+
+##4.
+Both the spread and the road team being the favorite decrease the number of bets according to the model. Both have large negative coefficients with the spread being -3658 and the roadfav being -11468. But the spread is significant while the road being a favorite is not.
+
+##5.
+```{r}
+##adding team dummy variables for home and away
+nfl_mod3 <- lm(Bets ~ absspread + roadfav + HomeTeam + AwayTeam, data = nfl_data)
+summary(nfl_mod3)
+```
+
+##6.
+While the spread and roadfav are still large negative coefficients the spread has increased while the roadfav has decreased. The spread is still significant. The teams play a larger role in the bets with the better teams having a positive coefficient and the worse having negative. Most of the teams that have statistically significant relationships are the worse team that will be in line for the top draft picks. These include the Titans, Jaguars, Patriots, Raiders, and Panthers. So the team dummy variable shows that teams that tend to win more and higher in the standings have more bets for them while the teams that lose more have less bets for them.
+
+#2.
+##1.
+```{r}
+##regression of crowd size based on weather factors
+ushl_mod1 <- lm(Crowd ~ temp + hum + wind + precip, data = ushl_data)
+summary(ushl_mod1)
+```
+
+##2.
+The only significant variable is the temp and it has a negative effect on attendance with a coefficient of -9.966. Which makes sense when the weather is warmer people don't want to be inside. Other negative factors are wind and precip both are insignificant with coefficients of -11.751 and -482.342 respectively. hum is the only variable with a relationship that increases the Crowd but isn't significant. Overall the weather tends to have a negative relationship with Crowd.
+
+##3.
+```{r}
+##adding home team dummy variable to crowd regression
+ushl_mod2 <- lm(Crowd ~ temp + hum + wind + precip + Home, data = ushl_data)
+summary(ushl_mod2)
+```
+
+The results for the weather change a little with all weather factors having a negative relationship with Crowd and wind being significant. Overall the Home team has a larger effect on the crowd swinging it both positive and negative based on the team with around half of the teams having significant results. This makes sense because they are going to the game or not mainly because of the teams and not soley due to the weather. If they bought tickets or decided to go they are going to stick to it. These are all Midwest locations so they are expecting colder weather hard to make them stay home.
+
+##4.
+```{r}
+##adding away team dummy variable to crowd regression
+ushl_mod3 <- lm(Crowd ~ temp + hum + wind + precip + Home + Visiting, data = ushl_data)
+summary(ushl_mod3)
+```
+
+No visiting teams significantly change the attendance but the have coefficients with larger magnitude than the weather but smaller than home teams.
+
+##5.
+Using this information you would be able to staff more people to do the walk up sales form the teams with larger coefficients and less for those with smaller. As well can staff more or less people based on the weather. As well the front office staff can use it to predict how much they will make on which games and when to do promotion nights to increase attendance when there are lower numbers.

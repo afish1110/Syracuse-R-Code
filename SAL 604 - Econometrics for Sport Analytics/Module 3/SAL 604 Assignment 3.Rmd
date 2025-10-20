@@ -1,0 +1,150 @@
+---
+title: "SAL 604 Assignment 3"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(readr)
+library(ggplot2)
+```
+
+```{r}
+MiLB <- read_csv('data/Minor_League_Baseball_Team.csv')
+NBAsalary <- read_csv('data/NBA_Stats_Salary.csv')
+```
+
+#1.
+##1.
+```{r}
+MiLB_mod1 <- lm(turnstile ~ sun + mon + tue + thu + fri + sat + apr + may + july + aug + winpct + temp + opday + merch + food + fireworks + early + mid, data = MiLB)
+```
+
+##2.
+```{r}
+summary(MiLB_mod1)
+```
+
+##3.
+In the model above the only significant variables are aug and fireworks. Both have a high positive effect on turnstile in this model.
+
+##4.
+```{r}
+MiLB_mod2 <- lm(paid ~ sun + mon + tue + thu + fri + sat + apr + may + july + aug + winpct + temp + opday + merch + food + fireworks + early + mid, data = MiLB)
+summary(MiLB_mod2)
+```
+Changing the dependent variable from turnstile to paid sees firework gain more significance while temp and opday are significant instead of aug. opday and fireworks have large positive effects while temp is a small positive.
+
+##5.
+```{r}
+MiLB_mod3 <- lm(nonpaid ~ sun + mon + tue + thu + fri + sat + apr + may + july + aug + winpct + temp + opday + merch + food + fireworks + early + mid, data = MiLB)
+summary(MiLB_mod3)
+```
+Changing the dependent variable to nonpaid results in only aug being significant with a high positive effect.
+
+##6.
+```{r}
+MiLB_mod4 <- lm(percap ~ sun + mon + tue + thu + fri + sat + apr + may + july + aug + winpct + temp + opday + merch + food + fireworks + early + mid, data = MiLB)
+summary(MiLB_mod4)
+```
+With the dependent variable being percap we have 4 significant parts of the model. The intercept, july, aug, and temp are all significant. None of them have a large effect with july and aug having small negative and intercept and temp having small positive.
+
+##7.
+```{r}
+MiLB_mod5 <- lm(percap ~ sun + mon + tue + thu + fri + sat + apr + may + july + aug + winpct + temp + opday + merch + food + fireworks + early + mid + nonpaidratio, data = MiLB)
+summary(MiLB_mod5)
+```
+Adding nonpaidration doesn't change anything to the previous going from the model in part 6 to part 7. The same four are significant, intercept, july, aug, and temp, with the same magnitdues. This model leads to believing that fans that gain free entry don't lead to high amount spent on concessions as the nonpaidratio is insignificant.
+
+#2.
+##1.
+```{r}
+NBA_mod1 <- lm(WS.48 ~ Age + I(Age^2), data = NBAsalary)
+summary(NBA_mod1)
+```
+Using the quadratic model above all components are significant with intercept and Age^2 having small negative effect and Age having small positive effect. 
+
+##2.
+```{r}
+ggplot(NBAsalary, aes(x = Age, y = WS.48)) +
+  geom_point() + stat_smooth(method = loess)
+```
+
+##3.
+```{r}
+positions <- c('PG', 'SG', 'SF', 'PF', 'C')
+NBApos <- NBAsalary %>% filter(Pos %in% positions)
+```
+
+
+```{r}
+NBA_mod2 <- lm(WS.48 ~ Age + I(Age^2) + Pos, data = NBApos)
+summary(NBA_mod2)
+```
+
+```{r}
+##subsets for PG and SF
+NBA.pg <- subset(NBApos, Pos == 'PG')
+NBA.sf <- subset(NBApos, Pos == 'SF')
+```
+
+
+```{r}
+##mapping relationship with the subsets
+ggplot(NBA.pg, aes(x = Age, y = WS.48)) +
+  geom_point() + stat_smooth(method = loess) +
+  ggtitle('WS.48 by Age - PG')
+```
+
+```{r}
+ggplot(NBA.sf, aes(x = Age, y = WS.48)) +
+  geom_point() + stat_smooth(method = loess) +
+  ggtitle('WS.48 by Age - SF')
+```
+Based on the graphs the relationship between Age and WS.48 when focusing on 1 position doesn't appear to change a lot. It is still a wide quadratic with a peak in the late 20s or early 30s. Using the model above that adds a variable for position the positions that change WS.48 the least is PF with SG being the most.
+
+##4.
+```{r}
+NBA_mod3 <- lm(WS.48 ~ Cap.Hit + I(Cap.Hit^2), data = NBAsalary)
+summary(NBA_mod3)
+```
+Using the Cap.Hit model we have all 3 components significant. Intercept and Cap.Hit are small positive effect while Cap.Hit^2 is small negative effect
+
+##5.
+```{r}
+ggplot(NBAsalary, aes(x = Cap.Hit, y = Salary)) +
+  geom_point() + stat_smooth(method = loess)
+```
+
+##6.
+```{r}
+##looking at MP and salary
+##assuming linear relationship as the starters and people getting more time get more money and more counting stats
+NBA_mod4 <- lm(Salary ~ MP, data = NBApos)
+summary(NBA_mod4)
+```
+
+```{r}
+ggplot(NBApos, aes(MP, Salary)) +
+  geom_point() + stat_smooth(method = lm)
+```
+
+```{r}
+##looking at a subset of over 1000 MP
+NBA.3000 <- subset(NBApos, MP > 1000)
+NBA_mod5 <- lm(Salary ~ MP, data = NBA.3000)
+summary(NBA_mod5)
+```
+
+```{r}
+ggplot(NBA.3000, aes(MP, Salary)) +
+  geom_point() + stat_smooth(method = lm)
+```
+
+Overall it is difficult to map MP to Salary as players get injured or lose their job and all of the sudden aren't playing the minutes they are being paid to play. As well free agency plays a role in elevated salaries. Overall in the linear relationship MP is significant in both sets having a large positive effect on Salary.

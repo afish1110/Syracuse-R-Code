@@ -1,0 +1,161 @@
+---
+title: "SAL 604 Assignment 6"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(readr)
+library(urca)
+library(rpart)
+library(rpart.plot)
+library(tseries)
+library(foreign)
+library(car)
+library(lmtest)
+library(sandwich)
+```
+
+```{r}
+stocks <- read_csv('data/stocks.csv')
+no_show <- read_csv('data/No_shows.csv')
+```
+#1.
+##1.
+
+```{r}
+##unit root tests NASDAQ
+adf.test(stocks$NASDAQ, k = 1)
+summary(ur.df(stocks$NASDAQ, c('trend'), lags = 1))
+```
+
+```{r}
+##unit root test Callaway
+adf.test(stocks$Callaway, k = 1)
+summary(ur.df(stocks$Callaway, c('trend'), lags = 1))
+```
+
+```{r}
+##unit root test Ceasars
+adf.test(stocks$Caesars, k = 1)
+summary(ur.df(stocks$Caesars, c('trend'), lags = 1))
+```
+
+For all 3 series we fail to reject the null hypothesis of a unit root so we assume I(1) nonstationary
+
+##2.
+
+```{r}
+model1 <- lm(Callaway ~ NASDAQ, data = stocks)
+model2 <- lm(Caesars ~ NASDAQ, data = stocks)
+model3 <- lm(Caesars ~ Callaway, data = stocks)
+summary(model1)
+summary(model2)
+summary(model3)
+resid1 <- resid(model1)
+resid2 <- resid(model2)
+resid3 <- resid(model3)
+```
+
+```{r}
+adf.test(resid1, k = 1)
+summary(ur.df(resid1, c('trend'), lags = 1))
+```
+
+```{r}
+adf.test(resid2, k = 1)
+summary(ur.df(resid2, c('trend'), lags = 1))
+```
+
+```{r}
+adf.test(resid3, k = 1)
+summary(ur.df(resid3, c('trend'), lags = 1))
+```
+
+From the Engle-Granger Test we fail to reject the null with models 1 and 2 but on model 3 we can reject the null at the 5% level meaning we have cointegration
+
+##3.
+
+```{r}
+##correcting for cointegration using ECM on model 3
+lag_res <- lag(resid3)
+lag_res <- lag_res[2:length(lag_res)]
+
+##new model 3
+model3 <- lm(diff(Caesars) ~ diff(Callaway) + lag_res, data = stocks)
+summary(model3)
+```
+
+With the ECM correction for model3 we have the diff(Callaway) significant at the 0.1% level with a large positive effect. As well lag_res is significant at the 5% level with a negative effect. lag_res is our error correction term.
+
+```{r}
+model1 <- lm(diff(Callaway) ~ diff(NASDAQ), data = stocks)
+summary(model1)
+model2 <- lm(diff(Caesars) ~ diff(NASDAQ), data = stocks)
+summary(model2)
+```
+
+With no cointegration on models 1 and 2 we take first differences. For model1 we have diff(NASDAQ) significant at the 0.1% level with a large positive effect on diff(Callaway). For model 2 we have the same for diff(NASDAQ) but the effect is on diff(Caesars).
+
+#2,
+##1.
+
+```{r}
+summary(no_show$notatt)
+```
+
+
+```{r}
+noshow_tree <- rpart(notatt ~ ., data = no_show)
+rpart.plot(noshow_tree)
+```
+
+##5.
+
+The decision tree depicts the average number of no shows given the situations. So on average given any game there is 5860 no shows. When you split into groups based on winpct. When wpct >= 0.2 the average number of no shows decreases to 5047 and this occurs in 69% of games. Whereas the other 31% has an increase to an average of 7648 no shows. Breaking down even further, looking at the winpct >= 0.2 it breaks into groups based on the total. When it is greater than or equal to 48 th no shows decrease even more bringing it down to 4330 which this occurs 28% of the time. The other side of it sees an increase to 5543 which happens 41% of the time. Overall as the chart expands to the left the average number of no shows decreases.
+
+##6.
+```{r}
+ns_lm <- lm(notatt ~ absline + total + hum + precip + wind + thur + mon + sunnight + div + winpct + sep + oct + nov, data = no_show)
+summary(ns_lm)
+```
+
+```{r}
+vif(ns_lm)
+```
+
+Issues with multicollinearity surrounding the month dummies so will take out oct since it is the highest
+
+```{r}
+ns_lm <- lm(notatt ~ absline + total + hum + precip + wind + thur + mon + sunnight + div + winpct + sep + nov, data = no_show)
+summary(ns_lm)
+vif(ns_lm)
+```
+No more issues with multicollinearity with oct removed
+
+```{r}
+##test for heteroskedasticity
+##BP test
+bptest(ns_lm)
+##White test
+bptest(ns_lm, ~ fitted(ns_lm) + I(fitted(ns_lm)^2))
+```
+
+BP and White tests fail to reject null
+
+##7.
+
+```{r}
+summary(ns_lm)
+```
+
+AFter checking and correcting for multicollinearity and heteroskedasticity we have the results above. The only significant variable is winpct at the 1% level with a large negative effect
+
+##8.
+Based on the model and decision tree we can see the first split is the only significant explanatory variable. And just like the tree shows it has a large impact on making the number of no shows smaller. The total makes sense within the scope of what fans want to see, but within the model it isn't significant or very close to being. So that decision is clearly consumption based.

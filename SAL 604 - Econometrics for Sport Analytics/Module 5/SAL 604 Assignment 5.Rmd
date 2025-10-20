@@ -1,0 +1,222 @@
+---
+title: "SAL 604 Assignment 5"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+##packages
+library(tidyverse)
+library(readr)
+library(car)
+library(e1071)
+library(lmtest)
+library(sandwich)
+library(ggplot2)
+```
+
+```{r}
+##files
+nfl_web <- read_csv('data/NFL_Website.csv')
+nfl_fd <- read_csv('data/NFL_FD.csv')
+nba <- read_csv('data/NBA_Stats_Salary_4_2_23.csv')
+```
+
+#1.
+##1.
+```{r}
+model1 <- lm(rating ~ mov + combsc + thur + mon + oct + nov + dec + late + Division + OT + Penalties + sumwin, data = nfl_web)
+summary(model1)
+```
+##2.
+
+For model1 we have 3 variables significant at the 0.1% level, mov, combsc, and sumwin. The effects are small negative, small positive, and large positive respectively. The intecept is also significant at this level. At the 1% level OT is significant with a large positive effect. At the 5% level late and Division are significant with small positive effects. 
+
+##3.
+```{r}
+##plotting residuals to check homoskedasticity
+plot(fitted(model1), resid(model1))
+##looks like a lot of white noise maybe a slitght linear negative relationship will further test with BP and White tests
+```
+
+```{r}
+##BP test
+bptest(model1)
+```
+
+```{r}
+##White test
+bptest(model1, ~ fitted(model1) + I(fitted(model1)^2))
+```
+
+According to the tests we reject the null hypothesis of no heteroskedasticity
+
+##4.
+```{r}
+hccm(model1)
+```
+
+```{r}
+##correcting hetero
+coeftest(model1, vcov. = hccm)
+```
+
+After correction mov, combsc, late, Division, OT, and sumwin are all significant.
+
+##5.
+```{r}
+model2 <- lm(rating ~ line + total + thur + mon + oct + nov + dec + late + Division + OT + Penalties + sumwin, data = nfl_web)
+summary(model2)
+```
+
+```{r}
+##plotting residuals
+plot(fitted(model2), resid(model2))
+```
+
+Appearance of linear pattern possible hetero
+
+```{r}
+##BP test
+bptest(model2)
+```
+
+```{r}
+##White test
+bptest(model2, ~ fitted(model2) + I(fitted(model2)^2))
+```
+
+Reject null hypothesis
+
+```{r}
+##Correcting hetero
+hccm(model2)
+coeftest(model2, vcov. = hccm)
+```
+
+After correcting for heteroskedasticity OT and sumwin are significant at the 0.1% level with large positive effects. late is significant at the 10% level with a small positive effect.
+
+##6.
+```{r}
+model3 <- lm(number ~ mov + combsc + thur + mon + oct + nov + dec + late + Division + OT + Penalties + sumwin, data = nfl_web)
+summary(model3)
+```
+
+```{r}
+plot(fitted(model3), resid(model3))
+```
+
+```{r}
+bptest(model3)
+```
+
+```{r}
+bptest(model3, ~ fitted(model3) + I(fitted(model3)^2))
+```
+
+Fail to reject no adjustments needed
+
+#2.
+##1.
+```{r}
+model1 <- lm(FD.points ~ FD.salary + Pos + h.a + Oppt, data = nfl_fd)
+summary(model1)
+```
+##2.
+The variables that are significant are FD.salary, PosQB, PosRB, PosTE, PosWR. All are significant at the 0.1% level with small negative effects on the positions and small positive on Fd.salary
+
+##3.
+```{r}
+plot(fitted(model1), resid(model1))
+```
+
+```{r}
+bptest(model1)
+```
+
+```{r}
+bptest(model1, ~ fitted(model1) + I(fitted(model1)^2))
+```
+
+Reject the null
+
+##4.
+```{r}
+hccm(model1)
+coeftest(model1, vcov. = hccm)
+```
+
+After correcting for heteroskedasticity we have no change in the results
+
+##5.
+```{r}
+nfl_nonzero <- subset(nfl_fd, FD.points > 0)
+```
+
+```{r}
+model2 <- lm(FD.points ~ FD.salary + Pos + h.a + Oppt, data = nfl_nonzero)
+summary(model2)
+```
+
+```{r}
+plot(fitted(model2), resid(model2))
+```
+
+```{r}
+bptest(model2)
+```
+
+```{r}
+bptest(model2, ~ fitted(model2) + I(fitted(model2)^2))
+```
+
+Reject null
+
+```{r}
+hccm(model2)
+coeftest(model2, vcov. = hccm)
+```
+
+When filtering the data set to on include players with positive fantasy points PosQB is significant at the 1% level instead of 0.1%. As well many opponents become significant. The only opponents with no significance are Green Bay, LA Rams, New Orleans, Pittsburgh, San Fran, Tampa Bay, and Washington. All of the other opponents are significant at the 10%, 5%, or 1% level, except Detroit which is significant at the 0.1% level
+
+#3.
+```{r}
+set.seed(1234)
+sample_index <- sample(nrow(nba), round(nrow(nba) * .75), replace = FALSE)
+nba_train <- nba[sample_index, ]
+nba_test <- nba[-sample_index, ]
+```
+
+```{r}
+round(prop.table(table(select(nba, Pos))), 2)
+```
+
+```{r}
+round(prop.table(table(select(nba_train, Pos))), 2)
+```
+
+```{r}
+round(prop.table(table(select(nba_test, Pos))), 2)
+```
+
+```{r}
+nba_mod <- naiveBayes(Pos ~ ., data = nba_train, laplace = 1)
+nba_mod
+```
+
+```{r}
+nba_pred <- predict(nba_mod, nba_test, type = 'class')
+nba_pred_table <- table(nba_test$Pos, nba_pred)
+nba_pred_table
+```
+
+```{r}
+sum(diag(nba_pred_table)) / nrow(nba_test)
+```
+
+This is less accurate than the KNN from last week. With k = 3, 5 we had results of 58.9% and 60.8%

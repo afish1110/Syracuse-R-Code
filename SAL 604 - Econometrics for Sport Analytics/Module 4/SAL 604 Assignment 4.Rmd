@@ -1,0 +1,197 @@
+---
+title: "SAL 604 Assignment 4"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(car)
+library(readr)
+library(class)
+library(dummy)
+```
+
+```{r}
+nba <- read_csv('data/NBA_Stats_Salary_4_2_23.csv')
+ncaaf <- read_csv('data/per_caps_NCAAF.csv')
+```
+
+
+#1.
+Splitting the first question up by model. Will complete each part for the first model then the second starting with the concessions.
+##1.
+```{r}
+##using all of the variables to start will test for multicollinearity and go from there
+concessions <- lm(pccon ~ wp + owp + confgame + Thurs + Friday + smallconf + bigconf + hf + absline + total, data = ncaaf)
+summary(concessions)
+```
+
+##2.
+With all of the variables in the model we have statistically significant on Friday and absline at the 5% level, hf at the 10% level, and the intercept at the 0.1% level. With the significant variables having a positive effect except absline.
+
+##3.
+```{r}
+vif(concessions)
+```
+
+smallconf posses a big problem
+
+##4.
+```{r}
+##new model reducing multicollinearity by removing variables with VIF > 5
+concessions <- lm(pccon ~ wp + owp + confgame + Thurs + Friday + bigconf + hf + absline + total, data = ncaaf)
+summary(concessions)
+```
+
+Removing smallconf changes the model by having wp significant at the 5% level with a positive effect. All other variable significance remains the same.
+
+```{r}
+##double checking multicollinearity
+vif(concessions)
+```
+
+This double checks that all the variables are under 5 when looking at VIF
+
+Now for novelties
+##1.
+```{r}
+novelties <- lm(pcnov ~ wp + owp + confgame + Thurs + Friday + smallconf + bigconf + hf + absline + total, data = ncaaf)
+summary(novelties)
+```
+
+##2.
+With this model we have statistical significance with Thurs at the 5% level and Friday at the 10% level. Both are small negative effects. As well the intercept is significant at the 5% level with a small positive effect.
+
+##3.
+```{r}
+vif(novelties)
+```
+
+smallconf is a large problem with multicollinearity
+
+##4.
+```{r}
+novelties <- lm(pcnov ~ wp + owp + confgame + Thurs + Friday + bigconf + hf + absline + total, data = ncaaf)
+summary(novelties)
+```
+
+Removing smallconf makes Thurs more significant now at the 1% level all other significances remain the same.
+
+```{r}
+vif(novelties)
+```
+
+Removing small conference fixed the multicollinearity issues.
+
+#2.
+```{r}
+normalize <- function(x){
+  return((x - min(x)) / (max(x) - min(x)))
+}
+```
+
+```{r}
+##normalizing df
+nba %>% mutate(
+  Cap.Hit = normalize(Cap.Hit),
+  Age = normalize(Age),
+  G = normalize(G),
+  MP = normalize(MP),
+  PER = normalize(PER),
+  TS = normalize(TS),
+  X3PAr = normalize(X3PAr),
+  FTr = normalize(FTr),
+  ORB = normalize(ORB),
+  DRB = normalize(DRB),
+  TRB = normalize(TRB),
+  AST = normalize(AST),
+  STL = normalize(STL),
+  BLK = normalize(BLK),
+  TOV = normalize(TOV),
+  USG = normalize(USG),
+  OWS = normalize(OWS),
+  DWS = normalize(DWS),
+  WS = normalize(WS),
+  WS.48 = normalize(WS.48),
+  OBPM = normalize(OBPM),
+  DBPM = normalize(DBPM),
+  BPM = normalize(BPM),
+  VORP = normalize(VORP)) -> nba
+```
+
+```{r}
+##removing position from df and 
+pos_labels <- nba$Pos
+nba_noPos <- nba %>% select(-Pos)
+```
+
+```{r}
+set.seed(1234)
+sample_index <- sample(nrow(nba), round(nrow(nba) * .75), replace = FALSE)
+nba_train <- nba_noPos[sample_index, ]
+nba_test <- nba_noPos[-sample_index, ]
+train_labels <- (pos_labels[sample_index])
+test_labels <- (pos_labels[-sample_index])
+```
+
+```{r}
+pos_pred3 <- knn(
+  train = nba_train,
+  test = nba_test,
+  cl = train_labels,
+  k = 3
+)
+```
+
+```{r}
+pos_pred3_table <- table(test_labels, pos_pred3)
+pos_pred3_table
+```
+
+```{r}
+sum(diag(pos_pred3_table)) / nrow(nba_test)
+```
+
+```{r}
+pos_pred4 <- knn(
+  train = nba_train,
+  test = nba_test,
+  cl = train_labels,
+  k = 4
+)
+```
+
+```{r}
+pos_pred4_table <- table(test_labels, pos_pred4)
+pos_pred4_table
+```
+
+```{r}
+sum(diag(pos_pred4_table)) / nrow(nba_test)
+```
+
+```{r}
+pos_pred5 <- knn(
+  train = nba_train,
+  test = nba_test,
+  cl = train_labels,
+  k = 5
+)
+```
+
+```{r}
+pos_pred5_table <- table(test_labels, pos_pred5)
+pos_pred5_table
+```
+
+```{r}
+sum(diag(pos_pred5_table)) / nrow(nba_test)
+```
+
+In this instance as k increased the predictions became more accurate. This is because there was more nearest neighbors to compare. As well k = 4 didn't change from 3 because you want k to be odd.

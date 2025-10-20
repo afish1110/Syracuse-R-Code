@@ -1,0 +1,116 @@
+---
+title: "SAL 621 Group Project 1"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(readr)
+library(ggplot2)
+library(car)
+```
+
+```{r}
+NFLdata <- read_csv('data/NFL_Oddssharks_2020-2024_621_2_27_25_v2.csv')
+```
+
+
+```{r}
+NFLdata %>% mutate(sumscore = HomeScore + AwayScore) -> NFLdata
+```
+
+```{r}
+NFLdata[complete.cases(NFLdata), ] -> NFLdata
+```
+
+
+```{r}
+totals_mod1 <- lm(sumscore ~ Total, data = NFLdata)
+summary(totals_mod1)
+linearHypothesis(totals_mod1, c('(Intercept) = 0', 'Total = 1'))
+```
+Can't reject the null hypothesis that totals_mod1 is better than the intercept model will look at the relationship to determine the type of model to use.
+```{r}
+ggplot(NFLdata, aes(Total, sumscore)) +
+  geom_point() + xlab('Vegas Line Total') +
+  ylab('Game Total') + ggtitle('Vegas Line v Game - Total')
+```
+
+Takes the form of a linear relationship so will start adding more explanatory variables
+
+```{r}
+##hard coding the hypothesis for Home and Away teams so dont have to type them out multiple times and saves space
+mod2_hyp <- c('(Intercept) = 0', 'Total = 1', 'HomeTeamAtlanta = HomeTeamBaltimore', 'HomeTeamBaltimore = HomeTeamBuffalo', 'HomeTeamBuffalo = HomeTeamCarolina', 'HomeTeamCarolina = HomeTeamChicago', 'HomeTeamChicago = HomeTeamCincinnati', 'HomeTeamCincinnati = HomeTeamCleveland', 'HomeTeamCleveland = HomeTeamDallas', 'HomeTeamDallas = HomeTeamDenver', 'HomeTeamDenver = HomeTeamDetroit', 'HomeTeamDetroit = HomeTeamGreen Bay', 'HomeTeamGreen Bay = HomeTeamHouston', 'HomeTeamHouston = HomeTeamIndianapolis', 'HomeTeamIndianapolis = HomeTeamJacksonville', 'HomeTeamJacksonville = HomeTeamKansas City', 'HomeTeamKansas City = HomeTeamLA Chargers', 'HomeTeamLA Chargers = HomeTeamLA Rams', 'HomeTeamLA Rams = HomeTeamLas Vegas', 'HomeTeamLas Vegas = HomeTeamMiami', 'HomeTeamMiami = HomeTeamMinnesota', 'HomeTeamMinnesota = HomeTeamNew England', 'HomeTeamNew England = HomeTeamNew Orleans', 'HomeTeamNew Orleans = HomeTeamNY Giants', 'HomeTeamNY Giants = HomeTeamNY Jets', 'HomeTeamNY Jets = HomeTeamPhiladelphia', 'HomeTeamPhiladelphia = HomeTeamPittsburgh', 'HomeTeamPittsburgh = HomeTeamSan Francisco', 'HomeTeamSan Francisco = HomeTeamSeattle', 'HomeTeamSeattle = HomeTeamTampa Bay', 'HomeTeamTampa Bay = HomeTeamTennessee', 'HomeTeamTennessee = HomeTeamWashington')
+```
+
+```{r}
+mod3_hyp <- c('(Intercept) = 0', 'Total = 1', 'HomeTeamAtlanta = HomeTeamBaltimore', 'HomeTeamBaltimore = HomeTeamBuffalo', 'HomeTeamBuffalo = HomeTeamCarolina', 'HomeTeamCarolina = HomeTeamChicago', 'HomeTeamChicago = HomeTeamCincinnati', 'HomeTeamCincinnati = HomeTeamCleveland', 'HomeTeamCleveland = HomeTeamDallas', 'HomeTeamDallas = HomeTeamDenver', 'HomeTeamDenver = HomeTeamDetroit', 'HomeTeamDetroit = HomeTeamGreen Bay', 'HomeTeamGreen Bay = HomeTeamHouston', 'HomeTeamHouston = HomeTeamIndianapolis', 'HomeTeamIndianapolis = HomeTeamJacksonville', 'HomeTeamJacksonville = HomeTeamKansas City', 'HomeTeamKansas City = HomeTeamLA Chargers', 'HomeTeamLA Chargers = HomeTeamLA Rams', 'HomeTeamLA Rams = HomeTeamLas Vegas', 'HomeTeamLas Vegas = HomeTeamMiami', 'HomeTeamMiami = HomeTeamMinnesota', 'HomeTeamMinnesota = HomeTeamNew England', 'HomeTeamNew England = HomeTeamNew Orleans', 'HomeTeamNew Orleans = HomeTeamNY Giants', 'HomeTeamNY Giants = HomeTeamNY Jets', 'HomeTeamNY Jets = HomeTeamPhiladelphia', 'HomeTeamPhiladelphia = HomeTeamPittsburgh', 'HomeTeamPittsburgh = HomeTeamSan Francisco', 'HomeTeamSan Francisco = HomeTeamSeattle', 'HomeTeamSeattle = HomeTeamTampa Bay', 'HomeTeamTampa Bay = HomeTeamTennessee', 'HomeTeamTennessee = HomeTeamWashington', 'AwayTeamAtlanta = AwayTeamBaltimore', 'AwayTeamBaltimore = AwayTeamBuffalo', 'AwayTeamBuffalo = AwayTeamCarolina', 'AwayTeamCarolina = AwayTeamChicago', 'AwayTeamChicago = AwayTeamCincinnati', 'AwayTeamCincinnati = AwayTeamCleveland', 'AwayTeamCleveland = AwayTeamDallas', 'AwayTeamDallas = AwayTeamDenver', 'AwayTeamDenver = AwayTeamDetroit', 'AwayTeamDetroit = AwayTeamGreen Bay', 'AwayTeamGreen Bay = AwayTeamHouston', 'AwayTeamHouston = AwayTeamIndianapolis', 'AwayTeamIndianapolis = AwayTeamJacksonville', 'AwayTeamJacksonville = AwayTeamKansas City', 'AwayTeamKansas City = AwayTeamLA Chargers', 'AwayTeamLA Chargers = AwayTeamLA Rams', 'AwayTeamLA Rams = AwayTeamLas Vegas', 'AwayTeamLas Vegas = AwayTeamMiami', 'AwayTeamMiami = AwayTeamMinnesota', 'AwayTeamMinnesota = AwayTeamNew England', 'AwayTeamNew England = AwayTeamNew Orleans', 'AwayTeamNew Orleans = AwayTeamNY Giants', 'AwayTeamNY Giants = AwayTeamNY Jets', 'AwayTeamNY Jets = AwayTeamPhiladelphia', 'AwayTeamPhiladelphia = AwayTeamPittsburgh', 'AwayTeamPittsburgh = AwayTeamSan Francisco', 'AwayTeamSan Francisco = AwayTeamSeattle', 'AwayTeamSeattle = AwayTeamTampa Bay', 'AwayTeamTampa Bay = AwayTeamTennessee', 'AwayTeamTennessee = AwayTeamWashington')
+```
+
+
+
+```{r}
+totals_mod2 <- lm(sumscore ~ Total + HomeTeam, data = NFLdata)
+summary(totals_mod2)
+linearHypothesis(totals_mod2, mod2_hyp)
+```
+
+```{r}
+totals_mod3 <- lm(sumscore ~ Total + HomeTeam + AwayTeam, data = NFLdata)
+summary(totals_mod3)
+#testing if all home and away teams have same coefficients/effect as well as intercept being
+linearHypothesis(totals_mod3, mod3_hyp)
+```
+
+
+It is looking like adding the teams is helping the linear relationship so will now perform an ANOVA test to see which model is better
+```{r}
+anova(totals_mod2, totals_mod3)
+anova(totals_mod1, totals_mod2)
+anova(totals_mod1, totals_mod3)
+```
+According to the anova testing the totals_mod2 is the best option as it is statistically significant from totals_mod1 and satisfies the linear hypothesis test.
+
+
+```{r}
+##testing for multicolinearity within our 3 models
+vif(totals_mod2)
+vif(totals_mod3)
+```
+Very little if any multicolinearity within all of the models
+
+```{r}
+summary(NFLdata$Total)
+```
+
+
+In all 3 models the Residuals are over predicted at the higher end of the totals. Will still examine both tails, but expecting Unders to hit more on the higher end and less on the lower end.
+```{r}
+NFLdata %>% count(OU) -> count_ou
+count_ou
+count_ou$n[3] / sum(count_ou$n)
+```
+
+```{r}
+NFLdata %>% filter(Total < 41) -> NFLq1
+NFLq1 %>% count(OU) -> count_ou
+count_ou
+count_ou$n[3] / sum(count_ou$n)
+```
+
+```{r}
+NFLdata %>% filter(Total > 48) -> NFLq3
+NFLq3 %>% count(OU) -> count_ou
+count_ou
+count_ou$n[3] / sum(count_ou$n)
+```
+
+
+
+

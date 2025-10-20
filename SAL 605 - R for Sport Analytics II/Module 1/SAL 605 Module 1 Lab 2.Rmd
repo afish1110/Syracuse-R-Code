@@ -1,0 +1,90 @@
+---
+title: "SAL 605 Module 1 Lab 2"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+##packages
+library(tidyverse)
+library(Lahman)
+library(ggplot2)
+library(ggthemes)
+```
+
+```{r}
+##Mike Trout's player id from Lahman
+trout_id <- People %>%
+  ##looks to make sure it is only Mike Trout selected
+  filter(nameFirst == 'Mike' & nameLast == 'Trout') %>%
+  ##assigns playerID to the variable trout_id
+  pull(playerID)
+```
+
+```{r}
+##getting appropriate stats from the batting data frame
+trout_stats <- Batting %>%
+  ##selects only rows with Trout's playerID
+  filter(playerID == trout_id) %>%
+  ##joins with player info data frame by playerID
+  ##inner join means we will filter out all non Mike Trout players
+  inner_join(., People, by = join_by('playerID')) %>%
+  ##since MLB has age based on June 30 need to adjust the birth year of players for simple math
+  ##if born after June 30 adds a year to birthyear to account for this rule
+  mutate(birthyear = case_when(birthMonth >= 7 ~ birthYear + 1,
+                               .default = birthYear),
+         ##calculating age subtract current year nd birth year
+         Age = yearID - birthyear,
+         ##Total Bases stat will be used later just makes easier to read later formula
+         TotalBases = H + 2 * X2B + 3 * X3B + 4 * HR,
+         ##Runs Created it is rounded to 2 decimal places
+         RunsCreated = round(((H + BB) * TotalBases) / (AB + BB), 2)) %>%
+  ##only taking necessary columns Age and our stat Runs Created
+  select(Age, RunsCreated)
+```
+
+```{r}
+##model of runs created by age (quadratic)
+trout_model <- lm(RunsCreated ~ I(Age - 30) + I((Age - 30) ^ 2), data = trout_stats)
+##coefficients of the model to be used later
+b <- coef(trout_model)
+b
+##calculating max age and max runs created the x, y value of the "peak"
+max_age <- 30 - b[2] / (2 * b[3])
+max_rc <- b[1] - ((b[2] ^2) / (4 * b[3]))
+```
+
+```{r}
+##visualization of Trouts Career Trajectory using Runs Created
+ggplot(trout_stats, aes(Age, RunsCreated)) +
+  ##scatter plot
+  geom_point(color = 'orange2') + 
+  ##fitting line using quadratic
+  geom_smooth(method = 'lm', se = FALSE, size = 1.25, color = 'midnightblue',
+              formula = y ~ poly(x, 2, raw = TRUE)) +
+  ##x and y intercepts for peak based on model
+  geom_vline(xintercept = max_age, linetype = 2, color = 'darkslategray') + 
+  geom_hline(yintercept = max_rc, linetype = 2, color = 'darkslategray') +
+  ##labeling intercepts
+  annotate(geom = 'text', x = c(25.5, 19), y = c(15, 165),
+           label = c('Peak Age', 'Max'), size = 4) +
+  ##chart labels
+  labs(title = 'Mike Trout Career Trajectory - Runs Created',
+         x = 'Age',
+         y = 'Runs Created',
+         caption = 'Data from Lahman Database') + 
+  ##centering chart title
+  theme(plot.title = element_text(hjust = 0.5)) +
+  ##chart theme
+  theme_clean()
+```
+
+```{r}
+ggsave('TroutTrajectoryPlot.pdf')
+```
+

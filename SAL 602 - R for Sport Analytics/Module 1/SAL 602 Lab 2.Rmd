@@ -1,0 +1,29 @@
+---
+title: "SAL 602 Lab 2"
+author: "Andrew Fish"
+date: "2024-10-24"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Red Sox Batters Ranked by WAR
+
+For this lab we will be looking at 3 Red Sox batters and looking for the top batter based on their respective WAR. The batters are Jarren Duran, Rafael Devers, and Tyler O'Neil.
+
+```{r echo=TRUE}
+JarrenDuran <- 7.9
+RafaelDevers <- 3.9
+TylerOneil <- 2.6
+
+if ((TylerOneil >= RafaelDevers) & (TylerOneil >= JarrenDuran)){
+  print("The top player is Tyler O'Neil")
+}else if((RafaelDevers >= TylerOneil) & (RafaelDevers >= JarrenDuran)){
+  print("The top player is Rafael Devers")
+}else if((JarrenDuran >= TylerOneil) & (JarrenDuran >= RafaelDevers)){
+  print("The top player is Jarren Duran")
+}
+```
+

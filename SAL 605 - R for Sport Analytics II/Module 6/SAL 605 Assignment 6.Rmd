@@ -1,0 +1,66 @@
+---
+title: "SAL 605 Assignment 6"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(BasketballAnalyzeR)
+```
+
+
+```{r}
+##setting up data frame for assist network of GSW
+PbP.GSW <- PbP.BDB %>% 
+  PbPmanipulation() %>% 
+  ##filters down to only GSW events
+  filter(team == 'GSW' &
+           ##can't have assists on shots that aren't 2s or 3s
+           ShotType %in% c('2P', '3P'))
+```
+
+
+```{r}
+##expected point value
+mean(PbP.GSW$points)
+```
+
+
+```{r}
+##assist network
+netdata <- assistnet(PbP.GSW)
+set.seed(2022) ##last GSW Championship
+plot(netdata, layout = 'circle', edge.thr = 20)
+```
+
+
+```{r}
+##want to repeat the process without Steph Curry
+##removing steph curry from the data
+PbP.GSW.SCO <- PbP.GSW %>% 
+  filter(if_all(a1:h5, ~ 'Stephen Curry' != .x))
+```
+
+
+```{r}
+##mean points without Curry on the court
+mean(PbP.GSW.SCO$points)
+```
+
+
+```{r}
+##assist network without Curry on court
+netdata <- assistnet(PbP.GSW.SCO)
+set.seed(30) ##Steph Curry
+plot(netdata, layout = 'circle', edge.thr = 20)
+```
+
+
+
+When Steph Curry is on the floor a lot of the offense flows through him. In the first plot we see a lot of lines coming from or too Curry, showing him scoring points or getting assist. As well this chart sees the offense is more diverse and more players are involved when Curry is on the court. When he isn't on the court the offense is mainly 4 players, Draymond Green, Klay Thompson, Kevin Durant, and David West. Most of the assists are from Draymond Green, and Thompson and Durant do most of the scoring. We can see the difference in the offense with the expected point values as well. When Curry is on the floor it is 1.138 pts and when he isn't it is 1.077. This decrease could be explained by the difference in the offense's complexity when Curry is on the floor versus when he isn't. Overall the Golden State offense does better and is more diverse when Curry is on the floor compared to when he is on the bench.

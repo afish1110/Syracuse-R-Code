@@ -1,0 +1,116 @@
+---
+title: "SAL 604 Assignment 1"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+##loading in packages have tidyverse as it is easier for data manipulation and cleaning
+library(broom)
+library(ggplot2)
+library(tidyverse)
+library(readr)
+```
+
+```{r}
+NBAPlayers <- read_csv('data/NBA_Players.csv')
+NCAAFOdds <- read_csv('data/NCAAF_Odds_2024.csv')
+```
+
+#1
+##a.
+```{r}
+##summary stats of players
+summary(NBAPlayers)
+
+```
+
+##b.
+```{r}
+##linear model between Salary and PTS (pts per game)
+player_mod <- lm(Salary ~ PTS, data = NBAPlayers)
+summary(player_mod)
+```
+
+##c.
+
+In the summary both the intercept and PTS are statistically significant. PTS has positivie coefficient of 1,050,465. So for every Point per Game a player scores they earn $1,050,465 or every $1,050,465 spent on a player is 1.0 pts per game. Intercept is negative so no real world interpretation.
+
+##d.
+```{r}
+##manually entered slope and intercept using geom_abline since stat_smooth wasn't woking
+player_plot <- ggplot(NBAPlayers, aes(PTS, Salary)) +
+  ##alpha makes all of the points easier to see
+  geom_point(alpha = 0.5) +
+  ##changed the size and color of the line to make model easier to see
+  geom_abline(slope = player_mod$coefficients[[2]], intercept = player_mod$coefficients[[1]], color = 'maroon', size = 1.5)
+
+player_plot
+```
+
+##e.
+```{r}
+##using vector notation plugging 10, 20, 30 into our model
+x <- c(10, 20, 30)
+y <- 1050465 * x - 2282281
+y
+```
+
+#2.
+
+##a.
+```{r}
+odds_mod <- lm(scorediff ~ favline, data = NCAAFOdds)
+summary(odds_mod)
+```
+
+##b.
+
+Neither the intercept or favline are significant. Favline has a negative coefficient meaning as the favline gets higher the scorediff will be less resulting in a closer game. 
+
+##c.
+```{r}
+odds_plot <- ggplot(NCAAFOdds, aes(favline, scorediff)) +
+  geom_point(alpha = 0.5) +
+  geom_abline(slope = odds_mod$coefficients[[2]], intercept = odds_mod$coefficients[[1]], color = 'green')
+odds_plot
+```
+
+After looking at the plot we can see that the model may be better than we thought based on the summary as there are 3 outliers in the data set that are skewing the results
+
+```{r}
+##manually removing the 3 outlier rows and assigning to a copy data frame
+copy_NCAAFOdds <- NCAAFOdds[-c(519, 575, 705), ]
+```
+
+```{r}
+new_odds_mod <- lm(scorediff ~ favline, data = copy_NCAAFOdds)
+summary(new_odds_mod)
+```
+
+Under the model with removing outliers or incorrect data we see that the favline becomes statistically significant
+
+##d. 
+
+```{r}
+odds_mod2 <- lm(sumscore ~ total, data = NCAAFOdds)
+summary(odds_mod2)
+```
+
+##e.
+With the second model we have neither the intercept or the total being significant in determining the sumscore. The total has a negative coefficient meaning that according to the model every 1 the total increases the sumscore decreases 13. Which doesn't make a lot of sense in terms of the betting realm. As the total number goes up you would expect the sumscore to increase as well.
+
+##f.
+
+```{r}
+odds_plot2 <- ggplot(NCAAFOdds, aes(total, sumscore)) +
+  geom_point(alpha = 0.5) +
+  geom_abline(slope = odds_mod2$coefficients[[2]], intercept = odds_mod2$coefficients[[1]], color = 'green')
+odds_plot2
+```
+

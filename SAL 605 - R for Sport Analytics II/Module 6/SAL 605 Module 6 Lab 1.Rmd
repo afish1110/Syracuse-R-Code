@@ -1,0 +1,44 @@
+---
+title: "SAL 605 Module 6 Lab 1"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(BasketballAnalyzeR)
+library(ggplot2)
+library(readr)
+```
+
+
+```{r}
+##2025 MLB Batting stats from Baseball Reference
+##scraped the old fashion way export to csv and formated in excel
+batting2025 <- read_csv('data/MLBBatting2025.csv')
+```
+
+
+```{r}
+##selecting columns to perform correlation analysis
+cor_data <- batting2025 %>% 
+  ##played in .75 seasons games want consistent players not biased by injury or garbage time
+  filter(G >= 120) %>% 
+  ##looking at correlation between the following
+  ##only need select since not performing any mutations
+  ##renaming WAR in select statment so appears in plots
+  select(WAR = `WAR▼`, HR, RBI, SB, OBP, SO, GIDP, R)
+```
+
+
+```{r}
+##corrlation matrix chart
+corrmatrix <- corranalysis(cor_data, threshold = 0.5)
+plot(corrmatrix)
+```
+

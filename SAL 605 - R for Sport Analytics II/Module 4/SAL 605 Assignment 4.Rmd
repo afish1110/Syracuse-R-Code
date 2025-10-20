@@ -1,0 +1,134 @@
+---
+title: "SAL 605 Assignment 4"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+##packages
+library(tidyverse)
+library(Lahman)
+library(baseballr)
+library(readr)
+library(ggplot2)
+library(ggthemes)
+```
+
+
+#1.
+```{r}
+##year we want to scrape
+season <- 2022
+##empty table to put scraped sections into
+seasonTable <- tibble()
+##vector for the days of the season
+days <- seq(from = as.Date(paste0(season, '-02-15')), to = as.Date(paste0(season, '-11-15')), by = '2 days')
+for (i in seq_along(days)) {
+  ##prints out the current period
+  print(paste(days[i], 'to', days[i] + 1))
+  
+  ##scrapes two days worth of data
+  currentPeriod <-  scrape_statcast_savant(start_date = days[i], end_date = days[i] + 1, player_type = 'batter')
+  ##reformats the variables
+  currentPeriod$outs_when_up <- as.numeric(currentPeriod$outs_when_up)
+  currentPeriod$game_type <- ifelse(currentPeriod$game_type == FALSE, '', currentPeriod$game_type)
+  currentPeriod$inning <- as.integer(currentPeriod$inning)
+  currentPeriod$pitch_number <-  as.integer(currentPeriod$pitch_number)
+  ##the values for break angle and length depreciated are NAs so the commented out lines won't work
+  # currentPeriod$break_angle_depreciated <-  as.logical(currentPeriod$break_angle_depreciated)
+  # currentPeriod$break_length_depreciated <-  as.logical(currentPeriod$break_length_depreciated)
+  currentPeriod$game_year <- as.integer(currentPeriod$game_year)
+  ##ensures to errors occur for the date range
+  if(nrow(currentPeriod) == 0){ ##not valid range
+    next
+  }
+  ##adds current period to the season table
+  seasonTable <- seasonTable %>% 
+    bind_rows(currentPeriod)
+}
+##arranges season table by date and writes to a csv so don't have to scrape it everytime
+seasonTable %>% 
+  arrange(game_date) %>% 
+  write_csv(paste0('data/statcast', season, '.csv'))
+```
+
+
+```{r}
+##read in the statcast data
+statcast2022 <- read_csv('data/statcast2022.csv')
+
+##filters out spring training games and keeps only balls in play
+statcast2022_bip <- statcast2022 %>% 
+  filter(game_type != 'S' & type == 'X')
+```
+
+#2. & 3.
+```{r}
+guidelines <- tibble(
+  launch_angle = c(10, 25, 50),
+  launch_speed = 40,
+  label = c('Ground Balls', 'Line Drives', 'Flyballs')
+)
+
+ev_plot_ba <- function(data) {
+  data %>%
+    ggplot(aes(x = launch_speed, y = launch_angle,
+               color = estimated_ba_using_speedangle)) +
+    geom_point(alpha = 0.05) +
+    geom_hline(data = guidelines, aes(yintercept = launch_angle),
+               color = 'black', linetype = 2) +
+    geom_text(data = guidelines, aes(label = label, y = launch_angle - 4),
+              color = 'black', hjust = 'left') +
+    scale_color_gradient2('BA', low = 'blue', mid = 'white', high = 'red', midpoint = 0.5) +
+    scale_x_continuous('Exit Velocity (mph)',
+                       limits = c(40, 120)) +
+    scale_y_continuous('Launch Angle (degrees)',
+                       breaks = seq(-75, 75, 25)) +
+    labs(caption = 'Data from Statcast Savant') +
+    theme_dark()
+}
+
+ev_plot_woba <- function(data) {
+  data %>%
+    ggplot(aes(x = launch_speed, y = launch_angle,
+               color = estimated_woba_using_speedangle)) +
+    geom_point(alpha = 0.05) +
+    geom_hline(data = guidelines, aes(yintercept = launch_angle),
+               color = 'black', linetype = 2) +
+    geom_text(data = guidelines, aes(label = label, y = launch_angle - 4),
+              color = 'black', hjust = 'left') +
+    scale_color_gradient2('wOBA', low = 'blue', mid = 'white', high = 'red', midpoint = 0.5) +
+    scale_x_continuous('Exit Velocity (mph)',
+                       limits = c(40, 120)) +
+    scale_y_continuous('Launch Angle (degrees)',
+                       breaks = seq(-75, 75, 25)) +
+    labs(caption = 'Data from Statcast Savant') +
+    theme_dark()
+}
+```
+
+
+```{r}
+plot_ba <- ev_plot_ba(statcast2022_bip)
+
+matrix_plot_ba <- plot_ba +
+  facet_grid(p_throws ~ stand)
+ggsave('graphics/BAfacetgrid.png')
+```
+
+```{r}
+plot_woba <-  ev_plot_woba(statcast2022_bip)
+
+matrix_plot_woba <- plot_woba +
+  facet_grid(p_throws ~ stand)
+ggsave('graphics/wOBAfacetgrid.png')
+```
+
+#4.
+
+Overall both the BA and wOBA face grid plots look very similar. All four quadrants on each plot have a curved line going from 60 mph and 30 degrees to 110 mph and  10 degrees. As well each quadrant has a hot zone that is a dark red circle around 105 mph and 25 degrees. As well the L/L quadrant is a lighter coloring than the other 3 since there is less data on L/L matchups. The main difference is that the wOBA graph is lighter coloring than the BA graph. This is because wOBA values different hits differently, i.e. a homerun is more wOBA than a single. So the darkest red is in the hot zone since there are more homeruns occurring at those EVs and LAs. Combining the two graphs we can see what EV and LA combinations did well for average and adding run value during the 2022 MLB season.

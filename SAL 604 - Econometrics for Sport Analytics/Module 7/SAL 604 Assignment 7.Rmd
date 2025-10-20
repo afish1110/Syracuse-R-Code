@@ -1,0 +1,139 @@
+---
+title: "SAL 604 Assignment 7"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(readr)
+library(sandwich)
+library(lmtest)
+library(foreign)
+library(factoextra)
+library(stats)
+library(ggplot2)
+library(e1071)
+library(urca)
+library(tseries)
+library(car)
+library(dynlm)
+```
+
+```{r}
+mets <- read_csv('data/Mets_Dynamic.csv')
+skater <- read_csv('data/SkaterOnIceSalary.csv')
+```
+#1.
+##1-3.
+```{r}
+model1 <- lm(aveprice ~ Sun + Mon + Tue + Thu + Fri + Sat + Apr + May + July + Sept + winpct + Windspeed + Temp + aft + earlyeve + opday + div + int, data = mets)
+summary(model1)
+```
+
+##4.
+
+Within model1 Fri, opday, and int are all significant at the 0.1% level with large positive effects. Sat and Temp are significant at the 1% level with a large positive and small postive effect respectively. May is significant at the 5% level with a large negative effect. Tue and the intercept are significant at the 10% level with a large negative and large positive effect respectively.
+
+##5.
+```{r}
+model1 <- lm(aveprice ~ Sun + Mon + Tue + Thu + Fri + Sat + Apr + May + July + Sept + winpct + Windspeed + Temp + aft + earlyeve + opday + div + int + chc + nyy + phi, data = mets)
+summary(model1)
+```
+
+After adding team dummies for the Cubs Yankees, and Phillies we see less significant variables. Fri and opday still significant at the 0.1% level with large positive effects. Temp still significant at 1% level with small positive effect. Sat now significant at 5% level instead of 1% and still has large positive effect. Tue, May, and nyy are significant at teh 10% level with Tue and May having large negative and nyy having large positive effects.
+
+##7.
+```{r}
+vif(model1)
+```
+
+No variables over 5 so no need to remove due to multicollinearity
+
+##9.
+
+```{r}
+dwtest(model1)
+```
+Can reject at the 10% level will correct for autocorrelation
+
+##10.
+
+```{r}
+coeftest(model1, vcovHAC)
+```
+
+After correcting for Autocorrelation and Heteroskedasticity we have opday significant at th 0.1% level with a large positive effect. Fri and Sat significant at the 1% level with large positive effects. May, winpct, and Temp are significant at the 5% level with large negative effects for May and winpct and a small positive effect for Temp.
+
+#2.
+##1.
+
+```{r}
+skater %>%
+  select(Salary, TOI, CFpct, FFpct) %>%
+  scale() -> skater_scaled
+summary(skater_scaled)
+```
+
+```{r}
+k_3 <- kmeans(skater_scaled, centers = 3, nstart = 25)
+k_3$size
+k_3$centers
+```
+
+```{r}
+fviz_cluster(k_3, data = skater_scaled)
+```
+
+##2.
+
+```{r}
+fviz_nbclust(skater_scaled, kmeans, method = 'silhouette')
+fviz_nbclust(skater_scaled, kmeans, method = 'wss')
+fviz_nbclust(skater_scaled, kmeans, method = 'gap_stat')
+```
+
+Using silhouette and wss we have the bets k is 3. But with gap stat we k is better if using 1, 7, 6, 4, 5 and then 3 in that order. Since the others give 3 as best we will make no changes.
+
+##3.
+
+Will group by salary scoring chances and shots
+
+```{r}
+skater %>%
+  select(Salary, SFpct, SCFpct) %>%
+  scale() -> skater_scaled2
+```
+
+```{r}
+k_3 <- kmeans(skater_scaled2, centers = 3, nstart = 25)
+k_3$size
+k_3$centers
+```
+
+```{r}
+fviz_cluster(k_3, data = skater_scaled2)
+```
+
+```{r}
+fviz_nbclust(skater_scaled2, kmeans, method = 'silhouette')
+fviz_nbclust(skater_scaled2, kmeans, method = 'wss')
+fviz_nbclust(skater_scaled2, kmeans, method = 'gap_stat')
+```
+Possible 4 could be a better k so redid with 4 clusters
+
+```{r}
+k_4 <- kmeans(skater_scaled2, centers = 4, nstart = 25)
+k_4$size
+k_4$centers
+```
+
+```{r}
+fviz_cluster(k_4, data = skater_scaled2)
+```
+
