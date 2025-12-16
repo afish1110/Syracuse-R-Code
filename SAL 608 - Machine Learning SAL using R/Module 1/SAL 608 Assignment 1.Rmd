@@ -1,0 +1,220 @@
+---
+title: "SAL 608 Assignment 1"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#1.
+```{r}
+##packages using the same ones from the assignment code plus performance as it contains vif and other model evaluation metrics
+library(readr)
+library(GGally)
+library(ggfortify)
+library(lmtest)
+library(MASS)
+library(tidyverse)
+library(regclass)
+library(performance)
+library(ggplot2)
+```
+
+
+```{r}
+##reading in the data
+full_dat <- read_csv('data/ncaaSeason.csv')
+##selecting wanted columns for modeling had to change from code in assignment pdf as weren't valid column names
+dat <- full_dat %>% 
+  select(`Win %`,
+         `FG%`,
+         `TS%`,
+         `ORB%`,
+         `DRB%`,
+         `AST%`,
+         `TOV%`,
+         `STL%`,
+         `BLK%`,
+         Pace,
+         `FT/FGA`) %>% 
+  ##renaming to proper variable format
+  rename(Win_Pct = `Win %`,
+         FG_Pct = `FG%`,
+         TS_Pct = `TS%`,
+         ORBR = `ORB%`,
+         DRBR = `DRB%`,
+         ASTR = `AST%`,
+         TOVR = `TOV%`,
+         STLR = `STL%`,
+         BLKR = `BLK%`,
+         Pace = Pace,
+         FT_FGA = `FT/FGA`)
+```
+
+
+The following chunk will model Win_Pct using FG_Pct in a simple linear regression model
+```{r}
+##simple lin reg model Win_Pct v FG_Pct
+mod1 <- lm(Win_Pct ~ FG_Pct,
+           data = dat)
+
+##calls summary of model
+summary(mod1)
+```
+
+From calling summary of our model we see that the R-squared is 0.4047 or 40.47%. This means that 40.47% of the variance in Win_Pct is explained by FG_Pct
+
+\newpage
+#2.
+```{r}
+##MLR of dat modeling Win_Pct
+mod2 <- lm(Win_Pct ~ .,
+           data = dat)
+
+summary(mod2)
+```
+
+mod2 models Win_Pct using the rest of the variables within dat. The R-squared changes to 73.54% meaning that 73.54% of the variance in Win_Pct is explained by all other variables in the data. This value is more than mod1 which makes sense since we are using more predictors we should have more explained variance. Typically the more predictors you have the higher the R-squared which is why it isn't always the best judge of a model since it can be manipulated.
+
+\newpage
+#3.
+Examining multicollinearity in mod2
+```{r}
+##using performance package to check multicollinearity
+check_collinearity(mod2)
+```
+
+From our VIF results we see that FG_Pct and TS_Pct have problematic VIFs. The simple solution to this issue would be to drop one of the two from our regression. Since TS_Pct has the higher VIF we will drop that variable. So our new mod2 will be as follows:
+```{r}
+##mod2 without TS_Pct
+mod2_new <- lm(Win_Pct ~ FG_Pct + ORBR + DRBR + ASTR + TOVR + STLR + BLKR + Pace + FT_FGA,
+           data = dat)
+
+summary(mod2_new)
+```
+
+
+\newpage
+#4.
+Splitting the Data
+```{r}
+set.seed(23) ##MJ
+##size of dat
+n <- nrow(dat)
+##proportion to use for training data using 75%
+prop <- 0.75
+
+##random sample of dat
+train <- sample(n, size = n * prop)
+
+##splitting to trainng and test
+dat_train <- dat[train, ]
+dat_test <- dat[-train, ]
+```
+
+
+Rerunning the models
+```{r}
+##simple lin reg model Win_Pct v FG_Pct
+mod1 <- lm(Win_Pct ~ FG_Pct,
+           data = dat_train)
+
+##calls summary of model
+summary(mod1)
+```
+
+
+```{r}
+##mod2 without TS_Pct
+mod2_new <- lm(Win_Pct ~ FG_Pct + ORBR + DRBR + ASTR + TOVR + STLR + BLKR + Pace + FT_FGA,
+           data = dat_train)
+
+summary(mod2_new)
+```
+
+
+```{r}
+mod3 <- lm(Win_Pct ~ TS_Pct + ORBR + TOVR + Pace + FT_FGA,
+           data = dat_train)
+
+summary(mod3)
+```
+
+
+Calculating RMSE of the 3 models
+```{r}
+rmse(mod1)
+rmse(mod2_new)
+rmse(mod3)
+```
+mod2_new which is the model using all predictors besides TS_Pct has the lowest test RMSE with 0.0924
+
+
+\newpage
+#5.
+
+The slope of TS_Pct in mod3 means that for every 1 percent change in TS_Pct Win_Pct changes 3.4569 percent. If TS_Pct increase so will Win_Pct.
+
+\newpage
+#6.
+Normality
+```{r}
+##informal test
+mod3_resid <- data.frame(resid = mod3$residuals)
+ggplot(mod3_resid, aes(sample = resid)) +
+  stat_qq() + stat_qq_line()
+```
+
+```{r}
+##formal test using Shapiro-Wilk Test
+##sig level 0.15
+shapiro.test(mod3_resid$resid)
+```
+Fail to reject the null, could potentially be an issue with significance level closer to 0.2. Also using the visual test the upper tail begins to diverge from the normal line.
+
+Constant Variance
+```{r}
+##visual test
+data.frame(fitted_vals = mod3$fitted.values,
+           std_resids = scale(mod3$residuals)) %>% 
+  ggplot(aes(fitted_vals, std_resids)) +
+  geom_point()
+```
+There are possible issues as fitted_vals approach 0 and 1. At the edges it looks to funnel both in and out. This could only appear this way since using 75% sample test data. But if it is a problem the way to fix it would be to transform Win_Pct using a log transform, natural log transom, or a sqaure root transform.
+
+
+
+Independence
+```{r}
+##sig level at 0.15
+dwtest(mod3, alternative = 'two.sided')
+```
+
+Fail to reject the null
+
+Linearity
+```{r}
+mod3_dat <- dat[, c("Win_Pct", "TS_Pct", "ORBR", "TOVR", "Pace", "FT_FGA")]
+pairs(mod3_dat)
+```
+
+From this plot matrix we can see the Win_Pct has a general linear relationship with all the variables.
+
+\newpage
+#7.
+```{r}
+##since needing to provide a range of win percentage and not average win percentage will use a prediction interval
+new <- data.frame(TS_Pct = 0.55,
+                  ORBR = 26.7, 
+                  TOVR = 21.2,
+                  Pace = 74.3,
+                  FT_FGA = 0.24) ##cahnged ORBR since in percent format in data
+predict(mod3, newdata = new, interval = 'prediction')
+```
+
+The range of win percentage would be 13.28%-54.9%

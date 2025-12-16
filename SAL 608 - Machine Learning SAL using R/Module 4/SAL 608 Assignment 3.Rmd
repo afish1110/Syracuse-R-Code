@@ -1,0 +1,161 @@
+---
+title: "SAL 608 Assignment 3"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(readr)
+library(rpart)
+library(rpart.plot)
+library(ggplot2)
+library(DescTools)
+```
+
+
+#1.
+```{r}
+set.seed(20240320)
+teams <- read_csv('data/kenpom_23_pre_tourney.csv',
+                 show_col_types = FALSE)
+
+summary(teams)
+```
+
+
+This data set includes college basketball data that helps determine seeds for March Madness. Factors include temp, offensive efficiency, defensive efficiency as well as ranks, adjusted, and adjusted ranks of the three factors.
+
+```{r}
+ggplot(data = teams, aes(AdjTempo, AdjOE)) +
+  geom_point()
+```
+
+```{r}
+ggplot(data = teams, aes(AdjTempo, AdjDE)) +
+  geom_point()
+```
+
+
+```{r}
+ggplot(data = teams, aes(AdjOE, AdjDE)) +
+  geom_point()
+```
+
+From the scatter plots we can see a clear relationship between AdjOE and AdjDE. As AdjOE increases AdjDE decreases. 
+
+\newpage
+#2.
+```{r}
+(tree_fit <- rpart(seed ~ AdjTempo + AdjOE + AdjDE,
+                  data = teams))
+```
+
+```{r}
+##displaying our Decision Tree
+##type 5 is just a visualization method
+rpart.plot(x = tree_fit, type = 5)
+```
+
+
+From this Decision Tree the order of importance in the predictors is AdjOE, AdjDE, and then AdjTempo. The only surprising part is that AdjTempo isn't included in the tree. Yes it is importance how efficient a team is on each side of the ball but the tempo should help determine how many possessions they are able to get in a game. It makes sense to have the AdjOE in front of the AdjDE since defense in basketball tends to rely on the opposing team missing shots and not rebounding the ball. So if your team can be more efficient on offense then you don't have play as good of defense.
+
+
+\newpage
+#3.
+```{r}
+##setting up train/test sets
+prop <- .6
+n <- nrow(teams)
+train <- sample(n, n * prop)
+
+seeded <- teams %>% 
+  filter(is.na(seed) == FALSE)
+
+train_data <- seeded[train, ]
+test_data <- seeded[-train, ]
+
+
+
+find_min_term <- function(min_term) {
+  min_term <- floor(min_term)
+  mod <- rpart(
+    seed ~ AdjTempo + AdjOE + AdjDE,
+    data = train_data,
+    control = rpart.control(minbucket = min_term)
+  )
+  preds <- predict(mod, test_data)
+  ##rmse
+  sqrt(mean((test_data$seed - preds) ^2))
+}
+```
+
+
+```{r}
+##minimum RMSE and using floor since did in the function find_min_term
+minterm <- floor(min(sapply(1:16, find_min_term)))
+```
+
+```{r}
+tuned <- rpart(
+  seed ~ AdjTempo + AdjOE + AdjDE,
+  data = teams,
+  control = rpart.control(minbucket = minterm)
+)
+
+rpart.plot(tuned)
+```
+
+There have been very significant changes to the tree. Tempo has become an actual factor in the decision tree. As well there are more branches. AdjOE and AdjDE are even more present in the tree.
+
+\newpage
+#4.
+```{r}
+teams <- teams %>% 
+  mutate(predicted = predict(tuned, teams),
+         seedDiff = seed - predicted)
+```
+
+```{r}
+##looking for snubs
+snubs <- teams %>% 
+  filter(is.na(seed)) %>% 
+  select(TeamName, seed, predicted) %>% 
+  arrange(predicted)
+head(snubs, 10)
+```
+
+
+```{r}
+##in but maybe shouldn't be
+reverse_snubs <- teams %>% 
+  filter(!is.na(seed)) %>% 
+  select(TeamName, seed, predicted) %>% 
+  arrange(desc(predicted))
+head(reverse_snubs, 10)
+```
+
+
+```{r}
+over_seed <- teams %>% 
+  filter(!is.na(seed)) %>% 
+  select(TeamName, seed, predicted, seedDiff) %>% 
+  arrange(desc(seedDiff))
+head(over_seed, 10)
+```
+
+```{r}
+under_seed <- teams %>% 
+  filter(!is.na(seed)) %>% 
+  select(TeamName, seed, predicted, seedDiff) %>% 
+  arrange(seedDiff)
+head(under_seed, 10)
+```
+

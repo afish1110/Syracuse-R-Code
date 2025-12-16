@@ -1,0 +1,581 @@
+---
+title: "SAL 608 Final Project Modeling"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+##packages
+##data
+library(hockeyR)
+library(readr)
+
+##cleaning
+library(tidyverse)
+
+##clustering
+library(BasketballAnalyzeR)
+
+##visualization
+library(sportyR)
+library(ggplot2)
+library(ggthemes)
+library(gt)
+library(gtExtras)
+
+##SHAP plots
+library(kernelshap)
+library(shapviz)
+
+##modeling
+library(performance)
+library(lmtest)
+library(DescTools)
+library(xgboost)
+##will add more here later
+```
+
+```{r}
+shots <- read_csv('data/shots.csv') %>% 
+  mutate(shot_id = paste(as.character(game_id), as.character(game_seconds_remaining), sep = '_'))
+model_data <- read_csv('data/model_data.csv')
+```
+
+```{r}
+##translating PPTeam to a numeric version for the xgBoost model
+model_data <- model_data %>% 
+  select(-c(game_id, game_seconds_remaining)) %>% 
+  mutate(PPTeamNum = as.numeric(as.factor(PPTeam)))
+```
+
+
+
+```{r}
+# Training and Test Data Split
+##we will use this original split across all of our models
+##for xgBoost we will split the training data again later on
+set.seed(123)
+n <- nrow(model_data)
+split <- 0.70
+train <- sample(n, n * split)
+
+model_data_train <- model_data[train, ]
+model_data_test <- model_data[-train, ]
+```
+
+
+Logit and Probit Models
+```{r}
+logistic_mod <- glm(PPGoal ~ period + period_seconds_remaining + PPSkaters + PKSkaters + PPTeam + HomePP + ScoreDiff + penalty_minutes + SOG, data = model_data_train, family = "binomial")
+summary(logistic_mod)
+
+
+# Durbin Watson Test
+dwtest(logistic_mod, alternative = "two.sided")
+
+# No evidence of autocorrelation
+
+model_data_train %>%
+  select(period, period_seconds_remaining,PPSkaters,PKSkaters,HomePP, ScoreDiff, penalty_minutes, SOG) %>%
+  mutate(log_odds = log(logistic_mod$fitted.values / (1 - logistic_mod$fitted.values))) %>%
+  pivot_longer(-log_odds) %>%
+  ggplot(aes(value, log_odds)) +
+  geom_point() +
+  facet_wrap(~ name, scales = "free_x")
+
+# Sample Test
+nrow(model_data_train) > 10 * 9 / min(mean(model_data_train$PPGoal), 1 - mean(model_data_train$PPGoal)) # 9 predictors
+
+# True = We have a large enough sample size.
+
+# Multicollinearity Check
+check_collinearity(logistic_mod)
+
+# No multicollinearity.
+```
+
+```{r}
+##Updating logit and probit models
+##training and testing data from above
+probit_new <- glm(PPGoal ~ period + period_seconds_remaining + PPSkaters + PKSkaters + PPTeam +
+                    HomePP + ScoreDiff + penalty_minutes + SOG,
+                  data = model_data_train,
+                  family = binomial(link = "probit"))
+
+logit_new <- glm(PPGoal ~ period + period_seconds_remaining + PPSkaters + PKSkaters + PPTeam +
+                   HomePP + ScoreDiff + penalty_minutes + SOG,
+                 data = model_data_train,
+                 family = binomial())
+```
+
+
+XGBoost
+
+```{r}
+xgb_train <- model_data_train %>% 
+  select(-PPTeam)
+
+xgb_test <- model_data_test %>% 
+  select(-PPTeam)
+
+set.seed(97) ##Kaprizov
+tune <- sample(nrow(xgb_train), 0.7 * nrow(xgb_train))
+
+##train and test data for the tuning process
+dtrain <- xgb.DMatrix(as.matrix(select(xgb_train[tune, ], -PPGoal)),
+                      label = xgb_train$PPGoal[tune])
+
+dtest <- xgb.DMatrix(as.matrix(select(xgb_train[-tune, ], -PPGoal)),
+                      label = xgb_train$PPGoal[-tune])
+```
+
+
+```{r}
+##function to find number of rounds for lamba tree ratio using lamba as 0.1 to find trees
+find_rounds <- function(rounds) {
+  rounds <- floor(rounds)
+  xgb.train(
+    params = list(
+      eta = 0.1,
+      objective = 'binary:logistic',
+      eval_metric = 'logloss'),
+    data = dtrain,
+    nrounds = rounds,
+    watchlist = list(train = dtrain, test = dtest),
+    
+    verbose = 0
+    )$evaluation_log %>% 
+    select(test_logloss) %>% 
+    slice_tail() %>% 
+    flatten_dbl()
+}
+```
+
+
+```{r}
+set.seed(98) #Bedard
+##data is small so using bounds of 1 and 2000 as should give an underfit and overfit on the edges
+(tree_ratio <- optimize(find_rounds, c(1, 2000), tol = 1))
+```
+
+
+```{r}
+##function for finding max depth
+find_depth <- function(depth) {
+  depth <- floor(depth)
+  xgb.train(
+    params = list(
+      eta = 0.1,
+      objective = 'binary:logistic',
+      eval_metric = 'logloss',
+      max_depth = depth),
+    data = dtrain,
+    nrounds = floor(tree_ratio$minimum),
+    watchlist = list(train = dtrain, test = dtest),
+    
+    verbose = 0
+    )$evaluation_log %>% 
+    select(test_logloss) %>% 
+    slice_tail() %>% 
+    flatten_dbl()
+}
+```
+
+
+```{r}
+set.seed(46) ##Spurgeon
+##from trial and error found it optimizes just under the upper bound
+(opt_depth <- optimize(find_depth, c(1, 200), tol = 1))
+```
+
+
+```{r}
+##function for finding min child weight
+find_weight <- function(weight) {
+  weight <- floor(weight)
+  xgb.train(
+    params = list(
+      eta = 0.1,
+      objective = 'binary:logistic',
+      eval_metric = 'logloss',
+      max_depth = floor(opt_depth$minimum),
+      min_child_weight = weight),
+    data = dtrain,
+    nrounds = floor(tree_ratio$minimum),
+    watchlist = list(train = dtrain, test = dtest),
+    
+    verbose = 0
+    )$evaluation_log %>% 
+    select(test_logloss) %>% 
+    slice_tail() %>% 
+    flatten_dbl()
+}
+```
+
+
+```{r}
+set.seed(2024) ##data's end year
+##like depth it is optimizing just under upper bound
+(child_weight <- optimize(find_weight, c(1, 200), tol = 1))
+```
+
+
+```{r}
+##function for tuning number of trees and lamba
+##same as the other functions just adding the previously tuned variables and tuning for the one we want
+tree_eta_ratio <- 0.1 * floor(tree_ratio$minimum)
+
+find_tree <- function(trees){
+  trees <- floor(trees)
+  xgb.train(
+    params = list(
+      eta = tree_eta_ratio / trees,
+      objective = 'binary:logistic',
+      eval_metric = 'logloss',
+      max_depth = floor(opt_depth$minimum),
+      min_child_weight = floor(child_weight$minimum)),
+    data = dtrain,
+    nrounds = trees,
+    watchlist = list(train = dtrain, test = dtest),
+    
+    verbose = 0
+    )$evaluation_log %>% 
+    select(test_logloss) %>% 
+    slice_tail() %>% 
+    flatten_dbl()
+}
+```
+
+
+```{r}
+##running function above over 500:10000 every 500
+set.seed(29) ##MacKinnon
+perform_by_tree <- tibble(
+  ntree = 2:20 * 500,
+  error = map_dbl(2:20 * 500, find_tree)
+)
+```
+
+
+```{r}
+ggplot(perform_by_tree, aes(ntree, error)) +
+  geom_line() +
+  geom_vline(xintercept = 6500, color = 'red')
+```
+
+
+```{r}
+##for the logloss it appears to stabalize around 6500 trees
+trees <- 6500
+```
+
+
+```{r}
+##running the full model with the og training data set
+full_train <- xgb.DMatrix(as.matrix(select(xgb_train, -PPGoal)),
+                          label = xgb_train$PPGoal)
+
+full_test <- xgb.DMatrix(as.matrix(select(xgb_test, -PPGoal)),
+                         label = xgb_test$PPGoal)
+
+full_mod <- xgb.train(
+  params = list(
+    eta = tree_eta_ratio / trees,
+    objective = 'binary:logistic',
+    eval_metric = 'logloss',
+    min_child_weight = floor(child_weight$minimum),
+    max_depth = floor(opt_depth$minimum)),
+  data = full_train,
+  nrounds = trees,
+  watchlist = list(train = full_train, test = full_test),
+  verbose = 0
+)
+```
+
+
+```{r}
+##feature importance plot using ggplot xgboost
+xgb.ggplot.importance(
+  xgb.importance(model = full_mod)
+)
+```
+
+
+Comparing XGBoost and Probit via Brier Score
+```{r}
+##comparing xgboost and probit
+xgb_helper <- as.matrix(model_data_test[ , full_mod$feature_names])
+
+bs <- model_data_test %>%
+  mutate(log_pred = predict(logit_new, .,
+                            type = "response"),
+         pro_pred = predict(probit_new, .,
+                            type = "response"),
+         xgb_pred = predict(full_mod, xgb_helper)) %>%
+  summarize(log_brier = BrierScore(PPGoal, log_pred),
+            pro_brier = BrierScore(PPGoal, pro_pred),
+            xgb_brier = BrierScore(PPGoal, xgb_pred))
+
+brier_scores <- data.frame(
+  models = c('XGBoost', 'Probit', 'Logit' ),
+  scores = c(bs$xgb_brier, bs$pro_brier, bs$log_brier)
+)
+
+brier_scores %>% 
+  gt() %>% 
+  tab_header(title = 'Brier Score Comparison') %>% 
+  cols_label(models = 'Model',
+             scores = 'Brier Score') %>% 
+  gt_theme_538(quiet = TRUE) %>% 
+  cols_align('center') %>% 
+  gtsave(filename = 'graphics/BrierScores.png')
+
+# The probit BrierScore is lower than the logit BrierScore, implying that the predictions are more accurate than the probit model. While we typically have no reason to choose one over the other, the probit model's lower score means we should select this over the logit model to ensure the analysis contains the most accurate predictions. Overall the best model is the xgBoost in terms of Brier score
+```
+
+Looking back at our BrierScores from logit (0.1653845) and probit (1.651004) the xgboost is better
+
+```{r}
+##transforming to binary response
+xgb_pred <- predict(full_mod, xgb_helper)
+xgb_class <- ifelse(xgb_pred >= 0.5, 1, 0)
+
+##model accuracy
+xgb_acc <- mean(xgb_class == model_data_test$PPGoal) ##78.65%
+log_acc <- performance_accuracy(logit_new) ##57.86
+pro_acc <- performance_accuracy(probit_new) ##60.44
+```
+
+
+```{r}
+accuracy <- data.frame(
+  models = c('XGBoost', 'Probit', 'Logit'),
+  accuracy = c(xgb_acc, pro_acc$Accuracy, log_acc$Accuracy)
+)
+
+accuracy %>% 
+  gt() %>% 
+  tab_header(title = 'Accuracy Comparison') %>% 
+  cols_label(models = 'Model',
+             accuracy = 'Accuracy') %>% 
+  fmt_percent(columns = accuracy,
+              decimals = 2) %>% 
+  gt_theme_538(quiet = TRUE) %>% 
+  cols_align('center') %>% 
+  gtsave('graphics/Accuracy.png')
+```
+
+
+SHAP Beeswarm Plot using xgBoost model
+Still new to shap plots so got some coding help from
+https://github.com/ModelOriented/shapviz?tab=readme-ov-file
+```{r}
+##getting shap values for the SHAP plot
+shp <- shapviz(full_mod, X_pred = full_train, X = as.matrix(select(xgb_train, -PPGoal)))
+```
+
+```{r}
+##shap importance plot beeswarm
+sv_importance(shp, kind = 'bee') +
+  ##labeling chart
+  labs(title = 'XGBoost SHAP Importance Beeswarm Plot',
+       caption = 'Data from NHL.com using hockeyR',
+       x = 'SHAP Value',
+       y = 'Feature') +
+  ##giving variables official names
+  ##need to write in reverse order of what appears on the chart
+  scale_y_discrete(labels = c('Penalty Minutes', 'Power Play Skaters', 'Home Power Play', 'Period', 'Penalty Kill Skaters',
+                              'Score Differential', 'Power Play Team', 'Seconds Remaining in Period', 'Shots on Goal')) +
+  ##zooms in to x [-1, 1] eliminates outliers that have little importance
+  coord_cartesian(xlim = c(-1, 1)) +
+  theme_calc()
+ggsave('graphics/BeeswarmPP.png')
+```
+
+Cluster Analysis of PP SOG
+```{r}
+set.seed(99) ##Gretzky
+shot_cluster1 <- shots %>% 
+  ##using abs(x) so shots taken in one ozone
+  mutate(x = abs(x)) %>% 
+  select(x, y) %>% 
+  kclustering()
+```
+
+
+```{r}
+##tuning K using the elbow method
+plot(shot_cluster1)
+```
+
+
+```{r}
+##updating clusters using k
+set.seed(8) ##Ovi
+shot_cluster2 <- shots %>% 
+  mutate(x = abs(x)) %>% 
+  select(x, y) %>% 
+  kclustering(., k = 5, labels = shots$shot_id)
+```
+
+
+```{r}
+##plotting cluster specifics no issues with CHI values
+plot(shot_cluster2)
+```
+
+
+```{r}
+##adding clusters number to shots data as factor
+shots <- suppressWarnings({
+  shots %>% 
+  inner_join(., shot_cluster2$Subjects, by = join_by(shot_id == Label)) %>% 
+  mutate(Cluster = as.factor(Cluster))
+})
+```
+
+
+```{r}
+##plotting shots on rink with color as the cluster
+geom_hockey(league = 'NHL', display_range = 'ozone') +
+  geom_point(data = shots, aes(abs(x), y, color = Cluster)) +
+  labs(title = 'Shot on Goal Clusters - 2023-24 NHL Season',
+       caption = 'Data from NHL.com using hockeyR')
+ggsave('graphics/ShotCluster.png')
+```
+
+
+```{r}
+##ploting shots on rink with color as PP time left
+geom_hockey(league = 'NHL', display_range = 'ozone') +
+  geom_point(data = shots, aes(abs(x), y, color = PPTimeRemain)) +
+  ##good pallete for colorblind
+  scale_color_continuous(palette = 'viridis') +
+  labs(title = 'Shot on Goal with Power Play Time Remaining \n2023-24 NHL Season',
+       caption = 'Data from NHL.com using hockeyR')
+ggsave('graphics/ShotTime.png')
+```
+
+
+Power Play Goal and Unsuccessful Power Play Time Visualizations
+```{r}
+# Most Power Play Goals by Team (Preparation for Graph)
+power_play_goal <- shots %>%
+  filter(
+    event_type == "GOAL",
+    strength_code == "PP"
+  )
+
+power_play_goal_count <- power_play_goal %>%
+  group_by(event_team) %>% # Group by Team
+  summarise(power_play_goals = n()) %>% # Sum power play goals by Team
+  arrange(desc(power_play_goals)) # Arrange in descending order
+```
+
+
+```{r}
+# Power Play Goals by Team (Visual)
+ggplot(power_play_goal_count, aes(x = power_play_goals, y = reorder(event_team, power_play_goals), fill = event_team)) +
+  geom_col(show.legend = FALSE) +
+  labs(
+    title = "Power Play Goals by Team",
+    x = "Power Play Goals",
+    y = "Team"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggsave("Most Power Play Goals.png")
+```
+
+
+Predicted Power Play Percentage based on XGBoost Predictions
+```{r}
+power_play_index <- model_data_test$PPSkaters > model_data_test$PKSkaters
+
+power_play_predicted_percentage <- mean(xgb_pred[power_play_index]) *100 # to get percentage
+power_play_predicted_percentage
+
+# 24.24% (all teams)
+```
+
+```{r}
+newdata <- model_data_test
+newdata$pred_prob <- xgb_pred
+
+newdata$power_play_index <- newdata$PPSkaters > newdata$PKSkaters
+
+pp_team <- newdata %>%
+  filter(power_play_index) %>%
+  group_by(PPTeam) %>%
+  summarise(power_play_predicted_percentage = mean(pred_prob) * 100) %>%
+  arrange(desc(power_play_predicted_percentage))
+```
+
+```{r}
+ggplot(pp_team, aes(x = reorder(PPTeam, power_play_predicted_percentage), y = power_play_predicted_percentage)) +
+  geom_col(fill = "steelblue") +
+  coord_flip() +
+  labs(
+    title = "Predicted Power Play Percentage (based on XGBoost Predictions)",
+    x = "Team",
+    y = "Predicted PP%"
+  ) +
+  theme_minimal()
+
+ggsave("Predicted Power Play Percentage.png")
+```
+
+Goals based on Man Advantage
+```{r}
+model_data <- read.csv("model_data.csv")
+
+model_data <- model_data %>%
+  mutate(man_adv = paste0(PPSkaters, "v", PKSkaters))
+
+pp_goals_sum <- model_data %>%
+  group_by(man_adv) %>%
+  summarise(total_goals = sum(PPGoal)) %>%
+  arrange(desc(total_goals))
+
+ggplot(pp_goals_sum, aes(x = man_adv, y = total_goals, fill = man_adv)) +
+  geom_col()+
+  geom_text(aes(label = total_goals), vjust=-0.5, size = 3.5) +
+  labs(
+    title = "Total Power Play Goals by Man Advantage",
+    x = "Man Advantage",
+    y = "Total PP Goals"
+  ) +
+  theme_minimal(base_size = 14) +
+  scale_fill_brewer(palette = "Set1") +
+  theme(legend.position = "none")
+
+
+ggsave("Total Power Play Goals by Man Advantage.png")
+```
+
+
+```{r}
+##shots v goals PP
+total_shots <- shots %>% 
+  group_by(event_team) %>% 
+  select(event_team, event_type) %>% 
+  summarize(tot_shot = n(),
+            tot_goal = sum(event_type == 'GOAL'))
+
+ggplot(total_shots, aes(x = tot_shot, y = tot_goal, color = event_team)) +
+  geom_point(size = 3) +
+  labs(title = 'Shots v Goals - PP Totals',
+       caption = 'Data from NHL.com via hockeyR',
+       y = 'Goals',
+       x = 'Shots') +
+  scale_color_discrete(name = 'Team') +
+  theme_calc()
+ggsave('graphics/ShotsvGoals.png')
+```
+

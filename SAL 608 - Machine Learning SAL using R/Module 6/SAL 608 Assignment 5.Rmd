@@ -1,0 +1,280 @@
+---
+title: "SAL 608 Assignment 5"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+##packages
+library(tidyverse)
+library(readr)
+library(xgboost)
+library(ggplot2)
+library(performance)
+library(ModelMetrics)
+library(Ckmeans.1d.dp)
+```
+
+```{r}
+##reading in data
+dat <- read_csv('data/all_star_selections.csv')
+
+##preparing train/test data for later on
+set.seed(04172024)
+
+##data for xgboost model
+xgb_dat <- dat %>% 
+  ##selecting predictors
+  select(all_star, AB, R, H, HR, RBI, SB, BB, SO)
+
+n <- nrow(xgb_dat)
+train_ind <- sample(n, 0.65 * n)
+
+dat_train <- xgb_dat[train_ind, ]
+dat_test <- xgb_dat[-train_ind, ]
+```
+
+\newpage
+#1.
+
+
+```{r}
+##splitting training data up again for tuning
+set.seed(123)
+n <- nrow(dat_train)
+tune_index <- sample(n, 0.65 * n)
+
+##train and test data using our tuning split of the train data
+dtrain <- xgb.DMatrix(as.matrix(select(dat_train[tune_index, ], -all_star)),
+                        label = dat_train$all_star[tune_index])
+
+dtest <- xgb.DMatrix(as.matrix(select(dat_train[-tune_index, ], -all_star)),
+                     label = dat_train$all_star[-tune_index])
+```
+
+
+```{r}
+##function to find number of rounds for lamba ratio
+find_rounds <- function(rounds) {
+  rounds <- floor(rounds)
+  xgb.train(
+    params = list(
+      eta = 0.1,
+      objective = 'binary:logistic',
+      eval_metric = 'error'),
+    data = dtrain,
+    nrounds = rounds,
+    watchlist = list(train = dtrain, test = dtest),
+    
+    verbose = 0
+    )$evaluation_log %>% 
+    select(test_error) %>% 
+    slice_tail() %>% 
+    flatten_dbl()
+}
+```
+
+
+```{r}
+set.seed(42) #jackie robinson
+(tree_ratio <- optimize(find_rounds, c(1, 2000), tol = 1))
+```
+
+
+\newpage
+#2.
+```{r}
+##function for finding max depth
+find_depth <- function(depth) {
+  depth <- floor(depth)
+  xgb.train(
+    params = list(
+      eta = 0.1,
+      objective = 'binary:logistic',
+      eval_metric = 'error',
+      max_depth = depth),
+    data = dtrain,
+    nrounds = floor(tree_ratio$minimum),
+    watchlist = list(train = dtrain, test = dtest),
+    
+    verbose = 0
+    )$evaluation_log %>% 
+    select(test_error) %>% 
+    slice_tail() %>% 
+    flatten_dbl()
+}
+```
+
+
+```{r}
+set.seed(3000) ##3k hit club
+(depth_val <- optimize(find_depth, c(1, 200), tol = 1))
+```
+
+```{r}
+##function for finding min child weight
+find_weight <- function(weight) {
+  weight <- floor(weight)
+  xgb.train(
+    params = list(
+      eta = 0.1,
+      objective = 'binary:logistic',
+      eval_metric = 'error',
+      max_depth = floor(depth_val$minimum),
+      min_child_weight = weight),
+    data = dtrain,
+    nrounds = floor(tree_ratio$minimum),
+    watchlist = list(train = dtrain, test = dtest),
+    
+    verbose = 0
+    )$evaluation_log %>% 
+    select(test_error) %>% 
+    slice_tail() %>% 
+    flatten_dbl()
+}
+```
+
+```{r}
+set.seed(62) ##AL HR Record Season
+(child_weight <- optimize(find_weight, c(1, 200), tol = 1))
+```
+
+
+\newpage
+#3.
+```{r}
+##function for tuning number of trees and lamba
+##same as the other functions just adding the previously tuned variables and tuning for the one we want
+tree_eta_ratio <- 0.1 * floor(tree_ratio$minimum)
+
+find_tree <- function(trees){
+  trees <- floor(trees)
+  xgb.train(
+    params = list(
+      eta = tree_eta_ratio / trees,
+      objective = 'binary:logistic',
+      eval_metric = 'error',
+      max_depth = floor(depth_val$minimum),
+      min_child_weight = floor(child_weight$minimum)),
+    data = dtrain,
+    nrounds = trees,
+    watchlist = list(train = dtrain, test = dtest),
+    
+    verbose = 0
+    )$evaluation_log %>% 
+    select(test_error) %>% 
+    slice_tail() %>% 
+    flatten_dbl()
+}
+```
+
+```{r}
+##running function above over 500:10000 every 500
+set.seed(116)
+perform_by_tree <- tibble(
+  ntree = 1:20 * 500,
+  error = map_dbl(1:20 * 500, find_tree)
+)
+```
+
+```{r}
+ggplot(perform_by_tree, aes(ntree, error)) +
+  geom_line() +
+  ##after first looking at graph added this line
+  geom_vline(xintercept = 6500, color = 'red')
+```
+
+
+```{r}
+##using 6500 as it looks to be the local min on the ntree graph
+trees <- 6500
+```
+
+\newpage
+#4.
+```{r}
+##train and test data set using the index at start of assignment
+full_train <- xgb.DMatrix(as.matrix(select(dat_train, -all_star)),
+                          label = dat_train$all_star)
+
+full_test <- xgb.DMatrix(as.matrix(select(dat_test, -all_star)),
+                         label = dat_test$all_star)
+
+full_mod <- xgb.train(
+  params = list(
+    eta = tree_eta_ratio / trees,
+    objective = 'binary:logistic',
+    eval_metric = 'error',
+    min_child_weight = floor(child_weight$minimum),
+    max_depth = floor(depth_val$minimum)),
+  data = full_train,
+  nrounds = trees,
+  watchlist = list(train = full_train, test = full_test),
+  verbose = 0
+)
+```
+
+
+```{r}
+##feature importance plot using ggplot xgboost
+xgb.ggplot.importance(
+  xgb.importance(model = full_mod)
+)
+```
+
+This imporance plot shows the most importance variables in order. So we have H, RBI, and AB as the top three important variables to our model.
+
+\newpage
+#5.
+```{r}
+(log_mod <- glm(all_star ~ .,
+              data = dat_train,
+              family = binomial()))
+```
+
+```{r}
+##predicting log accuracy
+pred_log <- predict(log_mod, dat_test, type = 'response')
+
+##df with result and prediction
+log_outcomes <- bind_cols(dat_test$all_star, pred_log)
+##changing column names
+names(log_outcomes) <- c('actual', 'predicted')
+log_outcomes <- log_outcomes %>% 
+  ##changing both to binary 
+  mutate(actual = case_when(actual == TRUE ~ 1,
+                            actual == FALSE ~ 0),
+         predicted = case_when(pred_log >= 0.5 ~ 1,
+                              pred_log < 0.5 ~ 0))
+
+##confusion matrix for accuracy
+cm_log <- table(Actual = log_outcomes$actual, Predicted = log_outcomes$predicted)
+cm_log
+
+accuracy_log <- sum(diag(cm_log)) / (sum(cm_log))
+accuracy_log
+```
+
+```{r}
+##xgboost accuracy
+##removing all-star from test data
+x_test <- as.matrix(dat_test[, full_mod$feature_names])
+
+##predicting
+pred_xgb <- predict(full_mod, x_test)
+##changning prob to binary
+pred_xgb_class <- ifelse(pred_xgb > 0.5, 1, 0)
+
+##calc accuracy
+accuracy_xgb <- mean(pred_xgb_class == dat_test$all_star)
+accuracy_xgb
+```
+
+The XGBoost model provides more accurate probabilites of a player making the all-star game

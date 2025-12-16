@@ -1,0 +1,142 @@
+---
+title: "SAL 608 Assignment 4"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(readr)
+library(randomForest)
+library(DescTools)
+library(performance)
+library(ggplot2)
+```
+
+#1.
+```{r}
+set.seed(01042024)
+su_dat <- read_csv('data/wnba-team-elo-ratings.csv') %>% 
+  mutate(score_diff = score1 - score2)
+```
+
+
+```{r}
+summary(su_dat)
+```
+
+Wanted to look at summary statistics to get a sense of the range for elo_pre for team 1 and 2 (measure of range of team skills) and the range of score_diff
+
+```{r}
+ggplot(data = su_dat, aes(elo1_pre, score1)) +
+  geom_point()
+```
+
+Visualizing the relationship between score_diff and elo
+
+
+```{r}
+ggplot(data = su_dat, aes(score_diff)) +
+  geom_histogram()
+```
+Visualizing the distribution of score_diff
+
+\newpage
+#2.
+```{r}
+set.seed(456)
+##didn't use is_home1 since not a variable in the data set
+(su.rf <- randomForest(score_diff ~ elo1_pre + elo2_pre + playoff,
+                      data = su_dat))
+
+##rmse using the performance package
+rmse(su.rf)
+```
+
+The RSMSE for this random forest model is 11.9289
+
+\newpage
+#3.
+```{r}
+set.seed(1234)
+##using 70/30 train test split
+train <- sample(nrow(su_dat), nrow(su_dat) * .7)
+
+train_data <- su_dat[train, ]
+test_data <- su_dat[-train, ]
+
+##tuning the node size
+find_term_val <- function(term_val) {
+  min_nod <- floor(term_val)
+  mod <- randomForest(score_diff ~ elo1_pre + elo2_pre + playoff,
+                      data = train_data,
+                      nodesize = min_nod)
+  rmse(mod)
+}
+```
+
+
+```{r}
+set.seed(1234)
+ideal <- optimize(find_term_val, c(5, 500))
+floor(ideal$minimum)
+```
+
+
+```{r}
+##tuning number of trees using same training and test data
+find_n_tree <- function(n_tree) {
+  min_nod <- floor(ideal$minimum)
+  mod <- randomForest(score_diff ~ elo1_pre + elo2_pre + playoff,
+                      data = train_data,
+                      nodesize = min_nod,
+                      ntree = n_tree)
+  rmse(mod)
+}
+```
+
+
+```{r}
+set.seed(321)
+##tibble of tree number and rmse
+perform_by_tree <- tibble(
+  n_tree = 1:40 * 50,
+  rmse = map_dbl(1:40 * 50, find_n_tree)
+)
+```
+
+
+```{r}
+##mapping the n_trees to find optimal number
+ggplot(perform_by_tree, aes(n_tree, rmse)) +
+  geom_line()
+```
+
+From this graph it looks like the RMSE starts leveling out around 1300-1400 trees. I will use 1300 for this problem. So overall the optimal number of trees is 1300 and the min nod size is 194
+
+\newpage
+#4.
+```{r}
+set.seed(789)
+(final.rf <- randomForest(score_diff ~ elo1_pre + elo2_pre + playoff,
+                         data = su_dat,
+                         nodesize = floor(ideal$minimum),
+                         ntree = 1300,
+                         importance = TRUE))
+rmse(final.rf)
+importance(final.rf)
+```
+
+```{r}
+importance(final.rf)
+varImpPlot(final.rf)
+```
+
+elo2_pre and elo1_pre have the greatest importance to this random forest model when predicting score_diff. This makes sense as elo is essentially a metric that determines relative skill. So it is saying on paper which team is more skilled or better. Analytically this makes sense that these two would be very important to the model as they encompass every skill metric and are a great measure of how good a team really is. This metric would be similar to a March Madness seed for a viewer, anyone can see it and despite their basketball knowledge have a good idea of who is going to win the game.

@@ -1,0 +1,309 @@
+---
+title: "SAL 608 Final Project"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+##packages
+##data
+library(hockeyR)
+
+##cleaning
+library(tidyverse)
+
+##visualization
+library(sportyR)
+library(ggplot2)
+
+##modeling
+library(performance)
+##will add more here later
+```
+
+
+```{r}
+##scraping data using the hockeyR package
+##scrapes play-by-play data from NHL.com for the given year
+pbp <- load_pbp(2024)
+
+##using only regular season data so need periods 1-4 to include OT
+pbp <- pbp %>% 
+  filter(season_type == 'REG' &
+         period <= 4)
+```
+
+
+```{r}
+##df of all penalties called
+##will use this as the baseline for the modeling data
+penalty <- pbp %>% 
+  ##same games together
+  group_by(game_id) %>% 
+  ##only want penalty messages
+  filter(event_type == 'PENALTY') %>% 
+  ##information to help determine PP data for later
+  select(game_id, game_seconds_remaining, period, period_seconds_remaining, home_name, away_name, event_type,
+         event_team, secondary_type, penalty_severity, penalty_minutes, home_skaters, away_skaters) %>% 
+  ##takes out fighting penalties as they are always offsetting
+  filter(secondary_type != 'fighting') %>% 
+  ##altering minutes and severity for match penalty as gets a 5min major
+  mutate(penalty_minutes = case_when(secondary_type == 'match-penalty' ~ 5,
+                                     .default = penalty_minutes),
+         penalty_severity = case_when(secondary_type == 'match-penalty' ~ 'Major',
+                                     .default = penalty_severity)) %>%
+  ##0 and 10 are ps or misconduct so don't give powerplays
+  filter(!(penalty_minutes %in% c(0, 10))) %>% 
+  ##sorts in game order
+  arrange(game_id) %>% 
+  ungroup()
+```
+
+
+```{r}
+##only PP events
+##need both PP and SH since from POV of event team
+##eliminates 6v5 and 1v0 since not real PP
+pp <- pbp %>% 
+  filter(strength_code %in% c('PP', 'SH') & !(strength_state %in% c('6v5', '5v6', '1v0', '0v1')))
+```
+
+
+```{r}
+faceoffs <- pp %>% 
+  ##grouping same games together
+  group_by(game_id) %>% 
+  ##only looking at faceoffs
+  filter(event_type == 'FACEOFF') %>% 
+  ##selects pertinent columns
+  select(game_id, game_seconds_remaining, period, period_seconds_remaining, event_type, home_name,
+         away_name, strength_state, strength_code, home_skaters, away_skaters, home_score, away_score) %>% 
+  mutate(HomePP = case_when(home_skaters > away_skaters ~ 1,
+                            away_skaters > home_skaters ~ 0,
+                            ##absurd default to easily check for errors
+                            .default = 999),
+         PPTeam = case_when(HomePP == 1 ~ home_name,
+                            HomePP == 0 ~ away_name)) %>% 
+  arrange(game_id) %>% 
+  ungroup()
+```
+
+Taking out any penalties that don't result in PP aka coincidental penalties
+```{r}
+coinc_remove <- suppressWarnings({
+  penalty %>% 
+  inner_join(., faceoffs,
+             by = join_by(game_id, game_seconds_remaining, period, period_seconds_remaining, home_name, away_name),
+             suffix = c('_pre', '_post')) %>% 
+  select(game_id, game_seconds_remaining, period, period_seconds_remaining,
+         home_skaters_pre, home_skaters_post, away_skaters_pre, away_skaters_post) %>% 
+  filter(home_skaters_pre != home_skaters_post |
+         away_skaters_pre != away_skaters_post) %>% 
+  mutate(play_id = paste(as.character(game_id), as.character(game_seconds_remaining), sep = '_'))
+})
+```
+
+```{r}
+penalty <- penalty %>% 
+  mutate(play_id = paste(as.character(game_id), as.character(game_seconds_remaining), sep = '_')) %>% 
+  ##only plays that result in PP
+  filter(play_id %in% coinc_remove$play_id) %>% 
+  ##removing helper columns
+  select(-c(home_skaters, away_skaters, play_id))
+```
+
+
+
+```{r}
+##looking at shots on goal during PP
+shots <- pp %>%
+  ##shots for teams only on PP
+  filter(strength_code == 'PP') %>% 
+  ##puts the same games together
+  group_by(game_id) %>% 
+  ##only shots on goal
+  filter(event_type %in% c('SHOT', 'GOAL')) %>% 
+  ##selecting pertinent columns
+  select(game_id, game_seconds_remaining, period, period_seconds_remaining, home_name, away_name, strength_code,
+         strength_state, home_skaters, away_skaters, event_type, event_team, x, y, x_fixed, y_fixed) %>% 
+  arrange(game_id) %>% 
+  ungroup()
+```
+
+Functions for PP goals and sog
+
+```{r}
+##function to get whether or not a team scored a pp goal during a power play returns binary output
+get_pp_goal <- function(game, time, pen_min, team) {
+    
+    ##penalty seconds
+    pen_sec <- pen_min * 60
+  
+    ##filtering to get PP time to check if a goal occurred
+    goals <- shots %>% 
+      filter(game_id == game &
+             event_team == team &
+             event_type == 'GOAL' &
+             ((game_seconds_remaining <= time) & (game_seconds_remaining >= (time - pen_sec))))
+  
+    ##checking if goals empty or not if empty no goal if not goal
+    goal <- ifelse(nrow(goals) > 0, 1, 0)
+
+  return(goal)
+}
+```
+
+
+```{r}
+##function to get times of pp goals will use as helper function
+##index if multiple goals during PP
+get_pp_goal_time <- function(game, time, team) {
+  goal_time <- shots %>% 
+      filter(game_id == game &
+             event_team == team &
+             event_type == 'GOAL' &
+             game_seconds_remaining <= time) %>%
+      pull(game_seconds_remaining)
+  return(goal_time)
+}
+```
+
+
+```{r}
+##function to count shots on goal given game, shooting team, start and end times
+count_sog <- function(game, team, start, end) {
+  total_shots <- shots %>% 
+      filter(game_id == game &
+             event_team == team &
+             event_type %in% c('SHOT', 'GOAL') &
+             game_seconds_remaining <= start & game_seconds_remaining >= end) %>% 
+    count()
+  return(total_shots)
+}
+```
+
+
+
+```{r}
+##function to count sog during pp using game_id period_seconds_remaining, PPTeam, and PPGoal
+get_pp_sog <- function(game, time, pen_min, team, goal) {
+  ##penalty seconds
+  pen_sec <- pen_min * 60
+  
+  ##number of goals during a pp window this will matter for double minors
+  total_goals <- shots %>% 
+    filter(game_id == game &
+           event_team == team &
+           event_type == 'GOAL' &
+           game_seconds_remaining <= time &
+           game_seconds_remaining >= (time - pen_sec)) %>% 
+    count()
+  
+  ##normal pp goal
+  if (goal == 1 & pen_min == 2) {
+    ##time of first goal ends the power play
+    goal_time <- get_pp_goal_time(game, time, team)[1]
+    
+    ##counting total sog during power play
+    total_sog <- count_sog(game, team, time, goal_time) 
+    
+    ##double minor at least 2 goals during time
+  } else if (goal == 1 & pen_min == 4 & total_goals$n > 1) {
+    ##time of second goal ends the power play
+    goal_time <- get_pp_goal_time(game, time, team)[2]
+    
+    ##counting total sog during power play
+    total_sog <- count_sog(game, team, time, goal_time)
+    
+    ##double minor with 1 goal 2 cases during first minor and during second minor
+  } else if (goal == 1 & pen_min == 4 & total_goals$n == 1) {
+    ##PP ends at time of first goal minus 2 min PP
+    goal_time <- get_pp_goal_time(game, time, team)[1]
+    
+    ##goal in first minor so pp ends 120 after goal
+    if (abs(time) - abs(goal_time) <= 120) {
+      ##counting total sog during power play
+      total_sog <- count_sog(game, team, time, (goal_time - (pen_sec / 2)))
+
+    } else
+      ##goal in second minor so same as standard pp
+      ##counting total sog during power play
+      total_sog <- count_sog(game, team, time, goal_time) 
+    
+  } else
+    ##five min majors and no goals pp has based on time
+    total_sog <- count_sog(game, team, time, (time - pen_sec))
+  
+  return(total_sog$n)
+}
+```
+
+Combining clean data into 1 source for modeling
+
+```{r}
+##modeling data
+model_data <- suppressWarnings({ ##suppresses many-to-many warning from inner join
+  penalty %>% 
+  ##joining penalty and faceoffs by the identifier columns
+  inner_join(., faceoffs, by = join_by(game_id, game_seconds_remaining, period, period_seconds_remaining, home_name, away_name)) %>% 
+  ##adding columns to change home/away skaters to pp/pk skaters
+  mutate(PPSkaters = case_when(HomePP == 1 ~ home_skaters,
+                               HomePP == 0 ~ away_skaters),
+         PKSkaters = case_when(HomePP == 1 ~ away_skaters,
+                               HomePP == 0 ~ home_skaters),
+         ScoreDiff = case_when(HomePP == 1 ~ home_score - away_score,
+                               HomePP == 0 ~ away_score - home_score),
+         ##applying the get_pp_goal function across each vector element
+         PPGoal = mapply(get_pp_goal, game = game_id, time = game_seconds_remaining,
+                         pen_min = penalty_minutes, team = PPTeam),
+         ##applying the get_pp_sog function across each vector element
+         SOG = mapply(get_pp_sog, game = game_id, time = game_seconds_remaining,
+                      pen_min = penalty_minutes, team = PPTeam, goal = PPGoal)) %>% 
+  ##selecting all columns needed for scope of project (modeling and visualizations)
+  ##will not need all for both
+  select(game_id, game_seconds_remaining, period, period_seconds_remaining, PPSkaters, PKSkaters, PPTeam, HomePP, ScoreDiff, penalty_minutes, PPGoal, SOG) %>% 
+  arrange(game_id)
+})
+```
+
+
+```{r}
+##function that finds most recent penalty and subtracts the current time from penalty time
+find_pen_time_remain <- function(game, time){
+  
+  ##finding most recent penalty as df
+  last_pen <- penalty %>% 
+    filter(game_id == game &
+           game_seconds_remaining >= time) %>% 
+    arrange(desc(game_seconds_remaining)) %>% 
+    tail(1)
+
+  time_remain <- (last_pen$penalty_minutes * 60) - (last_pen$game_seconds_remaining - time)
+  return(time_remain)
+}
+```
+
+
+```{r}
+##adding pp time remaining to shots
+shots <- shots %>% 
+  mutate(PPTimeRemain = mapply(find_pen_time_remain, game_id, game_seconds_remaining)) %>%
+  ##errors exist in the data where the faceoffs don't line up with time penalty was called
+  ##so this removes any errors in that by filtering out those data points
+  ##can't have negative PP time left
+  ##able to do this now and not have model data affected because used start and end times of PP to calculate goal and sog
+  filter(PPTimeRemain >= 0)
+```
+
+
+
+```{r}
+write_csv(model_data, 'data/model_data.csv')
+write_csv(shots, 'data/shots.csv')
+```
+

@@ -1,0 +1,240 @@
+---
+title: "SAL 608 Assignment 2"
+author: "Andrew Fish"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+##packages
+library(tidyverse)
+library(readr)
+library(performance)
+library(lmtest)
+library(ggplot2)
+library(DescTools)
+```
+
+
+```{r}
+##reading in file
+keys <- read_csv('data/keys_to_the_game.csv', show_col_types = FALSE)
+```
+
+
+#1.
+```{r}
+##summary of opponent stats
+keys %>%
+  select(contains('opp_')) %>% 
+  summary()
+```
+```{r}
+##summary non opponent stats
+keys %>% 
+  select(!(contains('opp_'))) %>% 
+  summary()
+```
+```{r}
+##win percentage
+mean(keys$win)
+```
+
+By splitting the summary statistics up by team we can see that the opponent tends to have worse versions (lower values for points and higher for turnovers). This makes sense as overall the opposing team losses roughly 40%
+
+\newpage
+#2.
+```{r}
+##log model win v everything
+log_mod <- glm(as.numeric(win) ~ .,
+               data = keys,
+               family = binomial())
+summary(log_mod)
+```
+
+```{r}
+##predicted values from the model attaching to original data
+expected <- keys %>% 
+  mutate(ExpectedProb = round(predict(log_mod, type = 'response'), 8))
+```
+
+
+To test validity of model we will check that all assumptions hold
+```{r}
+##binary response
+unique(keys$win)
+```
+
+We have false and true as the two values of the win variable so it is binary.
+
+```{r}
+##independence
+dwtest(log_mod, alternative = 'two.sided')
+```
+
+No issues with independence
+
+```{r}
+##graphs log odds against all variables to visualize if linear relationship
+keys %>% 
+  select(fga:opp_tov) %>% 
+  mutate(log_odds = log(log_mod$fitted.values / (1 - log_mod$fitted.values))) %>% 
+  pivot_longer(-log_odds) %>% 
+  ggplot(aes(value, log_odds)) +
+  geom_point() +
+  facet_wrap(~ name, scales = 'free_x')
+```
+
+All variables are linear with log odds so no issues
+
+```{r}
+##sample size
+nrow(keys) > 10 * ((length(keys) - 1) / min(mean(keys$win), 1 - mean(keys$win)))
+```
+
+Sample is large enough
+
+For this question since only looking at the predictions and their validity we do not need to test for multicollinearity. Based on the assumptions this model and its predictions appear to be valid.
+
+
+
+\newpage
+#3.
+```{r}
+##from performance package
+check_collinearity(log_mod)
+```
+
+Examining the VIF for the variables we can see that there are plenty of terms with isses. For the most part the opp versions of the terms have issues. From our initial investigation I am deciding to remove the opp versions of the terms from the problematic zones above to account for correlation issues. Would remove all opp variables but don't want to commit ommited variable bias
+
+```{r}
+##removing unwanted variables that are correlation issues
+new_data <- keys %>% 
+  select(!(c(opp_fga, opp_fg_pct, opp_fta, opp_tov, opp_drb, opp_orb)))
+```
+
+```{r}
+##reruning with updated data
+new_log <- glm(win ~ .,
+               data = new_data,
+               family = binomial())
+summary(new_log)
+##double checking
+check_collinearity(new_log)
+```
+
+
+\newpage
+#4.
+```{r}
+##new df that has required variables
+data <- keys %>% 
+  select(fg_pct, fg3_pct, ft_pct, fta, orb, tov, opp_fg_pct, opp_fg3_pct, opp_ft_pct, opp_fta, opp_orb, opp_tov, win)
+```
+
+```{r}
+lim_log <- glm(win ~ .,
+               data = data,
+               family = binomial())
+summary(lim_log)
+```
+
+```{r}
+unique(keys$win)
+```
+
+binary response variable holds
+
+```{r}
+dwtest(lim_log, alternative = 'two.sided')
+```
+
+No independence issues
+
+```{r}
+##log odds relationship between variables
+data %>% 
+  select(!win) %>% 
+  mutate(log_odds = log(lim_log$fitted.values / (1 - lim_log$fitted.values))) %>% 
+  pivot_longer(-log_odds) %>% 
+  ggplot(aes(value, log_odds)) +
+  geom_point() +
+  facet_wrap(~ name, scales = 'free_x')
+```
+
+All show linear relationship
+```{r}
+##checking sample size
+nrow(data) > 10 * ((length(data) - 1) / min(mean(data$win), 1 - mean(data$win)))
+```
+Large enough sample
+
+```{r}
+check_collinearity(lim_log)
+```
+No correlation issues
+
+
+\newpage
+#5.
+```{r}
+##already have the data set so don't need to create a new one
+##will run the probit model and compare accuracy using performance package
+prob_mod <- glm(win ~.,
+                data = data,
+                family = binomial(link = 'probit'))
+summary(prob_mod)
+```
+
+```{r}
+##default method for performance_accuracy() is k folds CV
+##logit first
+performance_accuracy(lim_log)
+
+##probit
+performance_accuracy(prob_mod)
+```
+
+
+Testing another form of cv using training and test data sets
+```{r}
+set.seed(18) ##Yamamoto WS MVP
+n <- nrow(data)
+prop <- .6
+train <- sample(n, size = n * prop)
+train_data <- data[train, ]
+test_data <- data[-train, ]
+```
+
+Rerunning logit and probit using training data
+```{r}
+logit <- glm(win ~.,
+             data = train_data,
+             family = binomial())
+
+probit <- glm(win ~ .,
+              data = train_data,
+              family = binomial(link = 'probit'))
+```
+
+
+```{r}
+test_data %>% 
+  mutate(log_pred = predict(logit,
+                            .,
+                            type = 'response'),
+         pro_pred = predict(probit,
+                            .,
+                            type = 'response')) %>% 
+  summarize(log_brier = BrierScore(win, log_pred),
+            pro_brier = BrierScore(win, pro_pred))
+```
+
+Logit and Probit created similar models in terms of accuracy, but according to their Brier Scores we should be using the logit model since it has the lower score. As well looking at the confidence intervals from the accuracy we see that the logit has a higher lower and upper bound for the 95% CI.
